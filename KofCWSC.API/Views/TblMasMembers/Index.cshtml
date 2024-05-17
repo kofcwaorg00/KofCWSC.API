@@ -1,0 +1,509 @@
+﻿@model IEnumerable<KofCWSC.API.Models.TblMasMember>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KofCid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prefix)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrefixUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrefixUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstNameUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstNameUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NickName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NickNameUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NickNameUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Miupdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MiupdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastNameUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastNameUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Suffix)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuffixUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuffixUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo1Updated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo1UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CityUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CityUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StateUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StateUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCodeUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCodeUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WifesName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WifesNameUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WifesNameUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo2Updated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo2UpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FaxNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FaxNumberUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FaxNumberUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assembly)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssemblyUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssemblyUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Circle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CircleUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CircleUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deceased)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeceasedUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeceasedUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhoneUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CellPhoneUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeatedDelegateDay1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeatedDelegateDay2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SeatedDelegateDay3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaidMpd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bulletin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BulletinUpdated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BulletinUpdatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataChanged)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastLoggedIn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CanEditAdmUi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoNotEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HidePersonalInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WhyDoNotEmail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.KofCid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prefix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrefixUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrefixUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstNameUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstNameUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NickName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NickNameUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NickNameUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Miupdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiupdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastNameUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastNameUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Suffix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuffixUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuffixUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo1Updated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo1UpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CityUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CityUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCodeUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCodeUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WifesName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WifesNameUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WifesNameUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo2Updated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddInfo2UpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaxNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaxNumberUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaxNumberUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Council)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CouncilUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CouncilUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assembly)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssemblyUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssemblyUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Circle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CircleUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CircleUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deceased)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeceasedUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeceasedUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellPhoneUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CellPhoneUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeatedDelegateDay1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeatedDelegateDay2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeatedDelegateDay3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaidMpd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bulletin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BulletinUpdated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BulletinUpdatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataChanged)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLoggedIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CanEditAdmUi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoNotEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HidePersonalInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WhyDoNotEmail)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MemberId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

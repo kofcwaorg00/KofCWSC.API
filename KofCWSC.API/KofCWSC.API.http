@@ -1,0 +1,6 @@
+@KofCWSC.API_HostAddress = http://localhost:5171
+
+GET {{KofCWSC.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
