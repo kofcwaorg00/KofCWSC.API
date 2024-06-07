@@ -3,6 +3,9 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:KofCWSCAPIDBContext"
+    },
+    "apis1": {
+      "type": "apis"
     }
   }
 }

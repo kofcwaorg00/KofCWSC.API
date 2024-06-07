@@ -2,18 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
+using System.Security.Principal;
 
 namespace KofCWSC.API.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
-    public class TblMasMembersController : Controller
+    [ApiController]
+    public class TblMasMembersController : ControllerBase
     {
+        //********************************************************************************************
+        // June 3, 2024 Tim Philomeno
+        // This control works for all CRUD operations
+        // ToDo:
+        //       Add Authorization and Authentication
+        //       Add input validation to prevent SQL Injection Attacks
+        //       Will need to figure out how to encrypt/decrypt data to/from the SQL Server
+        //       Need to figure out error processing, return OK, NotFoudn, can we transfer
+        //           database return messages back to the calling client?
+        //********************************************************************************************
         private readonly KofCWSCAPIDBContext _context;
 
         public TblMasMembersController(KofCWSCAPIDBContext context)
@@ -21,148 +34,125 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: TblMasMembers
-        [HttpGet(Name = "Members")]
-        public async Task<IActionResult> Index()
+        // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
+        [HttpGet("/GetMembers/ByLastName/{lastname}")]
+        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetTblMasMembers(string lastname)
         {
-            //return Ok(await _context.TblMasMembers
-            //    .Take(100)
-            //    .ToListAsync());
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            // Didn't want to bring back 17k rows of data so we are using this method "ByLastName" and 
+            // sending aaa which will not bring back any data but will allow the UI to be presented
+            // and then the user can search by all or part of last name
+            //********************************************************************************************
+            if (lastname.IsNullOrEmpty())
+            {
+                lastname = "aaa";
+            }
+            // the line below would need to be the E model and would go into a variable.  Then foreach 
+            // on that variable would be needed to decrypt and fill the non E model and be returned 
 
-            return Json(await _context.TblMasMembers.Take(100).ToListAsync());
+            return await _context.TblMasMembers
+                .Where(t => t.LastName.Contains(lastname))
+                .ToListAsync();
         }
 
-        //////////// GET: TblMasMembers/Details/5
-        //////////[ApiExplorerSettings(IgnoreApi = true)]
-        //////////public async Task<IActionResult> Details(int? id)
-        //////////{
-        //////////    if (id == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+        // GET: api/TblMasMembers/5
+        [HttpGet("/GetMember/{id}")]
+        public async Task<ActionResult<TblMasMember>> GetTblMasMember(int id)
+        {
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            // I have chosen to use 3 letter prefixes Get, Upd, Del, Add for my routing
+            //********************************************************************************************
+            var tblMasMember = await _context.TblMasMembers.FindAsync(id);
 
-        //////////    var tblMasMember = await _context.TblMasMember
-        //////////        .FirstOrDefaultAsync(m => m.MemberId == id);
-        //////////    if (tblMasMember == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+            if (tblMasMember == null)
+            {
+                return NotFound();
+            }
 
-        //////////    return View(tblMasMember);
-        //////////}
+            return tblMasMember;
+        }
 
-        //////////// GET: TblMasMembers/Create
-        //////////[ApiExplorerSettings(IgnoreApi = true)]
-        //////////public IActionResult Create()
-        //////////{
-        //////////    return View();
-        //////////}
+        // PUT: api/TblMasMembers/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("/UpdMember/{id}")]
+        public async Task<IActionResult> PutTblMasMember(int id, [FromBody] TblMasMember tblMasMember)
+        {
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            // So it appears that the mvc/ef frameworks automatically takes care of dealing with where
+            // the data is.  In this case I added [FromBody] because I am sending the tblMasMember
+            // object in the body and we just "know what to do"
+            //********************************************************************************************
+            if (id != tblMasMember.MemberId)
+            {
+                return BadRequest();
+            }
 
-        //////////// POST: TblMasMembers/Create
-        //////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //////////[HttpPost]
-        //////////[ValidateAntiForgeryToken]
-        //////////public async Task<IActionResult> Create([Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
-        //////////{
-        //////////    if (ModelState.IsValid)
-        //////////    {
-        //////////        _context.Add(tblMasMember);
-        //////////        await _context.SaveChangesAsync();
-        //////////        return RedirectToAction(nameof(Index));
-        //////////    }
-        //////////    return View(tblMasMember);
-        //////////}
+            _context.Entry(tblMasMember).State = EntityState.Modified;
 
-        //////////// GET: TblMasMembers/Edit/5
-        //////////[ApiExplorerSettings(IgnoreApi = true)]
-        //////////public async Task<IActionResult> Edit(int? id)
-        //////////{
-        //////////    if (id == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblMasMemberExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Content("Untrapped Error");
+                }
+            }
 
-        //////////    var tblMasMember = await _context.TblMasMember.FindAsync(id);
-        //////////    if (tblMasMember == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
-        //////////    return View(tblMasMember);
-        //////////}
+            return Ok();
+        }
 
-        //////////// POST: TblMasMembers/Edit/5
-        //////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //////////[HttpPost]
-        //////////[ValidateAntiForgeryToken]
-        //////////public async Task<IActionResult> Edit(int id, [Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
-        //////////{
-        //////////    if (id != tblMasMember.MemberId)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+        // POST: api/TblMasMembers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("/NewMember")]
+        public async Task<ActionResult<TblMasMember>> PostTblMasMember([FromBody]TblMasMember tblMasMember)
+        {
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            // Here is where I ran into issues with web.config and WEBDAV and AspNetCor modules requiring
+            // POST, PUT, and DELETE
+            //********************************************************************************************
+            _context.TblMasMembers.Add(tblMasMember);
+            await _context.SaveChangesAsync();
 
-        //////////    if (ModelState.IsValid)
-        //////////    {
-        //////////        try
-        //////////        {
-        //////////            _context.Update(tblMasMember);
-        //////////            await _context.SaveChangesAsync();
-        //////////        }
-        //////////        catch (DbUpdateConcurrencyException)
-        //////////        {
-        //////////            if (!TblMasMemberExists(tblMasMember.MemberId))
-        //////////            {
-        //////////                return NotFound();
-        //////////            }
-        //////////            else
-        //////////            {
-        //////////                throw;
-        //////////            }
-        //////////        }
-        //////////        return RedirectToAction(nameof(Index));
-        //////////    }
-        //////////    return View(tblMasMember);
-        //////////}
+            return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
+        }
 
-        //////////// GET: TblMasMembers/Delete/5
-        //////////[ApiExplorerSettings(IgnoreApi = true)]
-        //////////public async Task<IActionResult> Delete(int? id)
-        //////////{
-        //////////    if (id == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+        // DELETE: api/TblMasMembers/5
+        [HttpDelete("/DelMember/{id}")]
+        public async Task<IActionResult> DeleteTblMasMember(int id)
+        {
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            //********************************************************************************************
+            var tblMasMember = await _context.TblMasMembers.FindAsync(id);
+            if (tblMasMember == null)
+            {
+                return NotFound();
+            }
 
-        //////////    var tblMasMember = await _context.TblMasMember
-        //////////        .FirstOrDefaultAsync(m => m.MemberId == id);
-        //////////    if (tblMasMember == null)
-        //////////    {
-        //////////        return NotFound();
-        //////////    }
+            _context.TblMasMembers.Remove(tblMasMember);
+            await _context.SaveChangesAsync();
 
-        //////////    return View(tblMasMember);
-        //////////}
+            return NoContent();
+        }
 
-        //////////// POST: TblMasMembers/Delete/5
-        //////////[HttpPost, ActionName("Delete")]
-        //////////[ValidateAntiForgeryToken]
-        //////////public async Task<IActionResult> DeleteConfirmed(int id)
-        //////////{
-        //////////    var tblMasMember = await _context.TblMasMember.FindAsync(id);
-        //////////    if (tblMasMember != null)
-        //////////    {
-        //////////        _context.TblMasMember.Remove(tblMasMember);
-        //////////    }
-
-        //////////    await _context.SaveChangesAsync();
-        //////////    return RedirectToAction(nameof(Index));
-        //////////}
-
-        //////////private bool TblMasMemberExists(int id)
-        //////////{
-        //////////    return _context.TblMasMember.Any(e => e.MemberId == id);
-        //////////}
+        private bool TblMasMemberExists(int id)
+        {
+            //********************************************************************************************
+            // June 3, 2024 Tim Philomeno
+            // Looks like a "helper" function used in this class
+            //********************************************************************************************
+            return _context.TblMasMembers.Any(e => e.MemberId == id);
+        }
     }
 }

@@ -35,7 +35,15 @@ namespace KofCWSC.API.Data
             {
                 entity.HasKey(e => e.MemberId);
 
-                entity.ToTable("tbl_MasMembers");
+                entity.ToTable("tbl_MasMembers", tb =>
+                {
+                    // this is because our table has triggers
+                    tb.UseSqlOutputClause(false);
+
+                    tb.HasTrigger("T_tbl_MasMembers_DTrig");
+                    tb.HasTrigger("T_tbl_MasMembers_U1Trig");
+                    tb.HasTrigger("T_tbl_MasMembers_UTrig");
+                });
 
                 entity.HasIndex(e => e.KofCid, "NonClusteredIndex-20130527-110545")
                     .IsUnique();

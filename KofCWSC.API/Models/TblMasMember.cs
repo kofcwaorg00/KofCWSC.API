@@ -35,7 +35,7 @@ public partial class TblMasMember
 
     public string? MiupdatedBy { get; set; }
 
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
 
     public DateTime? LastNameUpdated { get; set; }
 
