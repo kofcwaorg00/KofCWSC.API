@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 ////////////var cnString = client.GetSecret("AZDEV").Value;
 ////////////string connectionString = cnString.Value;
 //------------------------------------------------------------------------------------------------------------------------------
-var connectionString = builder.Configuration.GetConnectionString("DevConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 //------------------------------------------------------------------------------------------------------------------------------
 // make sure we have a value from KeyVault. if not throw an exception
 ////////////if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");

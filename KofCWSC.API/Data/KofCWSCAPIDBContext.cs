@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Models;
+using Azure.Identity;
+using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
+using Microsoft.Data.SqlClient;
+using Azure.Security.KeyVault.Secrets;
 
 namespace KofCWSC.API.Data
 {
@@ -12,13 +16,32 @@ namespace KofCWSC.API.Data
         public KofCWSCAPIDBContext()
         {
         }
-
+        private static bool isKVInit;
         public KofCWSCAPIDBContext(DbContextOptions<KofCWSCAPIDBContext> options)
             : base(options)
         {
+            //*****************************************************************************************************************
+            // 6/14/2024 Tim Philomeno
+            // this is the magic code that allows client permissions for SQL Server to get its master encryption key from KeyVault
+            // the authentication is done using DefaultAzureCredential.  That cycles through multple types
+            // of authentication.  For the develoment environment, it uses the credentials that the developer has used to
+            // login to Visual Studio.  For publised environments, you need to setup Azure Identity to allow
+            // the applicaiton to authenticate and get access to KeyVault
+            //*****************************************************************************************************************
+            if (!isKVInit)
+            {
+                SqlColumnEncryptionAzureKeyVaultProvider akvProvider = new SqlColumnEncryptionAzureKeyVaultProvider(new DefaultAzureCredential());
+                SqlConnection.RegisterColumnEncryptionKeyStoreProviders(customProviders: new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>(capacity: 1, comparer: StringComparer.OrdinalIgnoreCase)
+            {
+                    { SqlColumnEncryptionAzureKeyVaultProvider.ProviderName, akvProvider}
+            });
+            }
+            isKVInit = true;
+            //-----------------------------------------------------------------------------------------------------------------
         }
 
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
+        public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -206,6 +229,25 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.WifesNameUpdatedBy).HasMaxLength(100);
             });
 
+            modelBuilder.Entity<GetLabelByOffice>(entity =>
+            {
+                entity.HasNoKey();
+                //entity.Property(e => e.District).HasColumnName("District");
+                //entity.Property(e => e.AltOfficeDescription).HasColumnName("AltOfficeDescription");
+                //entity.Property(e => e.FirstName).HasColumnName("FirstName");
+                //entity.Property(e => e.LastName).HasColumnName("LastName");
+                //entity.Property(e => e.Address).HasColumnName("Address");
+                //entity.Property(e => e.Council).HasColumnName("Council");
+                //entity.Property(e => e.Assembly).HasColumnName("Assembly");
+                //entity.Property(e => e.City).HasColumnName("City");
+                //entity.Property(e => e.State).HasColumnName("State");
+                //entity.Property(e => e.PostalCode).HasColumnName("PostalCode");
+                //entity.Property(e => e.OfficeDescription).HasColumnName("OfficeDescription");
+                //entity.Property(e => e.OfficeID).HasColumnName("OfficeID");
+                //entity.Property(e => e.CouncilName).HasColumnName("CouncilName");
+                //entity.Property(e => e.FullName).HasColumnName("FullName");
+                //entity.Property(e => e.CSZ).HasColumnName("CSZ");
+            });
             OnModelCreatingPartial(modelBuilder);
         }
 
