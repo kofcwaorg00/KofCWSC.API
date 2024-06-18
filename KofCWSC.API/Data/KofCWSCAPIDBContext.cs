@@ -8,6 +8,7 @@ using Azure.Identity;
 using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
 using Microsoft.Data.SqlClient;
 using Azure.Security.KeyVault.Secrets;
+using Serilog;
 
 namespace KofCWSC.API.Data
 {
@@ -28,16 +29,23 @@ namespace KofCWSC.API.Data
             // login to Visual Studio.  For publised environments, you need to setup Azure Identity to allow
             // the applicaiton to authenticate and get access to KeyVault
             //*****************************************************************************************************************
-            if (!isKVInit)
+            try
             {
-                SqlColumnEncryptionAzureKeyVaultProvider akvProvider = new SqlColumnEncryptionAzureKeyVaultProvider(new DefaultAzureCredential());
-                SqlConnection.RegisterColumnEncryptionKeyStoreProviders(customProviders: new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>(capacity: 1, comparer: StringComparer.OrdinalIgnoreCase)
+                if (!isKVInit)
+                {
+                    SqlColumnEncryptionAzureKeyVaultProvider akvProvider = new SqlColumnEncryptionAzureKeyVaultProvider(new DefaultAzureCredential());
+                    SqlConnection.RegisterColumnEncryptionKeyStoreProviders(customProviders: new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>(capacity: 1, comparer: StringComparer.OrdinalIgnoreCase)
             {
                     { SqlColumnEncryptionAzureKeyVaultProvider.ProviderName, akvProvider}
             });
+                }
+                isKVInit = true;
             }
-            isKVInit = true;
-            //-----------------------------------------------------------------------------------------------------------------
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw new Exception("SQL Azure Key Vault Initialization Failed");
+            }
         }
 
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;

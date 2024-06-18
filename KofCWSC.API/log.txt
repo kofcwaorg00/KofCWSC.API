@@ -1,0 +1,7 @@
+2024-06-16 13:13:09.100 -04:00 [WRN] Serilog works
+2024-06-16 13:14:18.063 -04:00 [INF] Serilog is Initialized
+2024-06-16 13:14:18.105 -04:00 [INF] Using: Data Source=sql2k2201.discountasp.net;User ID=SQL2022_1035200_kofcwaorg_user;Password=fAMI7WufRat3F5&aCI0-;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;column encryption setting=enabled
+2024-06-16 13:16:55.971 -04:00 [INF] Serilog is Initialized
+2024-06-16 13:16:56.124 -04:00 [INF] Using: Data Source=sql2k2201.discountasp.net;User ID=SQL2022_1035200_kofcwaorg_user;Password=fAMI7WufRat3F5&aCI0-;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;column encryption setting=enabled
+2024-06-16 13:17:11.497 -04:00 [INF] DBContext Created
+2024-06-16 13:17:11.586 -04:00 [INF] GetMembers/ByLastName/philomeno

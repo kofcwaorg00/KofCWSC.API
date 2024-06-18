@@ -10,6 +10,7 @@ using KofCWSC.API.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using System.Security.Principal;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -32,12 +33,14 @@ namespace KofCWSC.API.Controllers
         public TblMasMembersController(KofCWSCAPIDBContext context)
         {
             _context = context;
+            Log.Information("DBContext Created");
         }
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
         [HttpGet("/GetMembers/ByLastName/{lastname}")]
         public async Task<ActionResult<IEnumerable<TblMasMember>>> GetTblMasMembers(string lastname)
         {
+            Log.Information("Starting GetMembers/ByLastName/" + lastname);
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // Didn't want to bring back 17k rows of data so we are using this method "ByLastName" and 
@@ -50,16 +53,26 @@ namespace KofCWSC.API.Controllers
             }
             // the line below would need to be the E model and would go into a variable.  Then foreach 
             // on that variable would be needed to decrypt and fill the non E model and be returned 
-
-            return await _context.TblMasMembers
+            try
+            {
+                return await _context.TblMasMembers
                 .Where(t => t.LastName.Contains(lastname))
                 .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         // GET: api/TblMasMembers/5
         [HttpGet("/GetMember/{id}")]
         public async Task<ActionResult<TblMasMember>> GetTblMasMember(int id)
         {
+            Log.Information("Starting Getting Member " + id);
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // I have chosen to use 3 letter prefixes Get, Upd, Del, Add for my routing
@@ -68,6 +81,7 @@ namespace KofCWSC.API.Controllers
 
             if (tblMasMember == null)
             {
+                Log.Fatal("GetMember ID " + id + " Not found");
                 return NotFound();
             }
 
@@ -79,6 +93,7 @@ namespace KofCWSC.API.Controllers
         [HttpPut("/UpdMember/{id}")]
         public async Task<IActionResult> PutTblMasMember(int id, [FromBody] TblMasMember tblMasMember)
         {
+            Log.Information("Starting UpdMember " + id);
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // So it appears that the mvc/ef frameworks automatically takes care of dealing with where
@@ -87,6 +102,7 @@ namespace KofCWSC.API.Controllers
             //********************************************************************************************
             if (id != tblMasMember.MemberId)
             {
+                Log.Fatal("Member ID " + id + " Not found");
                 return BadRequest();
             }
 
@@ -100,12 +116,18 @@ namespace KofCWSC.API.Controllers
             {
                 if (!TblMasMemberExists(id))
                 {
+                    Log.Fatal("Concurrencty Issue with Member ID " + id + " Not found");
                     return NotFound();
                 }
                 else
                 {
+                    Log.Fatal("Concurrenty Issue");
                     return Content("Untrapped Error");
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal("From Catch in UpdMember" + ex.Message + " " + ex.InnerException);
             }
 
             return Ok();
@@ -116,34 +138,55 @@ namespace KofCWSC.API.Controllers
         [HttpPost("/NewMember")]
         public async Task<ActionResult<TblMasMember>> PostTblMasMember([FromBody]TblMasMember tblMasMember)
         {
+            Log.Information("Starting NewMember");
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // Here is where I ran into issues with web.config and WEBDAV and AspNetCor modules requiring
             // POST, PUT, and DELETE
             //********************************************************************************************
-            _context.TblMasMembers.Add(tblMasMember);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.TblMasMembers.Add(tblMasMember);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
+                return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
         // DELETE: api/TblMasMembers/5
         [HttpDelete("/DelMember/{id}")]
         public async Task<IActionResult> DeleteTblMasMember(int id)
         {
+            Log.Information("Starting DelMember ID " + id);
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             //********************************************************************************************
             var tblMasMember = await _context.TblMasMembers.FindAsync(id);
             if (tblMasMember == null)
             {
+                Log.Fatal("DelMember ID " + id + " Not found");
                 return NotFound();
             }
 
-            _context.TblMasMembers.Remove(tblMasMember);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            try
+            {
+                Log.Information("before remove");
+                _context.TblMasMembers.Remove(tblMasMember);
+                Log.Information("Before SaveChanges");
+                await _context.SaveChangesAsync();
+                Log.Information("Success Deleting " + id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+                return NoContent();
+            }
         }
 
         private bool TblMasMemberExists(int id)
