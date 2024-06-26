@@ -11,10 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using System.Security.Principal;
 using Serilog;
+using System.Text.RegularExpressions;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
     [ApiController]
     public class TblMasMembersController : ControllerBase
     {
@@ -27,6 +28,14 @@ namespace KofCWSC.API.Controllers
         //       Will need to figure out how to encrypt/decrypt data to/from the SQL Server
         //       Need to figure out error processing, return OK, NotFoudn, can we transfer
         //           database return messages back to the calling client?
+        // 6/24/2024 Tim Philmoeno
+        // I have removed the Route("[controller]") decoration to keep the routes more aligned with
+        // best practices of just using the Entity in combination of the HTTP type is all we need
+        // HttpGet LastName a collection of Member(s) by Last Name
+        // HttpGet (id) get a single member
+        // HttpPut (id) update a single member
+        // HttpDelete (id) delete a single member
+        // HttpPost add a member
         //********************************************************************************************
         private readonly KofCWSCAPIDBContext _context;
 
@@ -37,10 +46,15 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
-        [HttpGet("/GetMembers/ByLastName/{lastname}")]
+        [HttpGet("Members/LastName/{lastname}")]
         public async Task<ActionResult<IEnumerable<TblMasMember>>> GetTblMasMembers(string lastname)
         {
             Log.Information("Starting GetMembers/ByLastName/" + lastname);
+            if (!IsLastNameValid(lastname))
+            {
+                Log.Error("Invalid Last Name");
+                return BadRequest("Invalid Characters in Last Name");
+            }
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // Didn't want to bring back 17k rows of data so we are using this method "ByLastName" and 
@@ -51,8 +65,7 @@ namespace KofCWSC.API.Controllers
             {
                 lastname = "aaa";
             }
-            // the line below would need to be the E model and would go into a variable.  Then foreach 
-            // on that variable would be needed to decrypt and fill the non E model and be returned 
+
             try
             {
                 return await _context.TblMasMembers
@@ -62,17 +75,25 @@ namespace KofCWSC.API.Controllers
             catch (Exception ex)
             {
 
-                Log.Error(ex.Message);
-                throw new Exception(ex.Message);
+                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + ex.Message + " " + ex.InnerException);
+                throw new Exception("From " + GetType() + " " +ex.Message);
             }
             
         }
 
         // GET: api/TblMasMembers/5
-        [HttpGet("/GetMember/{id}")]
+        //[HttpGet("/GetMember/{id}")]
+        [HttpGet("Member/{id}")]
         public async Task<ActionResult<TblMasMember>> GetTblMasMember(int id)
         {
+            
             Log.Information("Starting Getting Member " + id);
+            if (!IsMemberIDValid(id))
+            {
+                Log.Fatal("GetMember ID " + id + " Not found");
+                return NotFound();
+            }
+
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // I have chosen to use 3 letter prefixes Get, Upd, Del, Add for my routing
@@ -90,7 +111,7 @@ namespace KofCWSC.API.Controllers
 
         // PUT: api/TblMasMembers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("/UpdMember/{id}")]
+        [HttpPut("/Member/{id}")]
         public async Task<IActionResult> PutTblMasMember(int id, [FromBody] TblMasMember tblMasMember)
         {
             Log.Information("Starting UpdMember " + id);
@@ -135,7 +156,7 @@ namespace KofCWSC.API.Controllers
 
         // POST: api/TblMasMembers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/NewMember")]
+        [HttpPost("/Member")]
         public async Task<ActionResult<TblMasMember>> PostTblMasMember([FromBody]TblMasMember tblMasMember)
         {
             Log.Information("Starting NewMember");
@@ -153,13 +174,13 @@ namespace KofCWSC.API.Controllers
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message + " " + ex.InnerException);
+                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + ex.Message + " " + ex.InnerException);
                 return NoContent();
             }
         }
 
         // DELETE: api/TblMasMembers/5
-        [HttpDelete("/DelMember/{id}")]
+        [HttpDelete("/Member/{id}")]
         public async Task<IActionResult> DeleteTblMasMember(int id)
         {
             Log.Information("Starting DelMember ID " + id);
@@ -184,7 +205,7 @@ namespace KofCWSC.API.Controllers
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message);
+                Log.Fatal(ex.Message + " " + ex.InnerException);
                 return NoContent();
             }
         }
@@ -196,6 +217,56 @@ namespace KofCWSC.API.Controllers
             // Looks like a "helper" function used in this class
             //********************************************************************************************
             return _context.TblMasMembers.Any(e => e.MemberId == id);
+        }
+        private bool IsMemberIDValid(int id)
+        {
+            //********************************************************************************************
+            // 6/25/2024 Tim Philomeno
+            // Rules for incoming parameter id
+            // must be an integer (this should be taken care of becasue of our parameter data type)
+            // must be between 1 and 100,000, 100,000 is arbitrary based on the current identity column
+            // max value of 21,182
+            //********************************************************************************************
+            if (id == 0)
+            {
+                return false;
+            }
+            if (id < 0)
+            {
+                return false;
+            }
+            if (id > 100000)
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool IsLastNameValid(string LastName)
+        {
+            //********************************************************************************************
+            // 6/25/2024 Tim Philomeno
+            // Rules for incoming parameter LastName
+            // must be a string (this should be taken care of becasue of our parameter data type)
+            // must be between 1 and 50 which is the lenght of the tbl_MasMembers.LastName
+            // must be a-z period space comma
+            //********************************************************************************************
+            if (LastName.Length == 0)
+            {
+                return false;
+            }
+            if (LastName.Length > 50)
+            {
+                return false;
+            }
+
+            string rxPat = (@"^[a-zA-Z.,\s]+$");
+            
+            if(!Regex.IsMatch(LastName, rxPat))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

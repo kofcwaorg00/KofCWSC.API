@@ -51,6 +51,8 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
 
+        public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

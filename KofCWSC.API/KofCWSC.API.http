@@ -20,3 +20,11 @@ Content-Type: application/json
 GET {{KofCWSC.API_HostAddress}}/GetMembers/ByLastName/philomeno
 
 ###
+
+GET {{KofCWSC.API_HostAddress}}/VerifyKofCID/3970136
+
+###
+
+GET {{KofCWSC.API_HostAddress}}/users/VerifyKofCID?KofCMemberID=string
+
+###

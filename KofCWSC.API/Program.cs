@@ -15,10 +15,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-Log.Information("Serilog is Initialized");
-
-//var keyVaultEndpoint = new Uri("https://kofcwscprodvault.vault.azure.net");
-//builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+//Log.Information("Serilog is Initialized");
 
 //******************************************************************************************************************************
 // 6/6/2024 Tim Philomneo
