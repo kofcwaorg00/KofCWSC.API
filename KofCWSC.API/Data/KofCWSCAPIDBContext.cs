@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
 using Microsoft.Data.SqlClient;
 using Azure.Security.KeyVault.Secrets;
 using Serilog;
+using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Data
 {
@@ -48,10 +49,16 @@ namespace KofCWSC.API.Data
             }
         }
 
+        public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
+        public DbSet<TblValAssy> TblValAssy { get; set; } = default!;
+        public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
+        public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; } 
+        public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
-        public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
+        public virtual DbSet<TblValOffice> TblValOffices { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -239,6 +246,62 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.WifesNameUpdatedBy).HasMaxLength(100);
             });
 
+            modelBuilder.Entity<TblMasPso>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__tbl_MasP__3214EC27821953F8");
+
+                entity.ToTable("tbl_MasPSOs");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.StateAdvocate)
+                    .HasMaxLength(255)
+                    .HasColumnName("State Advocate");
+                entity.Property(e => e.StateDeputy)
+                    .HasMaxLength(255)
+                    .HasColumnName("State Deputy");
+                entity.Property(e => e.StateSecretary)
+                    .HasMaxLength(255)
+                    .HasColumnName("State Secretary");
+                entity.Property(e => e.StateTreasurer)
+                    .HasMaxLength(255)
+                    .HasColumnName("State Treasurer");
+                entity.Property(e => e.StateWarden)
+                    .HasMaxLength(255)
+                    .HasColumnName("State Warden");
+            });
+
+            modelBuilder.Entity<TblValAssy>(entity =>
+            {
+                entity.HasKey(e => e.ANumber)
+                    .HasName("aaaaatbl_ValAssys_PK")
+                    .IsClustered(false);
+
+                entity.ToTable("tbl_ValAssys");
+
+                entity.Property(e => e.ANumber)
+                    .ValueGeneratedNever()
+                    .HasColumnName("A_NUMBER");
+                entity.Property(e => e.ALocation)
+                    .HasMaxLength(50)
+                    .HasColumnName("A_LOCATION");
+                entity.Property(e => e.AName)
+                    .HasMaxLength(50)
+                    .HasColumnName("A_NAME");
+                entity.Property(e => e.AddInfo1)
+                    .HasMaxLength(60)
+                    .HasColumnName("ADD INFO 1");
+                entity.Property(e => e.AddInfo2)
+                    .HasMaxLength(60)
+                    .HasColumnName("ADD INFO 2");
+                entity.Property(e => e.AddInfo3)
+                    .HasMaxLength(60)
+                    .HasColumnName("ADD INFO 3");
+                entity.Property(e => e.MasterLoc)
+                    .HasMaxLength(1)
+                    .IsFixedLength();
+                entity.Property(e => e.WebSiteUrl).HasColumnName("WebSiteURL");
+            });
+
             modelBuilder.Entity<GetLabelByOffice>(entity =>
             {
                 entity.HasNoKey();
@@ -259,6 +322,89 @@ namespace KofCWSC.API.Data
                 //entity.Property(e => e.CSZ).HasColumnName("CSZ");
             });
             OnModelCreatingPartial(modelBuilder);
+
+            modelBuilder.Entity<TblValCouncil>(entity =>
+            {
+                entity.HasKey(e => e.CNumber)
+                    .HasName("aaaaatbl_ValCouncils_PK")
+                    .IsClustered(false);
+
+                entity.ToTable("tbl_ValCouncils");
+
+                entity.Property(e => e.CNumber)
+                    .ValueGeneratedNever()
+                    .HasColumnName("C_NUMBER");
+                entity.Property(e => e.AddInfo1)
+                    .HasMaxLength(60)
+                    .HasColumnName("ADD INFO 1");
+                entity.Property(e => e.AddInfo2)
+                    .HasMaxLength(60)
+                    .HasColumnName("ADD INFO 2");
+                entity.Property(e => e.AddInfo3)
+                    .HasMaxLength(50)
+                    .HasColumnName("ADD INFO 3");
+                entity.Property(e => e.Arbalance)
+                    .HasColumnType("numeric(14, 2)")
+                    .HasColumnName("ARBalance");
+                entity.Property(e => e.BulletinUrl).HasColumnName("BulletinURL");
+                entity.Property(e => e.CLocation)
+                    .HasMaxLength(50)
+                    .HasColumnName("C_LOCATION");
+                entity.Property(e => e.CName)
+                    .HasMaxLength(32)
+                    .HasColumnName("C_NAME");
+                entity.Property(e => e.Chartered).HasColumnType("datetime");
+                entity.Property(e => e.DioceseId)
+                    .HasMaxLength(3)
+                    .HasColumnName("DioceseID");
+                entity.Property(e => e.District).HasColumnName("DISTRICT");
+                entity.Property(e => e.LiabIns).HasDefaultValue(false);
+                entity.Property(e => e.Status)
+                    .HasMaxLength(1)
+                    .HasDefaultValue("A")
+                    .IsFixedLength();
+                entity.Property(e => e.WebSiteUrl).HasColumnName("WebSiteURL");
+            });
+
+            modelBuilder.Entity<TblValOffice>(entity =>
+            {
+                entity.HasKey(e => e.OfficeId)
+                    .HasName("aaaaatbl_ValOffices_PK")
+                    .IsClustered(false);
+
+                entity.ToTable("tbl_ValOffices", tb =>
+                {
+                    tb.HasTrigger("T_tbl_ValOffices_DTrig");
+                    tb.HasTrigger("T_tbl_ValOffices_UTrig");
+                });
+
+                entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+                entity.Property(e => e.AltDescription).HasMaxLength(75);
+                entity.Property(e => e.EmailAlias)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.OfficeDescription).HasMaxLength(75);
+                entity.Property(e => e.SupremeUrl).HasColumnName("SupremeURL");
+                entity.Property(e => e.UseAsFormalTitle).HasDefaultValue(false);
+            });
+
+            modelBuilder.Entity<TblWebSelfPublish>(entity =>
+            {
+                entity.HasKey(e => e.Url).HasName("PK_tblWEB_SelfPublish_1");
+
+                entity.ToTable("tblWEB_SelfPublish");
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(400)
+                    .HasColumnName("URL");
+                entity.Property(e => e.Data)
+                    .HasColumnType("text");
+                entity.Property(e => e.OID)
+                    .HasColumnType("int")
+                    .HasColumnName("OID");
+            });
+
+
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
