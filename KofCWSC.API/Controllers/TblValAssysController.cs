@@ -10,7 +10,9 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    public class TblValAssysController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TblValAssysController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
@@ -19,136 +21,83 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: TblValAssys
-        public async Task<IActionResult> Index()
+        // GET: api/TblValAssys
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TblValAssy>>> GetTblValAssys()
         {
-            return View(await _context.TblValAssy
+            return await _context.TblValAssy
                 .OrderBy(x => x.ANumber)
-                .ToListAsync());
+                .ToListAsync();
         }
 
-        // GET: TblValAssys/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/TblValAssys/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TblValAssy>> GetTblValAssy(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValAssy = await _context.TblValAssy
-                .FirstOrDefaultAsync(m => m.ANumber == id);
-            if (tblValAssy == null)
-            {
-                return NotFound();
-            }
-
-            return View(tblValAssy);
-        }
-
-        // GET: TblValAssys/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TblValAssys/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ANumber,ALocation,AName,AddInfo1,AddInfo2,AddInfo3,WebSiteUrl,MasterLoc")] TblValAssy tblValAssy)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tblValAssy);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tblValAssy);
-        }
-
-        // GET: TblValAssys/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tblValAssy = await _context.TblValAssy.FindAsync(id);
+
             if (tblValAssy == null)
             {
                 return NotFound();
             }
-            return View(tblValAssy);
+
+            return tblValAssy;
         }
 
-        // POST: TblValAssys/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/TblValAssys
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ANumber,ALocation,AName,AddInfo1,AddInfo2,AddInfo3,WebSiteUrl,MasterLoc")] TblValAssy tblValAssy)
+        public async Task<ActionResult<TblValAssy>> PostTblValAssy(TblValAssy tblValAssy)
+        {
+            _context.TblValAssy.Add(tblValAssy);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTblValAssy), new { id = tblValAssy.ANumber }, tblValAssy);
+        }
+
+        // PUT: api/TblValAssys/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTblValAssy(int id, TblValAssy tblValAssy)
         {
             if (id != tblValAssy.ANumber)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(tblValAssy).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(tblValAssy);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblValAssyExists(tblValAssy.ANumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(tblValAssy);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblValAssyExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: TblValAssys/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/TblValAssys/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTblValAssy(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValAssy = await _context.TblValAssy
-                .FirstOrDefaultAsync(m => m.ANumber == id);
+            var tblValAssy = await _context.TblValAssy.FindAsync(id);
             if (tblValAssy == null)
             {
                 return NotFound();
             }
 
-            return View(tblValAssy);
-        }
-
-        // POST: TblValAssys/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tblValAssy = await _context.TblValAssy.FindAsync(id);
-            if (tblValAssy != null)
-            {
-                _context.TblValAssy.Remove(tblValAssy);
-            }
-
+            _context.TblValAssy.Remove(tblValAssy);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool TblValAssyExists(int id)

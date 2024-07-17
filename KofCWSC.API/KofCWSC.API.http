@@ -28,3 +28,136 @@ GET {{KofCWSC.API_HostAddress}}/VerifyKofCID/3970136
 GET {{KofCWSC.API_HostAddress}}/users/VerifyKofCID?KofCMemberID=string
 
 ###
+
+GET {{KofCWSC.API_HostAddress}}/api/TblMasPSOs
+
+###
+GET {{KofCWSC.API_HostAddress}}/api/TblMasPSOs/{id}
+
+###
+POST {{KofCWSC.API_HostAddress}}/api/TblMasPSOs
+Content-Type: application/json
+
+{
+  "Year": 2024,
+  "StateDeputy": "John Doe",
+  "StateSecretary": "James Smith",
+  "StateTreasurer": "Jim Brown",
+  "StateAdvocate": "Jack White",
+  "StateWarden": "Bill Green"
+}
+
+###
+
+PUT {{KofCWSC.API_HostAddress}}/api/TblMasPSOs/{id}
+Content-Type: application/json
+
+{
+  "Id": 1,
+  "Year": 2024,
+  "StateDeputy": "John Doe",
+  "StateSecretary": "James Smith",
+  "StateTreasurer": "Jim Brown",
+  "StateAdvocate": "Jack White",
+  "StateWarden": "Bill Green"
+}
+
+###
+
+DELETE {{KofCWSC.API_HostAddress}}/api/TblMasPSOs/{id}
+
+###
+GET {{KofCWSC.API_HostAddress}}/api/TblValAssys
+
+###
+
+GET {{KofCWSC.API_HostAddress}}/api/TblValAssys/{id}
+
+###
+
+POST {{KofCWSC.API_HostAddress}}/api/TblValAssys
+Content-Type: application/json
+
+{
+  "ANumber": 123,
+  "ALocation": "Some Location",
+  "AName": "Some Name",
+  "AddInfo1": "Additional Info 1",
+  "AddInfo2": "Additional Info 2",
+  "AddInfo3": "Additional Info 3",
+  "WebSiteUrl": "https://example.com",
+  "MasterLoc": "Some Master Location"
+}
+
+###
+
+PUT {{KofCWSC.API_HostAddress}}/api/TblValAssys/{id}
+Content-Type: application/json
+
+{
+  "ANumber": 123,
+  "ALocation": "Updated Location",
+  "AName": "Updated Name",
+  "AddInfo1": "Updated Info 1",
+  "AddInfo2": "Updated Info 2",
+  "AddInfo3": "Updated Info 3",
+  "WebSiteUrl": "https://example.com",
+  "MasterLoc": "Updated Master Location"
+}
+
+###
+
+DELETE {{KofCWSC.API_HostAddress}}/api/TblValAssys/{id}
+
+###
+
+GET {{KofCWSC.API_HostAddress}}/api/TblValCouncils
+
+###
+
+GET {{KofCWSC.API_HostAddress}}/api/TblValCouncils/{id}
+
+###
+POST {{KofCWSC.API_HostAddress}} /api/TblValCouncils
+Content-Type: application/json
+
+{
+  "CNumber": 1010,
+  "CLocation": "New City",
+  "CName": "New Council Name",
+  "District": 5,
+  "AddInfo1": "Additional Info 1",
+  "AddInfo2": "Additional Info 2",
+  "AddInfo3": "Additional Info 3",
+  "LiabIns": true,
+  "DioceseId": "Diocese 100",
+  "Chartered": "2023-01-01T00:00:00",
+  "WebSiteUrl": "http://www.newcouncilwebsite.com",
+  "BulletinUrl": "http://www.newcouncilbulletin.com",
+  "Arbalance": 5000.00,
+  "Status": "Active"
+}
+
+###
+PUT {{KofCWSC.API_HostAddress}} /api/TblValCouncils/{id}
+Content-Type: application/json
+
+{
+  "CNumber": 1010,
+  "CLocation": "Updated City",
+  "CName": "Updated Council Name",
+  "District": 6,
+  "AddInfo1": "Updated Additional Info 1",
+  "AddInfo2": "Updated Additional Info 2",
+  "AddInfo3": "Updated Additional Info 3",
+  "LiabIns": false,
+  "DioceseId": "Diocese 200",
+  "Chartered": "2023-01-01T00:00:00",
+  "WebSiteUrl": "http://www.updatedcouncilwebsite.com",
+  "BulletinUrl": "http://www.updatedcouncilbulletin.com",
+  "Arbalance": 3000.00,
+  "Status": "Inactive"
+}
+###
+
+DELETE {{KofCWSC.API_HostAddress}}/api/TblValCouncils/{id}

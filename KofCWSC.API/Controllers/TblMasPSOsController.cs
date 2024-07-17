@@ -10,7 +10,9 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    public class TblMasPSOsController : Controller
+    [Route("[controller]")]
+    [ApiController]
+    public class TblMasPSOsController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
@@ -19,134 +21,80 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: TblMasPSOs
-        public async Task<IActionResult> Index()
+        // GET: api/TblMasPSOs
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TblMasPso>>> GetTblMasPsos()
         {
-            return View(await _context.TblMasPsos.ToListAsync());
+            return await _context.TblMasPsos.ToListAsync();
         }
 
-        // GET: TblMasPSOs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/TblMasPSOs/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TblMasPso>> GetTblMasPso(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblMasPso = await _context.TblMasPsos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblMasPso == null)
-            {
-                return NotFound();
-            }
-
-            return View(tblMasPso);
-        }
-
-        // GET: TblMasPSOs/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TblMasPSOs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Year,StateDeputy,StateSecretary,StateTreasurer,StateAdvocate,StateWarden")] TblMasPso tblMasPso)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tblMasPso);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tblMasPso);
-        }
-
-        // GET: TblMasPSOs/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tblMasPso = await _context.TblMasPsos.FindAsync(id);
+
             if (tblMasPso == null)
             {
                 return NotFound();
             }
-            return View(tblMasPso);
+
+            return tblMasPso;
+        }
+        // POST: api/TblMasPSOs
+        [HttpPost]
+        public async Task<ActionResult<TblMasPso>> PostTblMasPso(TblMasPso tblMasPso)
+        {
+            _context.TblMasPsos.Add(tblMasPso);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTblMasPso), new { id = tblMasPso.Id }, tblMasPso);
         }
 
-        // POST: TblMasPSOs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Year,StateDeputy,StateSecretary,StateTreasurer,StateAdvocate,StateWarden")] TblMasPso tblMasPso)
+        // PUT: api/TblMasPSOs/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTblMasPso(int id, TblMasPso tblMasPso)
         {
             if (id != tblMasPso.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(tblMasPso).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(tblMasPso);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblMasPsoExists(tblMasPso.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(tblMasPso);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblMasPsoExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: TblMasPSOs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/TblMasPSOs/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTblMasPso(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblMasPso = await _context.TblMasPsos
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var tblMasPso = await _context.TblMasPsos.FindAsync(id);
             if (tblMasPso == null)
             {
                 return NotFound();
             }
 
-            return View(tblMasPso);
-        }
-
-        // POST: TblMasPSOs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tblMasPso = await _context.TblMasPsos.FindAsync(id);
-            if (tblMasPso != null)
-            {
-                _context.TblMasPsos.Remove(tblMasPso);
-            }
-
+            _context.TblMasPsos.Remove(tblMasPso);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool TblMasPsoExists(int id)
@@ -154,4 +102,6 @@ namespace KofCWSC.API.Controllers
             return _context.TblMasPsos.Any(e => e.Id == id);
         }
     }
+
 }
+

@@ -10,7 +10,9 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    public class TblValCouncilsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TblValCouncilsController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
@@ -19,139 +21,83 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: TblValCouncils
-        public async Task<IActionResult> Index()
+        // GET: api/TblValCouncils
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TblValCouncil>>> GetTblValCouncils()
         {
-            var filteredSortedList = await _context.TblValCouncils
+            return await _context.TblValCouncils
                 .Where(x => x.CNumber > 0)
                 .OrderBy(x => x.CNumber)
                 .ToListAsync();
-            return View(filteredSortedList);
-            //return View(await _context.TblValCouncils.OrderBy(x => x.CNumber).ToListAsync());
         }
 
-        // GET: TblValCouncils/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/TblValCouncils/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TblValCouncil>> GetTblValCouncil(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tblValCouncil = await _context.TblValCouncils
                 .FirstOrDefaultAsync(m => m.CNumber == id);
             if (tblValCouncil == null)
             {
                 return NotFound();
             }
-
-            return View(tblValCouncil);
+            return tblValCouncil;
         }
 
-        // GET: TblValCouncils/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TblValCouncils/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/TblValCouncils
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
+        public async Task<ActionResult<TblValCouncil>> CreateTblValCouncil(TblValCouncil tblValCouncil)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tblValCouncil);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tblValCouncil);
+            _context.TblValCouncils.Add(tblValCouncil);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetTblValCouncil), new { id = tblValCouncil.CNumber }, tblValCouncil);
         }
 
-        // GET: TblValCouncils/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
-            if (tblValCouncil == null)
-            {
-                return NotFound();
-            }
-            return View(tblValCouncil);
-        }
-
-        // POST: TblValCouncils/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
+        // PUT: api/TblValCouncils/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTblValCouncil(int id, TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(tblValCouncil).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(tblValCouncil);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblValCouncilExists(tblValCouncil.CNumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(tblValCouncil);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblValCouncilExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: TblValCouncils/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/TblValCouncils/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTblValCouncil(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValCouncil = await _context.TblValCouncils
-                .FirstOrDefaultAsync(m => m.CNumber == id);
+            var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
             if (tblValCouncil == null)
             {
                 return NotFound();
             }
 
-            return View(tblValCouncil);
-        }
-
-        // POST: TblValCouncils/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
-            if (tblValCouncil != null)
-            {
-                _context.TblValCouncils.Remove(tblValCouncil);
-            }
-
+            _context.TblValCouncils.Remove(tblValCouncil);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool TblValCouncilExists(int id)
@@ -160,3 +106,4 @@ namespace KofCWSC.API.Controllers
         }
     }
 }
+
