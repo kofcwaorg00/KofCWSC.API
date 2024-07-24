@@ -44,6 +44,19 @@ namespace KofCWSC.API.Controllers
             return tblWebSelfPublish;
         }
 
+        /// <summary>
+        /// changed
+        /// Added Display to support the "Read More.." on in the carosel.  TblWebSelfPublishs does not provide additional data that 
+        /// is used in the display of the message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("Display/{id}")]
+        public async Task<ActionResult<IEnumerable<SPGetSOS>>> Display(int id)
+        {
+            return await _context.Set<SPGetSOS>().FromSql($"EXECUTE uspWEB_GetSOS {id}").ToListAsync();
+        }
+
         // POST: api/TblWebSelfPublishes/Create
         [HttpPost("Create")]
         public async Task<ActionResult<TblWebSelfPublish>> Create([FromBody] TblWebSelfPublish tblWebSelfPublish)

@@ -62,7 +62,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
         public virtual DbSet<TblValOffice> TblValOffices { get; set; }
-
+        public virtual DbSet<SPGetSOS> SPGetSOS { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -451,7 +451,16 @@ namespace KofCWSC.API.Data
                     .HasColumnType("int")
                     .HasColumnName("OID");
             });
+            modelBuilder.Entity<TblCorrMemberOffice>(entity =>
+            {
+                entity.ToTable("tbl_CorrMemberOffice");
 
+                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+                entity.Property(e => e.Year).HasDefaultValue(2024);
+
+            });
 
         }
 

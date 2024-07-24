@@ -22,7 +22,7 @@ namespace KofCWSC.API.Controllers
         // GET: TblValOffices
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblValOffices.ToListAsync());
+            return View(await _context.TblValOffices.OrderBy(x => x.OfficeDescription).ToListAsync());
         }
 
         // GET: TblValOffices/Details/5
