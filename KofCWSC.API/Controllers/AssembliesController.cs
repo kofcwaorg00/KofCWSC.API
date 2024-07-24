@@ -12,11 +12,11 @@ namespace KofCWSC.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TblValAssysController : ControllerBase
+    public class AssembliesController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
-        public TblValAssysController(KofCWSCAPIDBContext context)
+        public AssembliesController(KofCWSCAPIDBContext context)
         {
             _context = context;
         }

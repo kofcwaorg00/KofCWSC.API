@@ -161,3 +161,101 @@ Content-Type: application/json
 ###
 
 DELETE {{KofCWSC.API_HostAddress}}/api/TblValCouncils/{id}
+
+### Get Bulletins
+GET {{host}}/api/SP/GetBulletins
+Accept: application/json
+
+### Get Email Alias
+GET {{host}}/api/SP/GetEmailAlias
+Accept: application/json
+
+### Get Chairmen
+GET {{host}}/api/SP/GetChairmen
+Accept: application/json
+
+### Get Chairman Info Block by ID
+GET {{host}}/api/SP/GetChairmanInfoBlock/{id}
+Accept: application/json
+
+### Get DDs
+GET {{host}}/api/SP/GetDDs
+Accept: application/json
+
+### Get Fourth Degree Officers
+GET {{host}}/api/SP/FourthDegreeOfficers
+Accept: application/json
+
+
+
+### Get All Offices for a Member
+GET {{host}}/api/MemberOffices/{memberId}
+Accept: application/json
+
+### Get Details for a Specific Member Office
+GET {{host}}/api/MemberOffices/Details/{officeId}
+Accept: application/json
+
+### Create Member Office
+POST {{host}}/api/MemberOffices
+Content-Type: application/json
+Accept: application/json
+{
+  "MemberId": 123,
+  "OfficeId": 1,
+  "PrimaryOffice": true,
+  "Year": 2024
+}
+
+### Update Member Office
+PUT {{host}}/api/MemberOffices/{officeId}
+Content-Type: application/json
+Accept: application/json
+{
+  "Id": 10,
+  "MemberId": 123,
+  "OfficeId": 1,
+  "PrimaryOffice": true,
+  "Year": 2025
+}
+
+### Delete Member Office
+DELETE {{host}}/api/MemberOffices/{officeId}
+Accept: application/json
+
+### Get All Awards
+GET {{host}}/api/MasAwards
+Accept: application/json
+
+### Get Award Details by ID
+GET {{host}}/api/MasAwards/{id}
+Accept: application/json
+
+### Create New Award
+POST {{host}}/api/MasAwards
+Content-Type: application/json
+Accept: application/json
+{
+  "AwardName": "Best Member",
+  "AwardDescription": "Award for the best member of the year.",
+  "AwardDueDate": "2023-12-31T00:00:00Z",
+  "LinkToTheAwardForm": "http://example.com/form",
+  "AwardSubmissionEmailAddress": "submit@example.com"
+}
+
+### Update Award
+PUT {{host}}/api/MasAwards/{id}
+Content-Type: application/json
+Accept: application/json
+{
+  "Id": 1,
+  "AwardName": "Best Member Updated",
+  "AwardDescription": "Updated description for the best member of the year.",
+  "AwardDueDate": "2024-12-31T00:00:00Z",
+  "LinkToTheAwardForm": "http://example.com/updated_form",
+  "AwardSubmissionEmailAddress": "updated_submit@example.com"
+}
+
+### Delete Award
+DELETE {{host}}/api/MasAwards/{id}
+Accept: application/json

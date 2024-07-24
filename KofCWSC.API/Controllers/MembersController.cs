@@ -17,7 +17,7 @@ namespace KofCWSC.API.Controllers
 {
     //[Route("[controller]")]
     [ApiController]
-    public class TblMasMembersController : ControllerBase
+    public class MembersController : ControllerBase
     {
         //********************************************************************************************
         // June 3, 2024 Tim Philomeno
@@ -39,7 +39,7 @@ namespace KofCWSC.API.Controllers
         //********************************************************************************************
         private readonly KofCWSCAPIDBContext _context;
 
-        public TblMasMembersController(KofCWSCAPIDBContext context)
+        public MembersController(KofCWSCAPIDBContext context)
         {
             _context = context;
             Log.Information("DBContext Created");

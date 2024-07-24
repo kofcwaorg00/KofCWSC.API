@@ -10,11 +10,11 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    public class TblValOfficesController : Controller
+    public class OfficesController : Controller
     {
         private readonly KofCWSCAPIDBContext _context;
 
-        public TblValOfficesController(KofCWSCAPIDBContext context)
+        public OfficesController(KofCWSCAPIDBContext context)
         {
             _context = context;
         }

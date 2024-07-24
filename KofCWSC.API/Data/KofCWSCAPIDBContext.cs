@@ -10,6 +10,7 @@ using Microsoft.Data.SqlClient;
 using Azure.Security.KeyVault.Secrets;
 using Serilog;
 using KofCWSC.API.Models;
+using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Data
 {
@@ -49,10 +50,13 @@ namespace KofCWSC.API.Data
             }
         }
 
+        public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
+        public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
+        public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
-        public DbSet<TblValAssy> TblValAssy { get; set; } = default!;
+        public virtual DbSet<TblValAssy> TblValAssy { get; set; } = default!;
         public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; } 
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
@@ -71,6 +75,11 @@ namespace KofCWSC.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MemberVM>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
             modelBuilder.Entity<TblMasMember>(entity =>
             {
                 entity.HasKey(e => e.MemberId);
@@ -386,6 +395,45 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.OfficeDescription).HasMaxLength(75);
                 entity.Property(e => e.SupremeUrl).HasColumnName("SupremeURL");
                 entity.Property(e => e.UseAsFormalTitle).HasDefaultValue(false);
+            });
+
+            modelBuilder.Entity<TblWebSelfPublish>(entity =>
+            {
+                entity.HasKey(e => e.Url).HasName("PK_tblWEB_SelfPublish_1");
+
+                entity.ToTable("tblWEB_SelfPublish");
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(400)
+                    .HasColumnName("URL");
+                entity.Property(e => e.Data)
+                    .HasColumnType("text");
+                entity.Property(e => e.OID)
+                    .HasColumnType("int")
+                    .HasColumnName("OID");
+            });
+
+            modelBuilder.Entity<TblMasAward>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__tbl_MasA__3214EC078DBBE52E");
+
+                entity.ToTable("tbl_MasAwards");
+
+                entity.Property(e => e.AwardDescription)
+                    .HasMaxLength(255)
+                    .HasColumnName("Award Description");
+                entity.Property(e => e.AwardDueDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Award Due Date");
+                entity.Property(e => e.AwardName)
+                    .HasMaxLength(255)
+                    .HasColumnName("Award Name");
+                entity.Property(e => e.AwardSubmissionEmailAddress)
+                    .HasMaxLength(255)
+                    .HasColumnName("Award Submission Email Address");
+                entity.Property(e => e.LinkToTheAwardForm)
+                    .HasMaxLength(255)
+                    .HasColumnName("Link to the Award Form");
             });
 
             modelBuilder.Entity<TblWebSelfPublish>(entity =>
