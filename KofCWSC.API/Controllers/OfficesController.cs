@@ -10,7 +10,9 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    public class OfficesController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OfficesController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
@@ -19,137 +21,84 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: TblValOffices
-        public async Task<IActionResult> Index()
+        // GET: api/Offices
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TblValOffice>>> GetOffices()
         {
-            return View(await _context.TblValOffices.ToListAsync());
+            return await _context.TblValOffices.ToListAsync();
         }
 
-        // GET: TblValOffices/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Offices/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TblValOffice>> GetOffice(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
-            {
-                return NotFound();
-            }
-
-            return View(tblValOffice);
-        }
-
-        // GET: TblValOffices/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TblValOffices/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tblValOffice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tblValOffice);
-        }
-
-        // GET: TblValOffices/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tblValOffice = await _context.TblValOffices.FindAsync(id);
+
             if (tblValOffice == null)
             {
                 return NotFound();
             }
-            return View(tblValOffice);
+
+            return tblValOffice;
         }
 
-        // POST: TblValOffices/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/Offices
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
+        public async Task<ActionResult<TblValOffice>> CreateOffice(TblValOffice tblValOffice)
+        {
+            _context.TblValOffices.Add(tblValOffice);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetOffice), new { id = tblValOffice.OfficeId }, tblValOffice);
+        }
+
+        // PUT: api/Offices/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOffice(int id, TblValOffice tblValOffice)
         {
             if (id != tblValOffice.OfficeId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(tblValOffice).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(tblValOffice);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblValOfficeExists(tblValOffice.OfficeId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(tblValOffice);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OfficeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: TblValOffices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/Offices/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOffice(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
+            var tblValOffice = await _context.TblValOffices.FindAsync(id);
             if (tblValOffice == null)
             {
                 return NotFound();
             }
 
-            return View(tblValOffice);
-        }
-
-        // POST: TblValOffices/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice != null)
-            {
-                _context.TblValOffices.Remove(tblValOffice);
-            }
-
+            _context.TblValOffices.Remove(tblValOffice);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
-        private bool TblValOfficeExists(int id)
+        private bool OfficeExists(int id)
         {
             return _context.TblValOffices.Any(e => e.OfficeId == id);
         }

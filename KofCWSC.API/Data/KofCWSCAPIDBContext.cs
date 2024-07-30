@@ -52,6 +52,7 @@ namespace KofCWSC.API.Data
 
         public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
         public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
+        public virtual DbSet<TblValOffice> TblValOffices { get; set; }
         public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
@@ -61,7 +62,6 @@ namespace KofCWSC.API.Data
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; } 
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
-        public virtual DbSet<TblValOffice> TblValOffices { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -330,7 +330,7 @@ namespace KofCWSC.API.Data
                 //entity.Property(e => e.FullName).HasColumnName("FullName");
                 //entity.Property(e => e.CSZ).HasColumnName("CSZ");
             });
-            OnModelCreatingPartial(modelBuilder);
+            
 
             modelBuilder.Entity<TblValCouncil>(entity =>
             {
@@ -452,7 +452,12 @@ namespace KofCWSC.API.Data
                     .HasColumnName("OID");
             });
 
+            modelBuilder.Entity<SPGetSOS>(entity =>
+            {
+                entity.HasNoKey();
+            });
 
+            OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

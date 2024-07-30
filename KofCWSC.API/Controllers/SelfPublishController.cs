@@ -21,15 +21,14 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: api/TblWebSelfPublishes
+        // GET: api/SelfPublish
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<TblWebSelfPublish>>> GetAll()
         {
-            var items = await _context.TblWebSelfPublishes.ToListAsync();
-            return Ok(items);
+            return await _context.TblWebSelfPublishes.ToListAsync();
         }
 
-        // GET: api/TblWebSelfPublishes/Details/{id}
+        // GET: api/SelfPublish/Details/{id}
         [HttpGet("Details/{id}")]
         public async Task<ActionResult<TblWebSelfPublish>> GetDetails(string id)
         {
@@ -44,7 +43,17 @@ namespace KofCWSC.API.Controllers
             return tblWebSelfPublish;
         }
 
-        // POST: api/TblWebSelfPublishes/Create
+        // GET: api/SelfPublish/Display/{id}
+        [HttpGet("Display/{id}")]
+        public async Task<ActionResult<IEnumerable<SPGetSOS>>> Display(int id)
+        {
+            var result = await _context.Set<SPGetSOS>()
+                .FromSqlRaw($"uspWEB_GetSOS {id}")
+                .ToListAsync();
+            return result;
+        }
+
+        // POST: api/SelfPublish/Create
         [HttpPost("Create")]
         public async Task<ActionResult<TblWebSelfPublish>> Create([FromBody] TblWebSelfPublish tblWebSelfPublish)
         {
@@ -57,7 +66,7 @@ namespace KofCWSC.API.Controllers
             return BadRequest(ModelState);
         }
 
-        // PUT: api/TblWebSelfPublishes/Edit/{id}
+        // PUT: api/SelfPublish/Edit/{id}
         [HttpPut("Edit/{id}")]
         public async Task<IActionResult> Edit(string id, [FromBody] TblWebSelfPublish tblWebSelfPublish)
         {
@@ -87,7 +96,7 @@ namespace KofCWSC.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/TblWebSelfPublishes/Delete/{id}
+        // DELETE: api/SelfPublish/Delete/{id}
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {

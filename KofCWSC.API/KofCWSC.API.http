@@ -188,39 +188,86 @@ Accept: application/json
 
 
 
-### Get All Offices for a Member
-GET {{host}}/api/MemberOffices/{memberId}
+### Get All TblValOffices
+GET {{host}}/api/TblValOffices
 Accept: application/json
 
-### Get Details for a Specific Member Office
-GET {{host}}/api/MemberOffices/Details/{officeId}
+### Get TblValOffice by ID
+GET {{host}}/api/TblValOffices/{id}
 Accept: application/json
 
-### Create Member Office
-POST {{host}}/api/MemberOffices
+### Create New TblValOffice
+POST {{host}}/api/TblValOffices
 Content-Type: application/json
 Accept: application/json
 {
-  "MemberId": 123,
-  "OfficeId": 1,
-  "PrimaryOffice": true,
-  "Year": 2024
+  "OfficeDescription": "New Office",
+  "DirSortOrder": 1,
+  "AltDescription": "Alternate Description",
+  "EmailAlias": "email@example.com",
+  "UseAsFormalTitle": true,
+  "WebPageTagLine": "Web Page Tag Line",
+  "SupremeUrl": "http://example.com"
 }
 
-### Update Member Office
-PUT {{host}}/api/MemberOffices/{officeId}
+### Update TblValOffice
+PUT {{host}}/api/TblValOffices/{id}
 Content-Type: application/json
 Accept: application/json
 {
-  "Id": 10,
-  "MemberId": 123,
   "OfficeId": 1,
-  "PrimaryOffice": true,
-  "Year": 2025
+  "OfficeDescription": "Updated Office",
+  "DirSortOrder": 2,
+  "AltDescription": "Updated Alternate Description",
+  "EmailAlias": "updatedemail@example.com",
+  "UseAsFormalTitle": false,
+  "WebPageTagLine": "Updated Web Page Tag Line",
+  "SupremeUrl": "http://example.com/updated"
 }
 
-### Delete Member Office
-DELETE {{host}}/api/MemberOffices/{officeId}
+### Delete TblValOffice
+DELETE {{host}}/api/TblValOffices/{id}
+Accept: application/json
+
+### Get All Offices
+GET {{host}}/api/Offices
+Accept: application/json
+
+### Get Office by ID
+GET {{host}}/api/Offices/{id}
+Accept: application/json
+
+### Create New Office
+POST {{host}}/api/Offices
+Content-Type: application/json
+Accept: application/json
+{
+  "OfficeDescription": "New Office",
+  "DirSortOrder": 1,
+  "AltDescription": "Alternate Description",
+  "EmailAlias": "email@example.com",
+  "UseAsFormalTitle": true,
+  "WebPageTagLine": "Web Page Tag Line",
+  "SupremeUrl": "http://example.com"
+}
+
+### Update Office
+PUT {{host}}/api/Offices/{id}
+Content-Type: application/json
+Accept: application/json
+{
+  "OfficeId": 1,
+  "OfficeDescription": "Updated Office",
+  "DirSortOrder": 2,
+  "AltDescription": "Updated Alternate Description",
+  "EmailAlias": "updatedemail@example.com",
+  "UseAsFormalTitle": false,
+  "WebPageTagLine": "Updated Web Page Tag Line",
+  "SupremeUrl": "http://example.com/updated"
+}
+
+### Delete Office
+DELETE {{host}}/api/Offices/{id}
 Accept: application/json
 
 ### Get All Awards
@@ -258,4 +305,55 @@ Accept: application/json
 
 ### Delete Award
 DELETE {{host}}/api/MasAwards/{id}
+Accept: application/json
+
+### Get Home Page Data
+GET {{host}}/api/Home
+Accept: application/json
+
+### Get Privacy Information
+GET {{host}}/api/Home/Privacy
+Accept: application/json
+
+### Health Check
+GET {{host}}/api/Home/HealthCheck
+Accept: application/json
+
+### Simulate an Error
+GET {{host}}/api/Home/Error
+Accept: application/json
+
+### Get All WebSelfPublishes
+GET {{host}}/api/SelfPublish
+Accept: application/json
+
+### Get WebSelfPublish by URL
+GET {{host}}/api/SelfPublish/Details/{id}
+Accept: application/json
+
+### Display WebSelfPublish Data
+GET {{host}}/api/SelfPublish/Display/{id}
+Accept: application/json
+
+### Create New WebSelfPublish
+POST {{host}}/api/SelfPublish/Create
+Content-Type: application/json
+Accept: application/json
+{
+  "Url": "http://example.com",
+  "Data": "Some data"
+}
+
+### Update WebSelfPublish
+PUT {{host}}/api/SelfPublish/Edit/{id}
+Content-Type: application/json
+Accept: application/json
+{
+  "Url": "http://example.com",
+  "Data": "Updated data",
+  "OID": 1
+}
+
+### Delete WebSelfPublish
+DELETE {{host}}/api/SelfPublish/Delete/{id}
 Accept: application/json
