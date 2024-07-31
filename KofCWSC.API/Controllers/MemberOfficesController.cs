@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Models;
 using KofCWSC.API.Data;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -39,12 +40,20 @@ namespace KofCWSC.API.Controllers
         [HttpGet("Details/{id}")]
         public async Task<ActionResult<TblCorrMemberOffice>> GetMemberOfficeDetails(int id)
         {
-            var memberOffice = await _context.TblCorrMemberOffices.FindAsync(id);
-            if (memberOffice == null)
+            try
             {
-                return NotFound();
+                var memberOffice = await _context.TblCorrMemberOffices.FindAsync(id);
+                if (memberOffice == null)
+                {
+                    return NotFound();
+                }
+                return memberOffice;
             }
-            return memberOffice;
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "-" + ex.StackTrace);
+                return NotFound();  
+            }
         }
 
         // POST: api/MemberOffices

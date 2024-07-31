@@ -63,7 +63,6 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -451,6 +450,9 @@ namespace KofCWSC.API.Data
                     .HasColumnType("int")
                     .HasColumnName("OID");
             });
+            modelBuilder.Entity<TblCorrMemberOffice>(entity =>
+            {
+                entity.ToTable("tbl_CorrMemberOffice");
 
             modelBuilder.Entity<SPGetSOS>(entity =>
             {
