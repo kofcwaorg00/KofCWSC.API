@@ -329,7 +329,7 @@ namespace KofCWSC.API.Data
                 //entity.Property(e => e.FullName).HasColumnName("FullName");
                 //entity.Property(e => e.CSZ).HasColumnName("CSZ");
             });
-            
+
 
             modelBuilder.Entity<TblValCouncil>(entity =>
             {
@@ -454,13 +454,15 @@ namespace KofCWSC.API.Data
             {
                 entity.ToTable("tbl_CorrMemberOffice");
 
-            modelBuilder.Entity<SPGetSOS>(entity =>
-            {
-                entity.HasNoKey();
-            });
+                modelBuilder.Entity<SPGetSOS>(entity =>
+                {
+                    entity.HasNoKey();
+                });
 
-            OnModelCreatingPartial(modelBuilder);
-        }
+                OnModelCreatingPartial(modelBuilder);
+            });
+            }
+       
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
