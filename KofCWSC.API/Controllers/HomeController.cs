@@ -43,9 +43,13 @@ namespace KofCWSC.API.Controllers
                 environment = "Using DASP PRODUCTION DATABASE";
             }
 
-            var result = await _context.Set<HomePageViewModel>()
-                .FromSqlRaw("EXECUTE uspWEB_GetHomePage")
-                .ToListAsync();
+            //var result = await _context.Set<HomePageViewModel>()
+            //    .FromSqlRaw("EXECUTE uspWEB_GetHomePage")
+            //    .ToListAsync();
+
+            var result = _context.Database
+                .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
+                .ToList();
 
             return Ok(new
             {

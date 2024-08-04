@@ -6,6 +6,8 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Net;
+using KofCWSC.API.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +33,11 @@ try
     var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
     var cnString = client.GetSecret("AZDEV").Value;
     string connectionString = cnString.Value;
-
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    string ipAddress = Helper.GetIPAddress(Dns.GetHostName());
     Log.Information("Using: " + connectionString);
+    Log.Information("Local ip Address is: " + ipAddress);
     //------------------------------------------------------------------------------------------------------------------------------
     // make sure we have a value from KeyVault. if not throw an exception
     if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
