@@ -14,5 +14,7 @@ namespace KofCWSC.API.Models
         public int Council { get; set; }
 
         public string? Email2 { get; set; }
+        public int MemberID { get; set; }
+        public string? Heading { get; set; }
     }
 }

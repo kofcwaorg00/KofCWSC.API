@@ -62,6 +62,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; } 
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
+        public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -450,6 +451,10 @@ namespace KofCWSC.API.Data
                     .HasColumnType("int")
                     .HasColumnName("OID");
             });
+            modelBuilder.Entity<SPGetChairmenId>(entity =>
+            {
+                entity.Property(e => e.Id);
+            });
             modelBuilder.Entity<TblCorrMemberOffice>(entity =>
             {
                 entity.ToTable("tbl_CorrMemberOffice");
@@ -458,7 +463,6 @@ namespace KofCWSC.API.Data
                 {
                     entity.HasNoKey();
                 });
-
                 OnModelCreatingPartial(modelBuilder);
             });
             }

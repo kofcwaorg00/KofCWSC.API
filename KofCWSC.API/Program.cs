@@ -36,7 +36,7 @@ try
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     string ipAddress = Helper.GetIPAddress(Dns.GetHostName());
-    Log.Information("Using: " + connectionString);
+    //Log.Information("Using: " + connectionString);
     Log.Information("Local ip Address is: " + ipAddress);
     //------------------------------------------------------------------------------------------------------------------------------
     // make sure we have a value from KeyVault. if not throw an exception

@@ -19,5 +19,6 @@ namespace KofCWSC.API.Models
         public string? AssignedCouncils { get; set; }
         
         public string? Email { get; set; }
+        public string Heading { get; set; }
     }
 }
