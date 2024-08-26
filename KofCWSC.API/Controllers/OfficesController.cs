@@ -10,7 +10,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class OfficesController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/Offices
-        [HttpGet]
+        [HttpGet("Offices")]
         public async Task<ActionResult<IEnumerable<TblValOffice>>> GetOffices()
         {
             return await _context.TblValOffices.ToListAsync();
         }
 
         // GET: api/Offices/5
-        [HttpGet("{id}")]
+        [HttpGet("Office/{id}")]
         public async Task<ActionResult<TblValOffice>> GetOffice(int id)
         {
             var tblValOffice = await _context.TblValOffices.FindAsync(id);
@@ -43,7 +43,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/Offices
-        [HttpPost]
+        [HttpPost("Office")]
         public async Task<ActionResult<TblValOffice>> CreateOffice(TblValOffice tblValOffice)
         {
             _context.TblValOffices.Add(tblValOffice);
@@ -53,7 +53,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/Offices/5
-        [HttpPut("{id}")]
+        [HttpPut("Office/{id}")]
         public async Task<IActionResult> UpdateOffice(int id, TblValOffice tblValOffice)
         {
             if (id != tblValOffice.OfficeId)
@@ -83,7 +83,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/Offices/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Office/{id}")]
         public async Task<IActionResult> DeleteOffice(int id)
         {
             var tblValOffice = await _context.TblValOffices.FindAsync(id);

@@ -10,13 +10,21 @@ namespace KofCWSC.API.Controllers
 {
     [Route("")]
     [ApiController]
-    public class SPController : ControllerBase
+    public class SPController : Controller
     {
         private readonly KofCWSCAPIDBContext _context;
 
         public SPController(KofCWSCAPIDBContext context)
         {
             _context = context;
+        }
+
+        // GET: MemberName
+        [HttpGet("GetMemberName/{id}")]
+        public async Task<ActionResult> GetMemberName(int id)
+        {
+            var myName = _context.funSYS_BuildName.FromSqlInterpolated($"SELECT dbo.funSYS_BuildName({id},0,'N') as MemberName").FirstOrDefault().MemberName;
+            return Json(myName);
         }
 
         // GET: GetAssys

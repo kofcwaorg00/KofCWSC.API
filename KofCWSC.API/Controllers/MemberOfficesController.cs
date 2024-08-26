@@ -11,7 +11,7 @@ using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class MemberOfficesController : ControllerBase
     {
@@ -23,21 +23,17 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/MemberOffices/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<TblCorrMemberOffice>>> GetMemberOffices(int id)
+        [HttpGet("MemberOffice/{id}")]
+        public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> GetMemberOffices(int id)
         {
-            var offices = await _context.TblCorrMemberOffices
-                                       .Where(m => m.MemberId == id)
-                                       .ToListAsync();
-            if (!offices.Any())
-            {
-                return NotFound();
-            }
-            return offices;
+            return _context.Database
+                    .SqlQuery<TblCorrMemberOfficeVM>($"EXECUTE uspSYS_GetOfficesForMemberID {id}")
+                    .ToList();
+            
         }
 
         // GET: api/MemberOffices/Details/5
-        [HttpGet("Details/{id}")]
+        [HttpGet("MemberOffice/Details/{id}")]
         public async Task<ActionResult<TblCorrMemberOffice>> GetMemberOfficeDetails(int id)
         {
             try
@@ -57,7 +53,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/MemberOffices
-        [HttpPost]
+        [HttpPost("MemberOffice")]
         public async Task<ActionResult<TblCorrMemberOffice>> CreateMemberOffice([FromBody] TblCorrMemberOffice memberOffice)
         {
             _context.TblCorrMemberOffices.Add(memberOffice);
@@ -66,7 +62,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/MemberOffices/5
-        [HttpPut("{id}")]
+        [HttpPut("MemberOffice/{id}")]
         public async Task<IActionResult> UpdateMemberOffice(int id, [FromBody] TblCorrMemberOffice memberOffice)
         {
             if (id != memberOffice.Id)
@@ -96,7 +92,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/MemberOffices/5
-        [HttpDelete("{id}")]
+        [HttpDelete("MemberOffice/{id}")]
         public async Task<IActionResult> DeleteMemberOffice(int id)
         {
             var memberOffice = await _context.TblCorrMemberOffices.FindAsync(id);

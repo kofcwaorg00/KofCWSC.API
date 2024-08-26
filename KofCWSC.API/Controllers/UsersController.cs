@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace KofCWSC.API.Controllers
 {
-    //[Route("[controller]")]
+    [Route("")]
     [ApiController]
     public class UsersController : Controller
     {

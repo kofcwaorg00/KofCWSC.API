@@ -12,10 +12,12 @@ using Microsoft.VisualBasic;
 using System.Security.Principal;
 using Serilog;
 using System.Text.RegularExpressions;
+using Microsoft.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSC.API.Controllers
 {
-    //[Route("[controller]")]
+    [Route("")]
     [ApiController]
     public class MembersController : ControllerBase
     {
@@ -47,7 +49,7 @@ namespace KofCWSC.API.Controllers
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
         [HttpGet("Members/LastName/{lastname}")]
-        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetTblMasMembers(string lastname)
+        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembers(string lastname)
         {
             Log.Information("Starting GetMembers/ByLastName/" + lastname);
             if (!IsLastNameValid(lastname))
@@ -84,7 +86,7 @@ namespace KofCWSC.API.Controllers
         // GET: api/TblMasMembers/5
         //[HttpGet("/GetMember/{id}")]
         [HttpGet("Member/{id}")]
-        public async Task<ActionResult<TblMasMember>> GetTblMasMember(int id)
+        public async Task<ActionResult<TblMasMember>> GetMembers(int id)
         {
             
             Log.Information("Starting Getting Member " + id);
@@ -94,10 +96,6 @@ namespace KofCWSC.API.Controllers
                 return NotFound();
             }
 
-            //********************************************************************************************
-            // June 3, 2024 Tim Philomeno
-            // I have chosen to use 3 letter prefixes Get, Upd, Del, Add for my routing
-            //********************************************************************************************
             var tblMasMember = await _context.TblMasMembers.FindAsync(id);
 
             if (tblMasMember == null)
@@ -112,7 +110,7 @@ namespace KofCWSC.API.Controllers
         // PUT: api/TblMasMembers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("/Member/{id}")]
-        public async Task<IActionResult> PutTblMasMember(int id, [FromBody] TblMasMember tblMasMember)
+        public async Task<IActionResult> Member(int id, [FromBody] TblMasMember tblMasMember)
         {
             Log.Information("Starting UpdMember " + id);
             //********************************************************************************************
@@ -157,7 +155,7 @@ namespace KofCWSC.API.Controllers
         // POST: api/TblMasMembers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/Member")]
-        public async Task<ActionResult<TblMasMember>> PostTblMasMember([FromBody]TblMasMember tblMasMember)
+        public async Task<ActionResult<TblMasMember>> Member([FromBody]TblMasMember tblMasMember)
         {
             Log.Information("Starting NewMember");
             //********************************************************************************************
@@ -167,21 +165,26 @@ namespace KofCWSC.API.Controllers
             //********************************************************************************************
             try
             {
+                // Call the UserService to create a new user
                 _context.TblMasMembers.Add(tblMasMember);
                 await _context.SaveChangesAsync();
-
                 return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
+            }
+            catch (DbUpdateException sqlex)
+            {
+                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + sqlex.Message + " " + sqlex.InnerException);
+                return BadRequest();
             }
             catch (Exception ex)
             {
                 Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + ex.Message + " " + ex.InnerException);
-                return NoContent();
+                return BadRequest();
             }
         }
 
         // DELETE: api/TblMasMembers/5
         [HttpDelete("/Member/{id}")]
-        public async Task<IActionResult> DeleteTblMasMember(int id)
+        public async Task<IActionResult> DeleteMember(int id)
         {
             Log.Information("Starting DelMember ID " + id);
             //********************************************************************************************
