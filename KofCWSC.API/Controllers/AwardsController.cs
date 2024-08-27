@@ -10,26 +10,26 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
-    public class MasAwardsController : ControllerBase
+    public class AwardsController : ControllerBase
     {
         private readonly KofCWSCAPIDBContext _context;
 
-        public MasAwardsController(KofCWSCAPIDBContext context)
+        public AwardsController(KofCWSCAPIDBContext context)
         {
             _context = context;
         }
 
         // GET: api/MasAwards
-        [HttpGet]
+        [HttpGet("Awards")]
         public async Task<ActionResult<IEnumerable<TblMasAward>>> GetAwards()
         {
             return await _context.TblMasAwards.ToListAsync();
         }
 
         // GET: api/MasAwards/5
-        [HttpGet("{id}")]
+        [HttpGet("Award/{id}")]
         public async Task<ActionResult<TblMasAward>> GetAward(int id)
         {
             var award = await _context.TblMasAwards.FindAsync(id);
@@ -43,7 +43,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/MasAwards
-        [HttpPost]
+        [HttpPost("Award")]
         public async Task<ActionResult<TblMasAward>> PostAward(TblMasAward award)
         {
             _context.TblMasAwards.Add(award);
@@ -53,7 +53,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/MasAwards/5
-        [HttpPut("{id}")]
+        [HttpPut("Award/{id}")]
         public async Task<IActionResult> PutAward(int id, TblMasAward award)
         {
             if (id != award.Id)
@@ -83,7 +83,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/MasAwards/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Award/{id}")]
         public async Task<IActionResult> DeleteAward(int id)
         {
             var award = await _context.TblMasAwards.FindAsync(id);
