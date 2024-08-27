@@ -10,7 +10,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("[controller]")]
+    [Route("")]
     [ApiController]
     public class PSOsController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblMasPSOs
-        [HttpGet]
+        [HttpGet("PSOs")]
         public async Task<ActionResult<IEnumerable<TblMasPso>>> GetTblMasPsos()
         {
             return await _context.TblMasPsos.ToListAsync();
         }
 
         // GET: api/TblMasPSOs/5
-        [HttpGet("{id}")]
+        [HttpGet("PSO/{id}")]
         public async Task<ActionResult<TblMasPso>> GetTblMasPso(int id)
         {
             var tblMasPso = await _context.TblMasPsos.FindAsync(id);
@@ -42,7 +42,7 @@ namespace KofCWSC.API.Controllers
             return tblMasPso;
         }
         // POST: api/TblMasPSOs
-        [HttpPost]
+        [HttpPost("PSO")]
         public async Task<ActionResult<TblMasPso>> PostTblMasPso(TblMasPso tblMasPso)
         {
             _context.TblMasPsos.Add(tblMasPso);
@@ -52,7 +52,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/TblMasPSOs/5
-        [HttpPut("{id}")]
+        [HttpPut("PSO/{id}")]
         public async Task<IActionResult> PutTblMasPso(int id, TblMasPso tblMasPso)
         {
             if (id != tblMasPso.Id)
@@ -82,7 +82,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/TblMasPSOs/5
-        [HttpDelete("{id}")]
+        [HttpDelete("PSO/{id}")]
         public async Task<IActionResult> DeleteTblMasPso(int id)
         {
             var tblMasPso = await _context.TblMasPsos.FindAsync(id);
