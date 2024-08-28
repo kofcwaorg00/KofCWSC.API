@@ -59,11 +59,11 @@ namespace KofCWSC.API.Data
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
         public virtual DbSet<TblValAssy> TblValAssy { get; set; } = default!;
         public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
-        public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; } 
+        public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
 
         public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
-
+        public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -465,9 +465,24 @@ namespace KofCWSC.API.Data
                 });
                 OnModelCreatingPartial(modelBuilder);
             });
-            }
-       
 
+            modelBuilder.Entity<TblSysTrxEvents>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__tblSYS_t__3214EC07638F8109");
+
+                entity.ToTable("tblSYS_trxEvents");
+
+                entity.Property(e => e.AddedBy).HasMaxLength(50);
+                entity.Property(e => e.AttachUrl)
+                    .HasMaxLength(250)
+                    .HasColumnName("AttachURL");
+                entity.Property(e => e.Begin).HasColumnType("datetime");
+                entity.Property(e => e.DateAdded).HasColumnType("datetime");
+                entity.Property(e => e.End).HasColumnType("datetime");
+                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.isAllDay).HasColumnType("boolean");
+            });
+        }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
