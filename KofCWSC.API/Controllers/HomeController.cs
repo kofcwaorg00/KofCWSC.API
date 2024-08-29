@@ -1,12 +1,10 @@
 using KofCWSC.API.Data;
-using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class HomeController : ControllerBase
     {
@@ -20,43 +18,17 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/Home
-        [HttpGet]
+        [HttpGet("Home")]
         public async Task<IActionResult> Index()
         {
             string environment;
             var connectionString = _context.Database.GetDbConnection().ConnectionString;
 
-            if (connectionString.Contains("2k2201"))
-            {
-                environment = "Using DASP DEVELOPMENT DATABASE";
-            }
-            else if (connectionString.Contains("KofCWSCWebDEV"))
-            {
-                environment = "Using AZURE DEVELOPMENT DATABASE";
-            }
-            else if (connectionString.Contains("KofCWSCWeb"))
-            {
-                environment = "Using AZURE PRODUCTION DATABASE";
-            }
-            else
-            {
-                environment = "Using DASP PRODUCTION DATABASE";
-            }
-
-            //var result = await _context.Set<HomePageViewModel>()
-            //    .FromSqlRaw("EXECUTE uspWEB_GetHomePage")
-            //    .ToListAsync();
-
             var result = _context.Database
                 .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
                 .ToList();
 
-            return Ok(new
-            {
-                Environment = environment,
-                APIURL = "Using AZDEV",
-                Result = result
-            });
+            return new JsonResult(result);
         }
 
         // GET: api/Home/Privacy
