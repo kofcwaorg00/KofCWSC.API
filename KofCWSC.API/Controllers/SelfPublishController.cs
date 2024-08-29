@@ -10,7 +10,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class SelfPublishController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/SelfPublish
-        [HttpGet]
+        [HttpGet("SelfPubs")]
         public async Task<ActionResult<IEnumerable<TblWebSelfPublish>>> GetAll()
         {
             return await _context.TblWebSelfPublishes.ToListAsync();
         }
 
         // GET: api/SelfPublish/Details/{id}
-        [HttpGet("Details/{id}")]
+        [HttpGet("SelfPub/{id}")]
         public async Task<ActionResult<TblWebSelfPublish>> GetDetails(string id)
         {
             var tblWebSelfPublish = await _context.TblWebSelfPublishes
@@ -44,7 +44,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/SelfPublish/Display/{id}
-        [HttpGet("Display/{id}")]
+        [HttpGet("SelfPub/Display/{id}")]
         public async Task<ActionResult<IEnumerable<SPGetSOS>>> Display(int id)
         {
             var result = await _context.Set<SPGetSOS>()
@@ -54,7 +54,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/SelfPublish/Create
-        [HttpPost("Create")]
+        [HttpPost("SelfPub")]
         public async Task<ActionResult<TblWebSelfPublish>> Create([FromBody] TblWebSelfPublish tblWebSelfPublish)
         {
             if (ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/SelfPublish/Edit/{id}
-        [HttpPut("Edit/{id}")]
+        [HttpPut("SelfPub/{id}")]
         public async Task<IActionResult> Edit(string id, [FromBody] TblWebSelfPublish tblWebSelfPublish)
         {
             if (id != tblWebSelfPublish.Url)
@@ -97,7 +97,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/SelfPublish/Delete/{id}
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("SelfPub/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var tblWebSelfPublish = await _context.TblWebSelfPublishes.FindAsync(id);

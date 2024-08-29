@@ -10,7 +10,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class AssembliesController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblValAssys
-        [HttpGet]
+        [HttpGet("Assys")]
         public async Task<ActionResult<IEnumerable<TblValAssy>>> GetTblValAssys()
         {
             return await _context.TblValAssy
@@ -31,7 +31,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblValAssys/5
-        [HttpGet("{id}")]
+        [HttpGet("Assy/{id}")]
         public async Task<ActionResult<TblValAssy>> GetTblValAssy(int id)
         {
             var tblValAssy = await _context.TblValAssy.FindAsync(id);
@@ -45,7 +45,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/TblValAssys
-        [HttpPost]
+        [HttpPost("Assy")]
         public async Task<ActionResult<TblValAssy>> PostTblValAssy(TblValAssy tblValAssy)
         {
             _context.TblValAssy.Add(tblValAssy);
@@ -55,7 +55,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/TblValAssys/5
-        [HttpPut("{id}")]
+        [HttpPut("Assy/{id}")]
         public async Task<IActionResult> PutTblValAssy(int id, TblValAssy tblValAssy)
         {
             if (id != tblValAssy.ANumber)
@@ -85,7 +85,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/TblValAssys/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Assy/{id}")]
         public async Task<IActionResult> DeleteTblValAssy(int id)
         {
             var tblValAssy = await _context.TblValAssy.FindAsync(id);

@@ -10,7 +10,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("")]
     [ApiController]
     public class CouncilsController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblValCouncils
-        [HttpGet]
+        [HttpGet("Councils")]
         public async Task<ActionResult<IEnumerable<TblValCouncil>>> GetTblValCouncils()
         {
             return await _context.TblValCouncils
@@ -32,7 +32,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/TblValCouncils/5
-        [HttpGet("{id}")]
+        [HttpGet("Council/{id}")]
         public async Task<ActionResult<TblValCouncil>> GetTblValCouncil(int id)
         {
             var tblValCouncil = await _context.TblValCouncils
@@ -45,7 +45,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // POST: api/TblValCouncils
-        [HttpPost]
+        [HttpPost("Council")]
         public async Task<ActionResult<TblValCouncil>> CreateTblValCouncil(TblValCouncil tblValCouncil)
         {
             _context.TblValCouncils.Add(tblValCouncil);
@@ -55,7 +55,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // PUT: api/TblValCouncils/5
-        [HttpPut("{id}")]
+        [HttpPut("Council/{id}")]
         public async Task<IActionResult> UpdateTblValCouncil(int id, TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
@@ -85,7 +85,7 @@ namespace KofCWSC.API.Controllers
         }
 
         // DELETE: api/TblValCouncils/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Council/{id}")]
         public async Task<IActionResult> DeleteTblValCouncil(int id)
         {
             var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
