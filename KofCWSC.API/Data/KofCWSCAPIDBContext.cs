@@ -61,7 +61,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
-
+        public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
         public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
         public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -278,7 +278,23 @@ namespace KofCWSC.API.Data
                     .HasMaxLength(255)
                     .HasColumnName("State Warden");
             });
+            modelBuilder.Entity<TblWebTrxAoi>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.ToTable("tblWEB_TrxAOI");
 
+                entity.Property(e => e.GraphicUrl)
+                    .HasMaxLength(250)
+                    .HasColumnName("GraphicURL");
+                entity.Property(e => e.LinkUrl)
+                    .HasMaxLength(250)
+                    .HasColumnName("LinkURL");
+                entity.Property(e => e.PostedDate).HasColumnType("datetime");
+                entity.Property(e => e.Title).HasMaxLength(250);
+                entity.Property(e => e.Type)
+                    .HasMaxLength(2)
+                    .IsFixedLength();
+            });
             modelBuilder.Entity<TblValAssy>(entity =>
             {
                 entity.HasKey(e => e.ANumber)
