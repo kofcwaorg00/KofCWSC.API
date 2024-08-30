@@ -1,4 +1,5 @@
 ﻿using KofCWSC.API.Data;
+using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
