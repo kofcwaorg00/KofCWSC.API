@@ -29,9 +29,9 @@ Log.Logger = new LoggerConfiguration()
 //******************************************************************************************************************************
 try
 {
-    var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVDev");
+    var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
     var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-    var cnString = client.GetSecret("AZDEV").Value;
+    var cnString = client.GetSecret("AZPROD").Value;
     string connectionString = cnString.Value;
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

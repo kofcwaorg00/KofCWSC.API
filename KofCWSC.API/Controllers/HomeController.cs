@@ -22,9 +22,6 @@ namespace KofCWSC.API.Controllers
         [HttpGet("Home")]
         public async Task<IActionResult> Index()
         {
-            string environment;
-            var connectionString = _context.Database.GetDbConnection().ConnectionString;
-
             var result = _context.Database
                 .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
                 .ToList();
