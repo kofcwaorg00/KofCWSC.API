@@ -47,10 +47,13 @@ namespace KofCWSC.API.Controllers
         [HttpGet("SelfPub/Display/{id}")]
         public async Task<ActionResult<IEnumerable<SPGetSOS>>> Display(int id)
         {
-            var result = await _context.Set<SPGetSOS>()
-                .FromSqlRaw($"uspWEB_GetSOS {id}")
-                .ToListAsync();
-            return result;
+            var result = await _context.Database.SqlQuery<SPGetSOS>($"uspWEB_GetSOS {id}").ToListAsync();
+
+
+            //var result = await _context.Set<SPGetSOS>()
+            //    .FromSqlRaw($"uspWEB_GetSOS {id}")
+            //    .ToListAsync();
+            return new JsonResult(result);
         }
 
         // POST: api/SelfPublish/Create
