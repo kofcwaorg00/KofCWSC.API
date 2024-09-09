@@ -29,9 +29,22 @@ Log.Logger = new LoggerConfiguration()
 //******************************************************************************************************************************
 try
 {
-    var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
-    var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-    var cnString = client.GetSecret("AZPROD").Value;
+    object kvURL = null;
+    SecretClient secretClient = null;
+    KeyVaultSecret cnString = null;
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower() == "production")
+    {
+        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
+        secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+        cnString = secretClient.GetSecret("AZPROD").Value;
+    }
+    else
+    {
+        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVDEV");
+        secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+        cnString = secretClient.GetSecret("AZDEV").Value;
+    }
+    
     string connectionString = cnString.Value;
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
