@@ -32,6 +32,7 @@ try
     object kvURL = null;
     SecretClient secretClient = null;
     KeyVaultSecret cnString = null;
+    Log.Information("Using " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + " Environment");
     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower() == "production")
     {
         kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
