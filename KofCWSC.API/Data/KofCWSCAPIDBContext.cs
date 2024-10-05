@@ -57,6 +57,8 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
+        public virtual DbSet<DirMain> DirMain { get; set; }
+        public virtual DbSet<DirSupremeContacts> DirSupremeContacts { get; set; }
         public virtual DbSet<TblValAssy> TblValAssy { get; set; } = default!;
         public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
@@ -330,24 +332,15 @@ namespace KofCWSC.API.Data
             modelBuilder.Entity<GetLabelByOffice>(entity =>
             {
                 entity.HasNoKey();
-                //entity.Property(e => e.District).HasColumnName("District");
-                //entity.Property(e => e.AltOfficeDescription).HasColumnName("AltOfficeDescription");
-                //entity.Property(e => e.FirstName).HasColumnName("FirstName");
-                //entity.Property(e => e.LastName).HasColumnName("LastName");
-                //entity.Property(e => e.Address).HasColumnName("Address");
-                //entity.Property(e => e.Council).HasColumnName("Council");
-                //entity.Property(e => e.Assembly).HasColumnName("Assembly");
-                //entity.Property(e => e.City).HasColumnName("City");
-                //entity.Property(e => e.State).HasColumnName("State");
-                //entity.Property(e => e.PostalCode).HasColumnName("PostalCode");
-                //entity.Property(e => e.OfficeDescription).HasColumnName("OfficeDescription");
-                //entity.Property(e => e.OfficeID).HasColumnName("OfficeID");
-                //entity.Property(e => e.CouncilName).HasColumnName("CouncilName");
-                //entity.Property(e => e.FullName).HasColumnName("FullName");
-                //entity.Property(e => e.CSZ).HasColumnName("CSZ");
             });
-
-
+            modelBuilder.Entity<DirMain>(entity =>
+            { 
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<DirSupremeContacts>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.Entity<TblValCouncil>(entity =>
             {
                 entity.HasKey(e => e.CNumber)

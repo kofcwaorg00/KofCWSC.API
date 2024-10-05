@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -86,16 +87,25 @@ namespace KofCWSC.API.Controllers
         [HttpDelete("Office/{id}")]
         public async Task<IActionResult> DeleteOffice(int id)
         {
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice == null)
+            try
             {
-                return NotFound();
+                var tblValOffice = await _context.TblValOffices.FindAsync(id);
+                if (tblValOffice == null)
+                {
+                    return NotFound();
+                }
+
+                _context.TblValOffices.Remove(tblValOffice);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.TblValOffices.Remove(tblValOffice);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + " - " + ex.InnerException);
+                return StatusCode(450, ex.Message);
+                
+            }
         }
 
         private bool OfficeExists(int id)

@@ -3,6 +3,7 @@ using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 namespace KofCWSC.API.Controllers
@@ -41,9 +42,43 @@ namespace KofCWSC.API.Controllers
                 var _new = new List<GetLabelByOffice>();
                 _new = null;
                 return _new;
-
             }
+        }
 
+        [HttpGet("/GetDirMain/{ShortForm}")]
+        public IEnumerable<DirMain> GetDirMain(int ShortForm)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryMain] {ShortForm}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirSupremeContacts/{ShortForm}")]
+        public IEnumerable<DirMain> GetDirSupremeContacts(int ShortForm)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectorySupremeContacts] {ShortForm}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
         }
     }
 }
