@@ -45,13 +45,13 @@ namespace KofCWSC.API.Controllers
             }
         }
 
-        [HttpGet("/GetDirMain/{ShortForm}")]
-        public IEnumerable<DirMain> GetDirMain(int ShortForm)
+        [HttpGet("/GetDirMain/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirMain(int ShortForm,int NextYear)
         {
             try
             {
                 return _context.Database
-                    .SqlQuery<DirMain>($"[uspRPT_DirectoryMain] {ShortForm}")
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryMain] {ShortForm},{NextYear}")
                     .ToList();
             }
             catch (Exception ex)
@@ -63,13 +63,98 @@ namespace KofCWSC.API.Controllers
                 return _new;
             }
         }
-        [HttpGet("/GetDirSupremeContacts/{ShortForm}")]
-        public IEnumerable<DirMain> GetDirSupremeContacts(int ShortForm)
+        [HttpGet("/GetDirSupremeContacts/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirSupremeContacts(int ShortForm,int NextYear)
         {
             try
             {
                 return _context.Database
-                    .SqlQuery<DirMain>($"[uspRPT_DirectorySupremeContacts] {ShortForm}")
+                    .SqlQuery<DirMain>($"[uspRPT_DirectorySupremeContacts] {ShortForm}, {NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirStateOfficers/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirStateOfficers(int ShortForm,int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryStateOfficers] {ShortForm}, {NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirChancery/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirChancery(int ShortForm,int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryChancery] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirCCBoard/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirCCBoard(int ShortForm,int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryCCBoard] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirPFHBoard/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirPFHBoard(int ShortForm,int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryPFHBoard] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirDDs/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirDDs(int ShortForm,int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryDDs] {ShortForm},{NextYear}")
                     .ToList();
             }
             catch (Exception ex)

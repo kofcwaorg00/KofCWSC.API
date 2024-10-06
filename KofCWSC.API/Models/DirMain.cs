@@ -19,4 +19,5 @@ public partial class DirMain
     public string? Email { get; set; }
     public string? Title { get; set; }
     public int DirSortOrder { get; set; }
+    public int NextYear { get; set; }
 }
