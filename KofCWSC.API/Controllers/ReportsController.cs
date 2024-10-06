@@ -165,5 +165,90 @@ namespace KofCWSC.API.Controllers
                 return _new;
             }
         }
+        [HttpGet("/GetDirMembershipDirectors/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirMembershipDirectors(int ShortForm, int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryMemberShipDirectors] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirProgramDirectors/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirProgramDirectors(int ShortForm, int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryProgramDirectors] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirOtherChairmen/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirOtherChairmen(int ShortForm, int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryOtherChairmen] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirTechnologyChairmen/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirTechnologyChairmen(int ShortForm, int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryTechnologyChairmen] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetDirAandFChairmen/{ShortForm}/{NextYear}")]
+        public IEnumerable<DirMain> GetDirAandFChairmen(int ShortForm, int NextYear)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<DirMain>($"[uspRPT_DirectoryAandFChairmen] {ShortForm},{NextYear}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<DirMain>();
+                _new = null;
+                return _new;
+            }
+        }
     }
 }
