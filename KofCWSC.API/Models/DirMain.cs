@@ -20,4 +20,7 @@ public partial class DirMain
     public string? Title { get; set; }
     public int DirSortOrder { get; set; }
     public int NextYear { get; set; }
+    public string? EntityName { get; set; }
+    public string? PrintEntity {  get; set; }
+    public string? Meetings { get; set; }
 }
