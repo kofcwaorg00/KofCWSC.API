@@ -41,9 +41,9 @@ try
     }
     else
     {
-        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVDEV");
+        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
         secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZDEV").Value;
+        cnString = secretClient.GetSecret("AZPROD").Value;
     }
     
     string connectionString = cnString.Value;
