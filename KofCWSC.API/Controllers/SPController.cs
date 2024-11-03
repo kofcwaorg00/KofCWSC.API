@@ -19,6 +19,13 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
+        // GET: FraternalYear
+        [HttpGet("GetFratYear/{NextYear}")]
+        public async Task<ActionResult> GetFratYear(int NextYear)
+        {
+            var myYear = _context.funSYS_GetBegFratYearN.FromSqlInterpolated($"SELECT dbo.funSYS_GetBegFratYearN({NextYear}) as FratYear").FirstOrDefault().FratYear;
+            return Json(myYear);
+        }
         // GET: MemberName
         [HttpGet("GetMemberName/{id}")]
         public async Task<ActionResult> GetMemberName(int id)

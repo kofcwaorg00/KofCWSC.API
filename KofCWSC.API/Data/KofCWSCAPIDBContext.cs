@@ -54,6 +54,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
         public virtual DbSet<TblValOffice> TblValOffices { get; set; }
         public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
+        public virtual DbSet<SPFratYearVM> funSYS_GetBegFratYearN {  get; set; }
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
@@ -81,7 +82,10 @@ namespace KofCWSC.API.Data
             {
                 entity.HasNoKey();
             });
-
+            modelBuilder.Entity<SPFratYearVM>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.Entity<TblMasMember>(entity =>
             {
                 entity.HasKey(e => e.MemberId);
