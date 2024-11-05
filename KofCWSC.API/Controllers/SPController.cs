@@ -55,12 +55,12 @@ namespace KofCWSC.API.Controllers
             return await _context.Database.SqlQuery<SPGetSOSView>($"EXECUTE uspWEB_GetSOSView").ToListAsync();
         }
 
-        // GET: api/SP/GetBulletins
-        [HttpGet("GetBulletins")]
-        public async Task<ActionResult<IEnumerable<SPGetBulletins>>> GetBulletins()
-        {
-            return await _context.Database.SqlQuery<SPGetBulletins>($"EXECUTE uspSYS_GetBulletins").ToListAsync();
-        }
+        // GET: api/SP/GetBulletins OBSOLETE
+        //[HttpGet("GetBulletins")]
+        //public async Task<ActionResult<IEnumerable<SPGetBulletins>>> GetBulletins()
+        //{
+        //    return await _context.Database.SqlQuery<SPGetBulletins>($"EXECUTE uspSYS_GetBulletins").ToListAsync();
+        //}
 
         // GET: api/SP/GetEmailAlias
         [HttpGet("GetEmailAlias")]
