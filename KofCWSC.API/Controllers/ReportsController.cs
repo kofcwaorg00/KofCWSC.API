@@ -44,6 +44,30 @@ namespace KofCWSC.API.Controllers
                 return _new;
             }
         }
+        [HttpGet("/GetLabelByGroup/{GroupID}")]
+        public IEnumerable<GetLabelByOffice> GetLabelByGroup(int GroupID)
+        {
+            Log.Information($"Starting GetLabelByGroup {GroupID}");
+            if (GroupID == 0)
+            {
+                GroupID = 1;
+            }
+            try
+            {
+                return _context.Database
+                .SqlQuery<GetLabelByOffice>($"uspRPT_GetLabelByGroupFR {GroupID}")
+                .ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                var _new = new List<GetLabelByOffice>();
+                _new = null;
+                return _new;
+            }
+        }
 
         [HttpGet("/GetDirMain/{ShortForm}/{NextYear}")]
         public IEnumerable<DirMain> GetDirMain(int ShortForm,int NextYear)
