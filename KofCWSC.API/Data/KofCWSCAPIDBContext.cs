@@ -68,6 +68,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
         public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
+        public virtual DbSet<FileStorage> FileStorages { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -511,6 +512,11 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.DateSent).HasColumnName("DateSent");
                 entity.Property(e => e.Subject).HasMaxLength(50);
             });
+            modelBuilder.Entity<FileStorage>(
+           dob =>
+           {
+               dob.ToTable("tblWEB_FileStorage");
+           });
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
