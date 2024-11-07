@@ -46,7 +46,7 @@ namespace KofCWSC.API.Controllers
 
         // POST: api/TblValAssys
         [HttpPost("Assy")]
-        public async Task<ActionResult<TblValAssy>> PostTblValAssy(TblValAssy tblValAssy)
+        public async Task<ActionResult<TblValAssy>> PostTblValAssy([FromBody]TblValAssy tblValAssy)
         {
             _context.TblValAssy.Add(tblValAssy);
             await _context.SaveChangesAsync();
