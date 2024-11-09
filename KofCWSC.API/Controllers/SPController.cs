@@ -18,7 +18,14 @@ namespace KofCWSC.API.Controllers
         {
             _context = context;
         }
-
+        // GET: NextTempID
+        [HttpGet("GetNextTempID")]
+        public IQueryable<string> GetNextTempID()
+        {
+            var myID = _context.Database.SqlQuery<string>($"EXECUTE uspWSC_GetNextTempID");
+            return myID;
+            
+        }
         // GET: FraternalYear
         [HttpGet("GetFratYear/{NextYear}")]
         public async Task<ActionResult> GetFratYear(int NextYear)

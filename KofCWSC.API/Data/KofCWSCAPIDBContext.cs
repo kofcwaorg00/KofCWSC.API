@@ -55,6 +55,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblValOffice> TblValOffices { get; set; }
         public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
         public virtual DbSet<SPFratYearVM> funSYS_GetBegFratYearN {  get; set; }
+        public virtual DbSet<NextID> uspWSC_GetNextTempID {  get; set; }
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
@@ -517,6 +518,10 @@ namespace KofCWSC.API.Data
            {
                dob.ToTable("tblWEB_FileStorage");
            });
+            modelBuilder.Entity<NextID>(entity =>
+            {
+                entity.HasNoKey();
+            });
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
