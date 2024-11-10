@@ -70,6 +70,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
         public virtual DbSet<FileStorage> FileStorages { get; set; }
+        public virtual DbSet<CvnControl> TblCvnControls { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -521,6 +522,15 @@ namespace KofCWSC.API.Data
             modelBuilder.Entity<NextID>(entity =>
             {
                 entity.HasNoKey();
+            });
+            modelBuilder.Entity<CvnControl>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_tblCVN_Control1");
+
+                entity.ToTable("tblCVN_Control");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.LocationString).HasMaxLength(1000);
             });
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
