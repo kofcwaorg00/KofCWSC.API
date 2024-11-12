@@ -71,6 +71,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<CvnControl> TblCvnControls { get; set; }
+        public virtual DbSet<RollCallSheets> RollCallSheets { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -531,6 +532,9 @@ namespace KofCWSC.API.Data
 
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.LocationString).HasMaxLength(1000);
+            });
+            modelBuilder.Entity<RollCallSheets>(entity => {
+                entity.HasNoKey();
             });
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

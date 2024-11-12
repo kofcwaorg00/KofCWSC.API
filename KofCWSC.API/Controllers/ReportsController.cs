@@ -461,5 +461,77 @@ namespace KofCWSC.API.Controllers
                 return _new;
             }
         }
+        [HttpGet("/GetRollcallDistricts/{Day}")]
+        public IEnumerable<RollCallSheets> GetRollCallSheets(string Day)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<RollCallSheets>($"[uspRPT_GetRollCallDistricts] {Day}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<RollCallSheets>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetRollcallDDs/{Day}")]
+        public IEnumerable<RollCallSheets> GetRollCallDDs(string Day)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<RollCallSheets>($"[uspRPT_GetRollCallDDs] {Day}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<RollCallSheets>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetRollcallDelegates/{Day}")]
+        public IEnumerable<RollCallSheets> GetRollCallDelegates(string Day)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<RollCallSheets>($"[uspRPT_GetRollCallDelegates] {Day}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<RollCallSheets>();
+                _new = null;
+                return _new;
+            }
+        }
+        [HttpGet("/GetRollcallOthers/{Day}")]
+        public IEnumerable<RollCallSheets> GetRollCallOthers(string Day)
+        {
+            try
+            {
+                return _context.Database
+                    .SqlQuery<RollCallSheets>($"[uspRPT_GetRollCallOthers] {Day}")
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(GetType() + " - " + ex.Message + " " + ex.InnerException);
+                var _new = new List<RollCallSheets>();
+                _new = null;
+                return _new;
+            }
+        }
     }
 }
