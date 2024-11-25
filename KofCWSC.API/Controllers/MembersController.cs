@@ -168,7 +168,8 @@ namespace KofCWSC.API.Controllers
                 // Call the UserService to create a new user
                 _context.TblMasMembers.Add(tblMasMember);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
+                return Ok();
+                //return CreatedAtAction("GetTblMasMember", new { id = tblMasMember.MemberId }, tblMasMember);
             }
             catch (DbUpdateException sqlex)
             {
