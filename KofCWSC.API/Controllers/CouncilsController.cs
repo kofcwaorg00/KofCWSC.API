@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
+using NuGet.Protocol;
 
 namespace KofCWSC.API.Controllers
 {
@@ -41,7 +42,7 @@ namespace KofCWSC.API.Controllers
             {
                 return NotFound();
             }
-            return tblValCouncil;
+            return Ok(tblValCouncil);
         }
 
         // POST: api/TblValCouncils
@@ -56,13 +57,14 @@ namespace KofCWSC.API.Controllers
 
         // PUT: api/TblValCouncils/5
         [HttpPut("Council/{id}")]
-        public async Task<IActionResult> UpdateTblValCouncil(int id, TblValCouncil tblValCouncil)
+        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncil(int id, TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
-                return BadRequest();
+                // not sure if this would ever happen but we need to communicate back
+                // to the calling process what happened
+                return BadRequest("Council numbers mismatch");
             }
-
             _context.Entry(tblValCouncil).State = EntityState.Modified;
 
             try
@@ -73,15 +75,15 @@ namespace KofCWSC.API.Controllers
             {
                 if (!TblValCouncilExists(id))
                 {
-                    return NotFound();
+                    return BadRequest("Concurrency Issue");
                 }
                 else
                 {
-                    throw;
+                    return BadRequest("Unknown");
                 }
             }
 
-            return NoContent();
+            return Ok(tblValCouncil);
         }
 
         // DELETE: api/TblValCouncils/5
@@ -97,7 +99,7 @@ namespace KofCWSC.API.Controllers
             _context.TblValCouncils.Remove(tblValCouncil);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         private bool TblValCouncilExists(int id)

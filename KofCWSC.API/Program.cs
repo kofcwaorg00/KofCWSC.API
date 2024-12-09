@@ -43,7 +43,7 @@ try
     {
         kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
         secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZPROD").Value;
+        cnString = secretClient.GetSecret("AZDEV").Value;
     }
     
     string connectionString = cnString.Value;
@@ -75,7 +75,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

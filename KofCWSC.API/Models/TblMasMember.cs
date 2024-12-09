@@ -166,6 +166,7 @@ public partial class TblMasMember
     public int? DoNotEmail { get; set; }
 
     public bool? HidePersonalInfo { get; set; }
+    public string? WhyDoNotEmail { get; internal set; }
 
     //public string? WhyDoNotEmail { get; set; }
 

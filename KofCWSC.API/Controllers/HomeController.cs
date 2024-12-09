@@ -26,7 +26,8 @@ namespace KofCWSC.API.Controllers
                 .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
                 .ToList();
 
-            return new JsonResult(result);
+            //return new JsonResult(result);
+            return Ok(result);
         }
 
         // GET: api/Home/Privacy

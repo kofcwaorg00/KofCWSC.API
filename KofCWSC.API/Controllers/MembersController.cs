@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
+using KofCWSC.API.Utils;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using System.Security.Principal;
@@ -44,7 +45,7 @@ namespace KofCWSC.API.Controllers
         public MembersController(KofCWSCAPIDBContext context)
         {
             _context = context;
-            Log.Information("DBContext Created");
+            Log.Error(Helper.FormatLogEntry(this, new Exception("DBContext Created")));
         }
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
@@ -54,7 +55,7 @@ namespace KofCWSC.API.Controllers
             Log.Information("Starting GetMembers/ByLastName/" + lastname);
             if (!IsLastNameValid(lastname))
             {
-                Log.Error("Invalid Last Name");
+                Log.Error(Helper.FormatLogEntry(this, new Exception("Invalid Last Name")));
                 return BadRequest("Invalid Characters in Last Name");
             }
             //********************************************************************************************
@@ -77,10 +78,10 @@ namespace KofCWSC.API.Controllers
             catch (Exception ex)
             {
 
-                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + ex.Message + " " + ex.InnerException);
-                throw new Exception("From " + GetType() + " " +ex.Message);
+                Log.Error("Invalid Last Name");
+                return BadRequest(ex.Message);
             }
-            
+
         }
 
         // GET: api/TblMasMembers/5
@@ -88,8 +89,7 @@ namespace KofCWSC.API.Controllers
         [HttpGet("Member/{id}")]
         public async Task<ActionResult<TblMasMember>> GetMembers(int id)
         {
-            
-            Log.Information("Starting Getting Member " + id);
+
             if (!IsMemberIDValid(id))
             {
                 Log.Fatal("GetMember ID " + id + " Not found");
@@ -112,7 +112,6 @@ namespace KofCWSC.API.Controllers
         [HttpPut("/Member/{id}")]
         public async Task<IActionResult> Member(int id, [FromBody] TblMasMember tblMasMember)
         {
-            Log.Information("Starting UpdMember " + id);
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // So it appears that the mvc/ef frameworks automatically takes care of dealing with where
@@ -122,7 +121,7 @@ namespace KofCWSC.API.Controllers
             if (id != tblMasMember.MemberId)
             {
                 Log.Fatal("Member ID " + id + " Not found");
-                return BadRequest();
+                return BadRequest($"Member ID {id} Not Found");
             }
 
             _context.Entry(tblMasMember).State = EntityState.Modified;
@@ -135,18 +134,18 @@ namespace KofCWSC.API.Controllers
             {
                 if (!TblMasMemberExists(id))
                 {
-                    Log.Fatal("Concurrencty Issue with Member ID " + id + " Not found");
-                    return NotFound();
+                    return BadRequest($"Concurrency Issue Updating Member ID {id}");
                 }
                 else
                 {
                     Log.Fatal("Concurrenty Issue");
-                    return Content("Untrapped Error");
+                    return BadRequest("Untrapped Concurrency Issue");
                 }
             }
             catch (Exception ex)
             {
-                Log.Fatal("From Catch in UpdMember" + ex.Message + " " + ex.InnerException);
+                Log.Fatal(Helper.FormatLogEntry(this, ex));
+                return BadRequest("Untrapped Error in Member PUT");
             }
 
             return Ok();
@@ -157,7 +156,6 @@ namespace KofCWSC.API.Controllers
         [HttpPost("/Member")]
         public async Task<ActionResult<TblMasMember>> Member([FromBody]TblMasMember tblMasMember)
         {
-            Log.Information("Starting NewMember");
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
             // Here is where I ran into issues with web.config and WEBDAV and AspNetCor modules requiring
@@ -173,13 +171,13 @@ namespace KofCWSC.API.Controllers
             }
             catch (DbUpdateException sqlex)
             {
-                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + sqlex.Message + " " + sqlex.InnerException);
-                return BadRequest();
+                Log.Error(Helper.FormatLogEntry(this, sqlex));
+                return BadRequest(sqlex.Message);
             }
             catch (Exception ex)
             {
-                Log.Error("From " + GetType() + System.Reflection.MethodBase.GetCurrentMethod() + " " + ex.Message + " " + ex.InnerException);
-                return BadRequest();
+                Log.Error(Helper.FormatLogEntry(this, ex));
+                return BadRequest(ex.Message);
             }
         }
 
@@ -200,20 +198,24 @@ namespace KofCWSC.API.Controllers
 
             try
             {
-                Log.Information("before remove");
                 _context.TblMasMembers.Remove(tblMasMember);
-                Log.Information("Before SaveChanges");
                 await _context.SaveChangesAsync();
-                Log.Information("Success Deleting " + id);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message + " " + ex.InnerException);
+                Log.Information("Success Deleting " + id);
                 return NoContent();
             }
         }
+        //[HttpGet("hidden-action")]
+        //[ApiExplorerSettings(IgnoreApi = true)]  // This action will be ignored by Swagger
 
+        [HttpGet("IsKofCMember/{id}")]
+        public async Task<ActionResult<TblMasMember>> IsKofCMember(string id)
+        {
+            return  _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
+        }
         private bool TblMasMemberExists(int id)
         {
             //********************************************************************************************
@@ -264,7 +266,7 @@ namespace KofCWSC.API.Controllers
             }
 
             string rxPat = (@"^[a-zA-Z.,\s]+$");
-            
+
             if(!Regex.IsMatch(LastName, rxPat))
             {
                 return false;
