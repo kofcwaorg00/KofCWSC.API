@@ -188,9 +188,7 @@ namespace KofCWSC.API.Data
 
                 entity.Property(e => e.FirstNameUpdatedBy).HasMaxLength(100);
 
-                entity.Property(e => e.KofCid)
-                    .HasMaxLength(7)
-                    .HasColumnName("KofCID");
+                entity.Property(e => e.KofCid).HasColumnName("KofCID");
 
                 entity.Property(e => e.LastLoggedIn).HasColumnType("datetime");
 

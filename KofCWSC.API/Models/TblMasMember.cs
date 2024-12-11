@@ -9,7 +9,7 @@ public partial class TblMasMember
     [Key]
     public int MemberId { get; set; }
 
-    public string KofCid { get; set; } = null!;
+    public int KofCid { get; set; }
 
     public string? Prefix { get; set; }
 

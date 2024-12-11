@@ -204,7 +204,7 @@ namespace KofCWSC.API.Controllers
             }
             catch (Exception ex)
             {
-                Log.Information("Success Deleting " + id);
+                Log.Information("Success Deleting " + id + ex.Message);
                 return NoContent();
             }
         }
@@ -212,7 +212,7 @@ namespace KofCWSC.API.Controllers
         //[ApiExplorerSettings(IgnoreApi = true)]  // This action will be ignored by Swagger
 
         [HttpGet("IsKofCMember/{id}")]
-        public async Task<ActionResult<TblMasMember>> IsKofCMember(string id)
+        public async Task<ActionResult<TblMasMember>> IsKofCMember(int id)
         {
             return  _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
         }
@@ -265,7 +265,7 @@ namespace KofCWSC.API.Controllers
                 return false;
             }
 
-            string rxPat = (@"^[a-zA-Z.,\s]+$");
+            string rxPat = (@"^[0-9a-zA-Z.,\s]+$");
 
             if(!Regex.IsMatch(LastName, rxPat))
             {

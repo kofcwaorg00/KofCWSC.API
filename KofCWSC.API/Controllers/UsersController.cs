@@ -24,7 +24,7 @@ namespace KofCWSC.API.Controllers
         //[AcceptVerbs("GET", "POST")]
         [HttpGet("/VerifyKofCID/{KofCMemberID}")]
         //[Route("VerifyKofCID")]
-        public async Task<IActionResult> VerifyKofCID(string KofCMemberID)
+        public async Task<IActionResult> VerifyKofCID(int KofCMemberID)
         
         {
             try
@@ -60,7 +60,7 @@ namespace KofCWSC.API.Controllers
             }
 
         }
-        private bool IsKofCMemberIDValid(string KofCMemberID)
+        private bool IsKofCMemberIDValid(int KofCMemberID)
         {
             //********************************************************************************************
             // 6/25/2024 Tim Philomeno
@@ -69,25 +69,25 @@ namespace KofCWSC.API.Controllers
             // length must be between 5 and 7
             // must be 0-9
             //********************************************************************************************
-            if (KofCMemberID.Length == 0)
+            if (KofCMemberID == 0)
             {
                 return false;
             }
-            if (KofCMemberID.Length < 5)
+            if (KofCMemberID.ToString().Length < 5)
             {
                 return false;
             }
-            if (KofCMemberID.Length > 7)
+            if (KofCMemberID.ToString().Length > 7)
             {
                 return false;
             }
 
-            string rxPat = (@"^[0-9]+$");
+            //string rxPat = (@"^[0-9]+$");
 
-            if (!Regex.IsMatch(KofCMemberID, rxPat))
-            {
-                return false;
-            }
+            //if (!Regex.IsMatch(KofCMemberID, rxPat))
+            //{
+            //    return false;
+            //}
 
             return true;
         }
