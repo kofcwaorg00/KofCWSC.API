@@ -11,10 +11,10 @@ using Microsoft.Data.SqlClient;
 
 namespace KofCWSC.API.Controllers
 {
-    public class ImpDelegatesController : Controller
+    public class ConventionController : Controller
     {
         private readonly KofCWSCAPIDBContext _context;
-        public ImpDelegatesController(KofCWSCAPIDBContext context)
+        public ConventionController(KofCWSCAPIDBContext context)
         {
             _context = context;
         }
@@ -65,6 +65,24 @@ namespace KofCWSC.API.Controllers
             }
 
             return Ok();
+        }
+
+        // GET: CvnControls/Edit/5
+        [HttpGet("GetDelegateDays")]
+        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> GetDelegateDays()
+        {
+            return await _context.Database.SqlQuery<CvnDelegateDays>($"EXECUTE uspCVN_DelegateDays").ToListAsync();
+        }
+
+        [HttpGet("ToggleDelegateDays/{id}/{day}")]
+        public int ToggleDelegateDays(int id,int day)
+        {
+            return  _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleSeatedDays] {id}, {day}");
+        }
+        [HttpGet("ResetDelegates")]
+        public int ResetDelegates()
+        {
+            return _context.Database.ExecuteSql($"EXECUTE [uspCVN_ResetDelegates]");
         }
         //[HttpGet("ProcessDelegateImport/{GUID}")]
         //public async Task<ActionResult> ProcessDelegateImport(Guid GUID)

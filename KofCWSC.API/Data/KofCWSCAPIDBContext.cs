@@ -52,8 +52,8 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
         public virtual DbSet<TblValOffice> TblValOffices { get; set; }
         public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
-        public virtual DbSet<SPFratYearVM> funSYS_GetBegFratYearN {  get; set; }
-        public virtual DbSet<NextID> uspWSC_GetNextTempID {  get; set; }
+        public virtual DbSet<SPFratYearVM> funSYS_GetBegFratYearN { get; set; }
+        public virtual DbSet<NextID> uspWSC_GetNextTempID { get; set; }
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
@@ -72,6 +72,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<RollCallSheets> RollCallSheets { get; set; }
         public virtual DbSet<CvnImpDelegate> CvnImpDelegates { get; set; }
         public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
+        public virtual DbSet<CvnDelegateDays> CvnDelegateDays { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -341,7 +342,7 @@ namespace KofCWSC.API.Data
                 entity.HasNoKey();
             });
             modelBuilder.Entity<DirMain>(entity =>
-            { 
+            {
                 entity.HasNoKey();
             });
             modelBuilder.Entity<DirSupremeContacts>(entity =>
@@ -531,7 +532,8 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.Id).HasColumnName("id");
                 entity.Property(e => e.LocationString).HasMaxLength(1000);
             });
-            modelBuilder.Entity<RollCallSheets>(entity => {
+            modelBuilder.Entity<RollCallSheets>(entity =>
+            {
                 entity.HasNoKey();
             });
             modelBuilder.Entity<CvnImpDelegate>(entity =>
@@ -701,6 +703,10 @@ namespace KofCWSC.API.Data
                     .HasMaxLength(10)
                     .IsUnicode(false);
                 entity.Property(e => e.Guid).HasColumnName("GUID");
+            });
+            modelBuilder.Entity<CvnDelegateDays>(entity =>
+            {
+                entity.HasNoKey();
             });
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
