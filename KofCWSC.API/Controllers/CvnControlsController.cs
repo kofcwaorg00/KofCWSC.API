@@ -31,13 +31,24 @@ namespace KofCWSC.API.Controllers
             {
                 return NotFound();
             }
-
-            var cvnControl = await _context.TblCvnControls.FindAsync(id);
-            if (cvnControl == null)
+            try
             {
-                return NotFound();
+                var cvnControl = await _context.TblCvnControls.FindAsync(id);
+                if (cvnControl == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return cvnControl;
+                }
             }
-            return cvnControl;
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest(ex);
+            }
+            
         }
 
         // POST: CvnControls/Edit/5
