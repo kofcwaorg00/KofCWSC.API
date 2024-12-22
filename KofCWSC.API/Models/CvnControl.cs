@@ -15,4 +15,5 @@ public partial class CvnControl
     public string? ZipCode { get; set; }
     public decimal? MPDDay { get; set; }
     public decimal? MPDMile { get; set; }
+    public string? Location {  get; set; }
 }

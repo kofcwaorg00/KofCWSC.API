@@ -73,6 +73,10 @@ namespace KofCWSC.API.Data
         public virtual DbSet<CvnImpDelegate> CvnImpDelegates { get; set; }
         public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
         public virtual DbSet<CvnDelegateDays> CvnDelegateDays { get; set; }
+        public virtual DbSet<CvnMileage> TblCvnMasMileages { get; set; }
+        public virtual DbSet<CvnLocation> TblCvnMasLocations { get; set; }
+        public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -704,6 +708,36 @@ namespace KofCWSC.API.Data
                     .IsUnicode(false);
                 entity.Property(e => e.Guid).HasColumnName("GUID");
             });
+            modelBuilder.Entity<CvnMileage>(entity =>
+            {
+                entity.ToTable("tblCVN_MasMileage");
+
+                entity.Property(e => e.Location).HasMaxLength(50);
+            });
+            modelBuilder.Entity<CvnLocation>(entity =>
+            {
+                entity.ToTable("tblCVN_MasLocations");
+
+                entity.HasIndex(e => e.Location, "IX_tblCVN_MasLocations").IsUnique();
+
+                entity.Property(e => e.Location).HasMaxLength(50);
+            });
+            modelBuilder.Entity<CvnMpd>(entity =>
+            {
+                entity.ToTable("tblCVN_TrxMPD");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.CheckTotal).HasColumnType("numeric(10, 2)");
+                entity.Property(e => e.Day1G).HasMaxLength(50);
+                entity.Property(e => e.Day2G).HasMaxLength(50);
+                entity.Property(e => e.Day3G).HasMaxLength(50);
+                entity.Property(e => e.Group).HasMaxLength(50);
+                entity.Property(e => e.Location).HasMaxLength(50);
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.Office).HasMaxLength(50);
+                entity.Property(e => e.Payee).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<CvnDelegateDays>(entity =>
             {
                 entity.HasNoKey();
