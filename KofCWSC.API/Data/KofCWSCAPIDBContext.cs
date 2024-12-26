@@ -358,7 +358,7 @@ namespace KofCWSC.API.Data
                 entity.HasKey(e => e.CNumber)
                     .HasName("aaaaatbl_ValCouncils_PK")
                     .IsClustered(false);
-
+                
                 entity.ToTable("tbl_ValCouncils");
 
                 entity.Property(e => e.CNumber)
@@ -394,6 +394,46 @@ namespace KofCWSC.API.Data
                     .HasDefaultValue("A")
                     .IsFixedLength();
                 entity.Property(e => e.WebSiteUrl).HasColumnName("WebSiteURL");
+
+                entity.Property(e => e.PhyAddress)
+                    .HasMaxLength(255)
+                    .HasColumnName("PhyAddress");
+                entity.Property(e => e.PhyCity)
+                    .HasMaxLength(50)
+                    .HasColumnName("PhyCity");
+                entity.Property(e => e.PhyState)
+                    .HasMaxLength(20)
+                    .HasColumnName("PhyState");
+                entity.Property(e => e.PhyPostalCode)
+                    .HasMaxLength(20)
+                    .HasColumnName("PhyPostalCode");
+
+                entity.Property(e => e.MailAddress)
+                    .HasMaxLength(255)
+                    .HasColumnName("MailAddress");
+                entity.Property(e => e.MailCity)
+                   .HasMaxLength(50)
+                   .HasColumnName("MailCity");
+                entity.Property(e => e.MailState)
+                    .HasMaxLength(20)
+                    .HasColumnName("MailState");
+                entity.Property(e => e.MailPostalCode)
+                    .HasMaxLength(20)
+                    .HasColumnName("MailPostalCode");
+
+                entity.Property(e => e.MeetAddress)
+                    .HasMaxLength(255)
+                    .HasColumnName("MeetAddress");
+                entity.Property(e => e.MeetCity)
+                   .HasMaxLength(50)
+                   .HasColumnName("MeetCity");
+                entity.Property(e => e.MeetState)
+                    .HasMaxLength(20)
+                    .HasColumnName("MeetState");
+                entity.Property(e => e.MeetPostalCode)
+                    .HasMaxLength(20)
+                    .HasColumnName("MeetPostalCode");
+
             });
 
             modelBuilder.Entity<TblValOffice>(entity =>
@@ -478,6 +518,7 @@ namespace KofCWSC.API.Data
             });
             modelBuilder.Entity<TblCorrMemberOffice>(entity =>
             {
+                entity.ToTable(tb => tb.HasTrigger("trgAfterChangeCMO"));
                 entity.ToTable("tbl_CorrMemberOffice");
 
                 modelBuilder.Entity<SPGetSOS>(entity =>

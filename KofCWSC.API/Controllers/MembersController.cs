@@ -216,6 +216,7 @@ namespace KofCWSC.API.Controllers
         {
             return  _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
         }
+       
         private bool TblMasMemberExists(int id)
         {
             //********************************************************************************************
