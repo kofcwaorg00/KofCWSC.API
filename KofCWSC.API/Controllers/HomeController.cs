@@ -22,9 +22,9 @@ namespace KofCWSC.API.Controllers
         [HttpGet("Home")]
         public async Task<IActionResult> Index()
         {
-            var result = _context.Database
+            var result = await _context.Database
                 .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
-                .ToList();
+                .ToListAsync();
 
             //return new JsonResult(result);
             return Ok(result);

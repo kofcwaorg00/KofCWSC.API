@@ -26,9 +26,9 @@ namespace KofCWSC.API.Controllers
         [HttpGet("MemberOffice/{id}")]
         public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> GetMemberOffices(int id)
         {
-            return _context.Database
+            return await _context.Database
                     .SqlQuery<TblCorrMemberOfficeVM>($"EXECUTE uspSYS_GetOfficesForMemberID {id}")
-                    .ToList();
+                    .ToListAsync();
             
         }
 
