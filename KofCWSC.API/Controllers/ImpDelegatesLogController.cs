@@ -17,11 +17,12 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: ImpDelegatesLog
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //////////// GET: ImpDelegatesLog
+        //////////public ActionResult Index()
+        //////////{
+        //////////    return View();
+        //////////}
+        //************************
         [HttpGet("GetImpDelegatesLog/{guid}")]
         public async Task<ActionResult<IEnumerable<CvnImpDelegatesLog>>> GetImpDelegatesLog(Guid guid)
         {
@@ -29,6 +30,7 @@ namespace KofCWSC.API.Controllers
                 .Where(x => x.Guid == guid)
                 .ToListAsync();
         }
+        //*************************
         [HttpGet("ClearDelegates/{year}")]
         public int ClearDelegates(int year)
         {
@@ -45,68 +47,68 @@ namespace KofCWSC.API.Controllers
         }
 
 
-        // GET: ImpDelegatesLog/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        ////////////// GET: ImpDelegatesLog/Details/5
+        ////////////public ActionResult Details(int id)
+        ////////////{
+        ////////////    return View();
+        ////////////}
 
-        // GET: ImpDelegatesLog/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        ////////////// GET: ImpDelegatesLog/Create
+        ////////////public ActionResult Create()
+        ////////////{
+        ////////////    return View();
+        ////////////}
 
-        // POST: ImpDelegatesLog/Create
-        [HttpPost("CreateImpDelegatesLog")]
-        public async Task<ActionResult<CvnImpDelegatesLog>> CreateImpDelegatesLog([FromBody] CvnImpDelegatesLog cvnImpDelegatesLog)
-        {
-            _context.TblCvnImpDelegatesLogs.Add(cvnImpDelegatesLog);
-            await _context.SaveChangesAsync();
+        ////////////// POST: ImpDelegatesLog/Create
+        ////////////[HttpPost("CreateImpDelegatesLog")]
+        ////////////public async Task<ActionResult<CvnImpDelegatesLog>> CreateImpDelegatesLog([FromBody] CvnImpDelegatesLog cvnImpDelegatesLog)
+        ////////////{
+        ////////////    _context.TblCvnImpDelegatesLogs.Add(cvnImpDelegatesLog);
+        ////////////    await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(CreateImpDelegatesLog), new { id = cvnImpDelegatesLog.Id }, cvnImpDelegatesLog);
-        }
+        ////////////    return CreatedAtAction(nameof(CreateImpDelegatesLog), new { id = cvnImpDelegatesLog.Id }, cvnImpDelegatesLog);
+        ////////////}
 
-        // GET: ImpDelegatesLog/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        ////////////// GET: ImpDelegatesLog/Edit/5
+        ////////////public ActionResult Edit(int id)
+        ////////////{
+        ////////////    return View();
+        ////////////}
 
-        // POST: ImpDelegatesLog/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        ////////////// POST: ImpDelegatesLog/Edit/5
+        ////////////[HttpPost]
+        ////////////[ValidateAntiForgeryToken]
+        ////////////public ActionResult Edit(int id, IFormCollection collection)
+        ////////////{
+        ////////////    try
+        ////////////    {
+        ////////////        return RedirectToAction(nameof(Index));
+        ////////////    }
+        ////////////    catch
+        ////////////    {
+        ////////////        return View();
+        ////////////    }
+        ////////////}
 
-        // GET: ImpDelegatesLog/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        ////////////// GET: ImpDelegatesLog/Delete/5
+        ////////////public ActionResult Delete(int id)
+        ////////////{
+        ////////////    return View();
+        ////////////}
 
-        // POST: ImpDelegatesLog/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        ////////////// POST: ImpDelegatesLog/Delete/5
+        ////////////[HttpPost]
+        ////////////[ValidateAntiForgeryToken]
+        ////////////public ActionResult Delete(int id, IFormCollection collection)
+        ////////////{
+        ////////////    try
+        ////////////    {
+        ////////////        return RedirectToAction(nameof(Index));
+        ////////////    }
+        ////////////    catch
+        ////////////    {
+        ////////////        return View();
+        ////////////    }
+        ////////////}
     }
 }
