@@ -40,4 +40,5 @@ public partial class CvnMpd
     public decimal CheckTotal { get; set; }
 
     public string Location { get; set; } = null!;
+    public bool PayMe { get; set; }
 }
