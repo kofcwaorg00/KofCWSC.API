@@ -68,10 +68,10 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: CvnControls/Edit/5
-        [HttpGet("GetDelegateDays")]
+        [HttpGet("GetAttendeeDays")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> GetDelegateDays()
         {
-            return await _context.Database.SqlQuery<CvnDelegateDays>($"EXECUTE uspCVN_DelegateDays").ToListAsync();
+            return await _context.Database.SqlQuery<CvnDelegateDays>($"EXECUTE uspCVN_GetAttendeeDays").ToListAsync();
         }
 
         [HttpGet("ToggleDelegateDays/{id}/{day}")]
