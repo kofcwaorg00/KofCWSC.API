@@ -2,6 +2,7 @@
 using KofCWSC.API.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -50,8 +51,16 @@ namespace KofCWSC.API.Controllers
         [HttpGet("MPD/GetCheckBatch/{id}")]
         public async Task<ActionResult<IEnumerable<CvnMpd>>> GetCheckBatch(int id)
         {
-            int RowsAffected = _context.Database.ExecuteSql($"EXECUTE uspCVN_CreateCheckBatch {id}");
-            return await _context.Database.SqlQuery<CvnMpd>($"EXECUTE uspCVN_GetCheckBatch {id}").ToListAsync();
+            try
+            {
+                int RowsAffected = _context.Database.ExecuteSql($"EXECUTE uspCVN_CreateCheckBatch {id}");
+                return await _context.Database.SqlQuery<CvnMpd>($"EXECUTE uspCVN_GetCheckBatch {id}").ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest();
+            }
             
         }
     }

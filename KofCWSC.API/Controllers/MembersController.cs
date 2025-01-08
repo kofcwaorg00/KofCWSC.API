@@ -45,7 +45,7 @@ namespace KofCWSC.API.Controllers
         public MembersController(KofCWSCAPIDBContext context)
         {
             _context = context;
-            Log.Error(Helper.FormatLogEntry(this, new Exception("DBContext Created")));
+            Log.Information(Helper.FormatLogEntry(this, new Exception("DBContext Created")));
         }
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
