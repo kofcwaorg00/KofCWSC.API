@@ -56,4 +56,10 @@ public partial class TblValCouncil
     public string? OMeetTime { get; set; }
     public string? SMeetDOW { get; set; }
     public string? SMeetTime { get; set; }
+    public bool? SeatedDelegateDay1D1 { get; set; }
+    public bool? SeatedDelegateDay2D1 { get; set; }
+    public bool? SeatedDelegateDay3D1 { get; set; }
+    public bool? SeatedDelegateDay1D2 { get; set; }
+    public bool? SeatedDelegateDay2D2 { get; set; }
+    public bool? SeatedDelegateDay3D2 { get; set; }
 }

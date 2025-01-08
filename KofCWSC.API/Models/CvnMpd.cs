@@ -23,17 +23,29 @@ public partial class CvnMpd
 
     public DateOnly? CheckDate { get; set; }
 
-    public bool? Day1 { get; set; }
+    public bool? Day1D1 { get; set; }
 
-    public bool? Day2 { get; set; }
+    public bool? Day2D1 { get; set; }
 
-    public bool? Day3 { get; set; }
+    public bool? Day3D1 { get; set; }
 
-    public string? Day1G { get; set; }
+    public bool? Day1D2 { get; set; }
 
-    public string? Day2G { get; set; }
+    public bool? Day2D2 { get; set; }
 
-    public string? Day3G { get; set; }
+    public bool? Day3D2 { get; set; }
+
+    public string? Day1GD1 { get; set; }
+
+    public string? Day2GD1 { get; set; }
+
+    public string? Day3GD1 { get; set; }
+
+    public string? Day1GD2 { get; set; }
+
+    public string? Day2GD2 { get; set; }
+
+    public string? Day3GD2 { get; set; }
 
     public int Miles { get; set; }
 

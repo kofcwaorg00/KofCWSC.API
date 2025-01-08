@@ -770,9 +770,12 @@ namespace KofCWSC.API.Data
 
                 entity.Property(e => e.Id).HasColumnName("ID");
                 entity.Property(e => e.CheckTotal).HasColumnType("numeric(10, 2)");
-                entity.Property(e => e.Day1G).HasMaxLength(50);
-                entity.Property(e => e.Day2G).HasMaxLength(50);
-                entity.Property(e => e.Day3G).HasMaxLength(50);
+                entity.Property(e => e.Day1GD1).HasMaxLength(50);
+                entity.Property(e => e.Day2GD1).HasMaxLength(50);
+                entity.Property(e => e.Day3GD1).HasMaxLength(50);
+                entity.Property(e => e.Day1GD2).HasMaxLength(50);
+                entity.Property(e => e.Day2GD2).HasMaxLength(50);
+                entity.Property(e => e.Day3GD2).HasMaxLength(50);
                 entity.Property(e => e.Group).HasMaxLength(50);
                 entity.Property(e => e.Location).HasMaxLength(50);
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");

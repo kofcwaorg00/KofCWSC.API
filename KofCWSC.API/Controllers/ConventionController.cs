@@ -79,6 +79,11 @@ namespace KofCWSC.API.Controllers
         {
             return  _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleSeatedDays] {id}, {day}");
         }
+        [HttpGet("ToggleCouncilDays/{id}/{day}/{del}")]
+        public int ToggleCouncilDays(int id, int day,string del)
+        {
+            return _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleCouncilDays] {id}, {day},{del}");
+        }
         [HttpGet("ResetDelegates")]
         public int ResetDelegates()
         {
