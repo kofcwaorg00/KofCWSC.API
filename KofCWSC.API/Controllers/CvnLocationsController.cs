@@ -47,7 +47,35 @@ namespace KofCWSC.API.Controllers
             }
             return Ok(cvnLocation);
         }
+        [HttpPut("Locations/{id}")]
+        public async Task<ActionResult<CvnLocation>> UpdateTblValCouncil(int id, [FromBody] CvnLocation cvnLocation)
+        {
+            if (id != cvnLocation.Id)
+            {
+                // not sure if this would ever happen but we need to communicate back
+                // to the calling process what happened
+                return BadRequest("Council numbers mismatch");
+            }
+            _context.Entry(cvnLocation).State = EntityState.Modified;
 
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CvnLocationsExists(id))
+                {
+                    return BadRequest("Concurrency Issue");
+                }
+                else
+                {
+                    return BadRequest("Unknown");
+                }
+            }
+
+            return Ok(cvnLocation);
+        }
         // DELETE: api/tblCvnLocation/5
         [HttpDelete("Locations/{id}")]
         public async Task<IActionResult> DeleteCvnLocation(int id)
@@ -80,6 +108,9 @@ namespace KofCWSC.API.Controllers
             
         }
 
-
+        private bool CvnLocationsExists(int id)
+        {
+            return _context.TblCvnMasLocations.Any(e => e.Id == id);
+        }
     }
 }
