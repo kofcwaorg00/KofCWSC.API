@@ -38,7 +38,7 @@ public partial class TblValCouncil
 
     public string Status { get; set; } = null!;
 
-    public string? PhyAddress {  get; set; }
+    public string? PhyAddress { get; set; }
     public string? PhyCity { get; set; }
     public string? PhyState { get; set; }
     public string? PhyPostalCode { get; set; }
@@ -56,10 +56,10 @@ public partial class TblValCouncil
     public string? OMeetTime { get; set; }
     public string? SMeetDOW { get; set; }
     public string? SMeetTime { get; set; }
-    public bool? SeatedDelegateDay1D1 { get; set; }
-    public bool? SeatedDelegateDay2D1 { get; set; }
-    public bool? SeatedDelegateDay3D1 { get; set; }
-    public bool? SeatedDelegateDay1D2 { get; set; }
-    public bool? SeatedDelegateDay2D2 { get; set; }
-    public bool? SeatedDelegateDay3D2 { get; set; }
+    public bool SeatedDelegateDay1D1 { get; set; }
+    public bool SeatedDelegateDay2D1 { get; set; }
+    public bool SeatedDelegateDay3D1 { get; set; }
+    public bool SeatedDelegateDay1D2 { get; set; }
+    public bool SeatedDelegateDay2D2 { get; set; }
+    public bool SeatedDelegateDay3D2 { get; set; }
 }

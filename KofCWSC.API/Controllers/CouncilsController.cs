@@ -55,9 +55,57 @@ namespace KofCWSC.API.Controllers
             return CreatedAtAction(nameof(GetTblValCouncil), new { id = tblValCouncil.CNumber }, tblValCouncil);
         }
 
+        [HttpPut("Council/MPD/{id}")]
+        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncilMPD(int id, [FromBody] TblValCouncilMPD tblValCouncil)
+        {
+            if (id != tblValCouncil.CNumber)
+            {
+                // not sure if this would ever happen but we need to communicate back
+                // to the calling process what happened
+                return BadRequest("Council numbers mismatch");
+            }
+            var council = new TblValCouncil { CNumber = id };
+            _context.Attach(council);
+            council.SeatedDelegateDay1D1 = tblValCouncil.SeatedDelegateDay1D1;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay1D1).IsModified = true;
+
+            council.SeatedDelegateDay1D2 = tblValCouncil.SeatedDelegateDay1D2;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay1D2).IsModified = true;
+
+            council.SeatedDelegateDay2D1 = tblValCouncil.SeatedDelegateDay2D1;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay2D1).IsModified = true;
+
+            council.SeatedDelegateDay2D2 = tblValCouncil.SeatedDelegateDay2D2;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay2D2).IsModified = true;
+
+            council.SeatedDelegateDay3D1 = tblValCouncil.SeatedDelegateDay3D1;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay3D1).IsModified = true;
+
+            council.SeatedDelegateDay3D2 = tblValCouncil.SeatedDelegateDay3D2;
+            _context.Entry(council).Property(e => e.SeatedDelegateDay3D2).IsModified = true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblValCouncilExists(id))
+                {
+                    return BadRequest("Concurrency Issue");
+                }
+                else
+                {
+                    return BadRequest("Unknown");
+                }
+            }
+
+            return Ok(tblValCouncil);
+        }
+
         // PUT: api/TblValCouncils/5
         [HttpPut("Council/{id}")]
-        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncil(int id, TblValCouncil tblValCouncil)
+        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncil(int id, [FromBody] TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
