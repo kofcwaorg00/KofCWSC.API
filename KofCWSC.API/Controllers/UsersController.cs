@@ -53,7 +53,8 @@ namespace KofCWSC.API.Controllers
             {
                 if (!IsKofCMemberIDValid(KofCMemberID))
                 {
-                    Log.Error("Invalid KofC Member ID");
+                    var ex = new Exception("Invalid KofC Member ID");
+                    Log.Error(Utils.Helper.FormatLogEntry(this, ex));
                     return BadRequest("Invalid KofC Member ID");
                 }
                 //*******************************************************************************************
