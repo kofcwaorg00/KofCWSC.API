@@ -59,15 +59,15 @@ namespace KofCWSC.API.Controllers
         ////////////    return View();
         ////////////}
 
-        ////////////// POST: ImpDelegatesLog/Create
-        ////////////[HttpPost("CreateImpDelegatesLog")]
-        ////////////public async Task<ActionResult<CvnImpDelegatesLog>> CreateImpDelegatesLog([FromBody] CvnImpDelegatesLog cvnImpDelegatesLog)
-        ////////////{
-        ////////////    _context.TblCvnImpDelegatesLogs.Add(cvnImpDelegatesLog);
-        ////////////    await _context.SaveChangesAsync();
+        // POST: ImpDelegatesLog/Create
+        [HttpPost("CreateImpDelegatesLog")]
+        public async Task<ActionResult<CvnImpDelegatesLog>> CreateImpDelegatesLog([FromBody] CvnImpDelegatesLog cvnImpDelegatesLog)
+        {
+            _context.TblCvnImpDelegatesLogs.Add(cvnImpDelegatesLog);
+            await _context.SaveChangesAsync();
 
-        ////////////    return CreatedAtAction(nameof(CreateImpDelegatesLog), new { id = cvnImpDelegatesLog.Id }, cvnImpDelegatesLog);
-        ////////////}
+            return CreatedAtAction(nameof(CreateImpDelegatesLog), new { id = cvnImpDelegatesLog.Id }, cvnImpDelegatesLog);
+        }
 
         ////////////// GET: ImpDelegatesLog/Edit/5
         ////////////public ActionResult Edit(int id)

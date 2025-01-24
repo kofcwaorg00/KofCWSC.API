@@ -63,8 +63,8 @@ namespace KofCWSC.API.Controllers
                 Log.Error(ex.Message + " - " + ex.InnerException);
                 return BadRequest($"Error saving changes - {ex.Message}");
             }
-
-            return Ok();
+            //return Ok("Import Successful");
+            return Json("Import Successful");
         }
 
         // GET: CvnControls/Edit/5

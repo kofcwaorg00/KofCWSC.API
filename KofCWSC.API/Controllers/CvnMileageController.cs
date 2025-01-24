@@ -35,6 +35,19 @@ namespace KofCWSC.API.Controllers
             }
             return Ok(cvnMileage);
         }
+        // GET: api/TblValCouncils/5
+        [HttpGet("MileageForCouncil/{council}/{location}")]
+        public async Task<ActionResult<CvnMileage>> GetMileageForCouncil(int council,string location)
+        {
+            var cvnMileage = await _context.TblCvnMasMileages
+                .Where(e => e.Council == council && e.Location == location)
+                .FirstOrDefaultAsync();
+            if (cvnMileage == null)
+            {
+                return cvnMileage;
+            }
+            return Ok(cvnMileage);
+        }
         // POST: api/TblValCouncils
         [HttpPost("Mileage")]
         public async Task<ActionResult<TblValCouncil>> CreateCvnMileage([FromBody]CvnMileage cvnMileage)
