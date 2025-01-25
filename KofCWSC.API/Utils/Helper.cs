@@ -1,16 +1,21 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 
 namespace KofCWSC.API.Utils
 {
     public class Helper
     {
-        public static string FormatLogEntry(object thisme, Exception ex)
+        public static string FormatLogEntry(object thisme, Exception ex,string addData = "")
         {
             //***********************************************************************************************
             // 12/05/2024 Tim Philomeno
             // trying to get a consistant logging string
             // usage: Log.Error(Helper.FormatLogEntry(this, ex));
-            return thisme.GetType().Name + " - " + ex.Message + " - " + ex.InnerException;
+            var method = new StackTrace(ex, true).GetFrame(0)?.GetMethod();
+            var className = method?.DeclaringType?.FullName;
+            DateTime date = DateTime.Now;
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            return "API" + " - " + env + " - " + date + " - " + thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException + " - ***" + addData + "*** - " + ex.StackTrace;
             //-----------------------------------------------------------------------------------------------
         }
         public static string GetIPAddress(string hostname)
