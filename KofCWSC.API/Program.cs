@@ -8,13 +8,27 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Net;
 using KofCWSC.API.Utils;
+using KofCWSC.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
+var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
+var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
+string azureConnectionString = vConnString.Value;
+
+
+// Read the Azure connection string from configuration
+//string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
+string fromEmail = builder.Configuration["Azure:CommunicationService:FromEmail"];
+string toEmail = builder.Configuration["Azure:CommunicationService:ToEmail"];
+
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .Enrich.FromLogContext()
     .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day)
+    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
     .CreateLogger();
 
 //Log.Information("Serilog is Initialized");

@@ -15,6 +15,7 @@ using Serilog;
 using System.Text.RegularExpressions;
 using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace KofCWSC.API.Controllers
 {
@@ -214,7 +215,16 @@ namespace KofCWSC.API.Controllers
         [HttpGet("IsKofCMember/{id}")]
         public async Task<ActionResult<TblMasMember>> IsKofCMember(int id)
         {
-            return  _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
+            var results = _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
+            if (results == null)
+            {
+                return NotFound(); // I added this so the API Helper can handle a "" json string
+            }
+            else
+            {
+                return results;
+            }
+            
         }
        
         private bool TblMasMemberExists(int id)
