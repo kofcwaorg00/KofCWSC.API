@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Models;
 using KofCWSC.API.Data;
 using Serilog;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Metadata.Ecma335;
+using System.Reflection.Metadata;
 
 namespace KofCWSC.API.Controllers
 {
@@ -22,6 +25,34 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
+        // GET: CheckForMissingDelegateMembersAndCreateDelegates
+        [HttpGet("CheckForMissingDelegateMembersAndCreateDelegates")]
+        public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> CheckForMissingDelegateMembersAndCreateDelegates()
+        {
+            //******************************************************************************************************************
+            //  1/25/2025 Tim Philomeno
+            //  this will return either those imported records that do not have a correspoinding
+            //  member record or an empty result set if all imported delegates have a member record
+            //  then this sproc will populate the corrmemberoffice table with the new delegates and return an empty result set
+            //  we can test the model in our controller and can't finish until the missing members
+            //  have been resolved
+            //-----------------------------------------------------------------------------------------------------------------
+            try
+            {
+                var results = await _context.Database
+                    .SqlQuery<TblCorrMemberOfficeVM>($"EXECUTE uspCVN_CheckForMissingDelegateMembersAndCreateDelegates")
+                    .ToListAsync();
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this,ex));
+                return BadRequest(ex.InnerException);
+            }    
+            
+
+        }
         // GET: api/MemberOffices/{id}
         [HttpGet("MemberOffice/{id}")]
         public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> GetMemberOffices(int id)
