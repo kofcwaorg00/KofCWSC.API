@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
 using NuGet.Protocol;
+using System.ComponentModel;
 
 namespace KofCWSC.API.Controllers
 {
@@ -30,6 +31,18 @@ namespace KofCWSC.API.Controllers
                 .Where(x => x.CNumber > 0)
                 .OrderBy(x => x.CNumber)
                 .ToListAsync();
+        }
+
+        // GET: api/TblValCouncils/5
+        [HttpGet("FSEditCouncil/{id}")]
+        public async Task<ActionResult<TblValCouncilFSEdit>> GetTblValCouncilFSEdit(int id)
+        {
+            var tblValCouncil = _context.TblValCouncilsFSEdit.FromSql($"EXEC uspCVN_GetFSEdit {id}").AsEnumerable().FirstOrDefault();
+            if (tblValCouncil == null)
+            {
+                return NotFound();
+            }
+            return tblValCouncil;
         }
 
         // GET: api/TblValCouncils/5
