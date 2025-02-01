@@ -89,6 +89,33 @@ namespace KofCWSC.API.Controllers
         {
             return _context.Database.ExecuteSql($"EXECUTE [uspCVN_ResetDelegates]");
         }
+
+
+        // REPORTS
+        [HttpGet("/PrintMPDChecks/{GroupID}/{BegChkNbr}/{PrintCheckNumber}")]
+        public IEnumerable<PrintMPDChecks> GetLabelByGroup(int GroupID,int BegChkNbr,int PrintCheckNumber)
+        {
+            if (!(GroupID == 3 || GroupID == 25))
+            {
+                var _new = new List<PrintMPDChecks>();
+                return _new;
+            }
+            try
+            {
+                return _context.Database
+                .SqlQuery<PrintMPDChecks>($"[uspCVN_PrintMPDChecks] {GroupID},{BegChkNbr},{PrintCheckNumber}")
+                .ToList();
+
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                var _new = new List<PrintMPDChecks>();
+                return _new;
+            }
+        }
+
+
         //[HttpGet("ProcessDelegateImport/{GUID}")]
         //public async Task<ActionResult> ProcessDelegateImport(Guid GUID)
         //{
