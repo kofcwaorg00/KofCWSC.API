@@ -21,6 +21,13 @@ namespace KofCWSC.API.Controllers
             int RowsAffected = _context.Database.ExecuteSql($"EXECUTE uspCVN_PrimeCouncilDelegatesAndDDDays");
             return Ok(RowsAffected);
         }
+        [HttpGet("GetMPDChecks/{id}")]
+        public async Task<IEnumerable<CvnMpd>> GetMPDChecks(int id)
+        {
+            var results = _context.Database
+                   .SqlQuery<CvnMpd>($"[uspCVN_GetMPDChecks] {id}");
+            return results;
+        }
         // GET: api/TblValCouncils
         [HttpGet("MPD/{id}")]
         public async Task<ActionResult<IEnumerable<CvnMpd>>> GetMPD(int id)
