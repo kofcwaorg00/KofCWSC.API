@@ -83,5 +83,21 @@ namespace KofCWSC.API.Controllers
             }
             
         }
+
+        [HttpGet("MPD/ArchiveMPD/{id}")]
+        public async Task<ActionResult<int>> ArchiveMPD(int id)
+        {
+            try
+            {
+                int RowsAffected = _context.Database.ExecuteSql($"EXECUTE [uspCVN_ArchiveMPD] {id}");
+                return Ok(RowsAffected);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest();
+            }
+        }
     }
 }
