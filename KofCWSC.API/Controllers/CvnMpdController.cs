@@ -22,11 +22,20 @@ namespace KofCWSC.API.Controllers
             return Ok(RowsAffected);
         }
         [HttpGet("GetMPDChecks/{id}")]
-        public async Task<IEnumerable<CvnMpd>> GetMPDChecks(int id)
+        public async Task<ActionResult<IEnumerable<CvnMpd>>> GetMPDChecks(int id)
         {
-            var results = _context.Database
-                   .SqlQuery<CvnMpd>($"[uspCVN_GetMPDChecks] {id}");
-            return results;
+            try
+            {
+                var results = await _context.Database
+                       .SqlQuery<CvnMpd>($"[uspCVN_GetMPDChecks] {id}").ToListAsync();
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest("Error");
+            }
+
         }
         // GET: api/TblValCouncils
         [HttpGet("MPD/{id}")]
@@ -58,6 +67,10 @@ namespace KofCWSC.API.Controllers
         [HttpGet("MPD/GetCheckBatch/{id}")]
         public async Task<ActionResult<IEnumerable<CvnMpd>>> GetCheckBatch(int id)
         {
+            if (id == 0)
+            {
+                throw new Exception("MPD/GetCheckBatch was sent a 0");
+            }
             try
             {
                 int RowsAffected = _context.Database.ExecuteSql($"EXECUTE uspCVN_CreateCheckBatch {id}");
