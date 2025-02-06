@@ -796,6 +796,9 @@ namespace KofCWSC.API.Data
                 entity.ToTable("tblSYS_MasMemberSuspension");
 
                 entity.Property(e => e.KofCid).HasColumnName("KofCId");
+                entity.Property(e => e.Comment).HasColumnName("Comment");
+                entity.Property(e => e.Updated).HasColumnName("Updated");
+                entity.Property(e => e.UpdatedBy).HasColumnName("UpdatedBy");
             });
 
             modelBuilder.Entity<CvnDelegateDays>(entity =>
