@@ -49,6 +49,24 @@ namespace KofCWSC.API.Controllers
             Log.Information(Helper.FormatLogEntry(this, new Exception("DBContext Created")));
         }
 
+
+        [HttpGet("Members/KofCID/{KofCID}")]
+        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembersByKofCID(int KofCID)
+        {
+            try
+            {
+                return await _context.TblMasMembers
+                .Where(t => t.KofCid == KofCID)
+                .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error("Invalid Last Name");
+                return BadRequest(ex.Message);
+            }
+        }
+
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
         [HttpGet("Members/LastName/{lastname}")]
         public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembers(string lastname)

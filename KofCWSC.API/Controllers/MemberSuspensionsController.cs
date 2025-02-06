@@ -54,9 +54,10 @@ namespace KofCWSC.API.Controllers
                 {
                     _context.Add(memberSuspension);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    return Ok();
+                    //return RedirectToAction(nameof(Index));
                 }
-                return CreatedAtAction(nameof(CreateFrom), new { id = memberSuspension.Id }, memberSuspension);
+                return BadRequest("Model not valid");
 
             }
             catch (Exception ex)
