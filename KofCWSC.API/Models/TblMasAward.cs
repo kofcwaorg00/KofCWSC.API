@@ -11,6 +11,8 @@ public partial class TblMasAward
 
     [DisplayName("Award")]
     public string? AwardName { get; set; }
+
+    [MaxLength(1000)]
     [DisplayName("Description")]
     public string? AwardDescription { get; set; }
     [DisplayName("Due Date")]
