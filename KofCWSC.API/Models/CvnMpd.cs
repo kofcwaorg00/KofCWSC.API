@@ -47,9 +47,9 @@ public partial class CvnMpd
 
     public string? Day3GD2 { get; set; }
 
-    public int Miles { get; set; }
+    public int? Miles { get; set; }
 
-    public decimal CheckTotal { get; set; }
+    public decimal? CheckTotal { get; set; }
 
     public string Location { get; set; } = null!;
     public bool PayMe { get; set; }
