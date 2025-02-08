@@ -43,7 +43,7 @@ namespace KofCWSC.API.Controllers
                 var tblValCouncil = _context.TblValCouncilsFSEdit.FromSql($"EXEC uspCVN_GetFSEdit {id}").AsEnumerable().FirstOrDefault();
                 if (tblValCouncil == null)
                 {
-                    return NotFound();
+                    return Empty;
                 }
                 return tblValCouncil;
 
