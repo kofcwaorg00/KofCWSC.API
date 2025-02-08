@@ -9,6 +9,7 @@ using KofCWSC.API.Data;
 using KofCWSC.API.Models;
 using NuGet.Protocol;
 using System.ComponentModel;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -142,6 +143,11 @@ namespace KofCWSC.API.Controllers
                 {
                     return BadRequest("Unknown");
                 }
+            }
+            catch(Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest(ex.Message);
             }
 
             return Ok(tblValCouncil);
