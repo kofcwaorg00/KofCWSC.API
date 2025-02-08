@@ -38,12 +38,21 @@ namespace KofCWSC.API.Controllers
         [HttpGet("FSEditCouncil/{id}")]
         public async Task<ActionResult<TblValCouncilFSEdit>> GetTblValCouncilFSEdit(int id)
         {
-            var tblValCouncil = _context.TblValCouncilsFSEdit.FromSql($"EXEC uspCVN_GetFSEdit {id}").AsEnumerable().FirstOrDefault();
-            if (tblValCouncil == null)
+            try
             {
-                return NotFound();
+                var tblValCouncil = _context.TblValCouncilsFSEdit.FromSql($"EXEC uspCVN_GetFSEdit {id}").AsEnumerable().FirstOrDefault();
+                if (tblValCouncil == null)
+                {
+                    return NotFound();
+                }
+                return tblValCouncil;
+
             }
-            return tblValCouncil;
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return Empty;
+            }
         }
 
         // GET: api/TblValCouncils/5
