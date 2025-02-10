@@ -75,6 +75,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
         public virtual DbSet<CvnDelegateDays> CvnDelegateDays { get; set; }
         public virtual DbSet<CvnMileage> TblCvnMasMileages { get; set; }
+        public virtual DbSet<CvnMileageC> TblCvnMasMileagesC { get; set; }
         public virtual DbSet<CvnLocation> TblCvnMasLocations { get; set; }
         public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
         public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }

@@ -2,6 +2,7 @@
 using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -12,6 +13,23 @@ namespace KofCWSC.API.Controllers
         public CvnMileageController(KofCWSCAPIDBContext context)
         {
             _context = context;
+        }
+
+        // GET: api/TblValCouncils
+        [HttpGet("MileageForCouncils")]
+        public async Task<ActionResult<IEnumerable<CvnMileageC>>> GetMileageForCouncils()
+        {
+            try
+            {
+                var results = await _context.Database.SqlQuery<CvnMileageC>($"EXECUTE uspCVN_GetMileageCouncils").ToListAsync();
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return Empty;
+            }
         }
 
         // GET: api/TblValCouncils
