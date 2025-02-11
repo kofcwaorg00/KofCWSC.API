@@ -8,5 +8,6 @@
         public int District { get; set; }
         public string Day {  get; set; }
         public int SortOrder { get; set; }
+        public int DirSortOrder { get; set; }
     }
 }
