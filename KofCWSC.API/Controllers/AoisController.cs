@@ -25,9 +25,18 @@ namespace KofCWSC.API.Controllers
         [HttpGet("Aois")]
         public async Task<ActionResult<IEnumerable<TblWebTrxAoi>>> GetAOIs()
         {
-            return await _context.TblWebTrxAois
+            var results = await _context.TblWebTrxAois
                 .OrderByDescending(o => o.PostedDate)
                 .ToListAsync();
+            if (results.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return results;
+            }
+
         }
 
         // GET: TblWebTrxAois/Details/5
