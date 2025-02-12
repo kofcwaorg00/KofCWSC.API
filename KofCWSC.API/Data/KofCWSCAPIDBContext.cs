@@ -65,6 +65,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
         public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
+        public virtual DbSet<CvnImpDelegatesLog> CvnImpDelegatesLogs { get; set; }
         public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
         public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
