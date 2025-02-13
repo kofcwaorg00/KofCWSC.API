@@ -18,6 +18,15 @@ namespace KofCWSC.API.Controllers
             _logger = logger;
         }
 
+        // GET: api/HomeEnv
+        [HttpGet("HomeEnv")]
+        public IActionResult GetEnv()
+        {
+            var myENV = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            return Ok(myENV);
+            //return new JsonResult(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+        }
+
         // GET: api/Home
         [HttpGet("Home")]
         public async Task<IActionResult> Index()
