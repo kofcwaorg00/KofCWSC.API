@@ -47,19 +47,34 @@ try
     SecretClient secretClient = null;
     KeyVaultSecret cnString = null;
     Log.Information("Using " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + " Environment");
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower() == "production")
+    kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
+    secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+    //**************************************************************************************************
+    // Secrets for sql server db connect strings
+    // DBCONN = KofCWSC sql server KofCWSCWeb
+    // AZPROD = KofCWSC sql server KofCWSCWeb
+    // AZDEV = KofCWSC sql server KofCWSCWebDev
+    // DBCONNLOC = Tim's local sql server KofCWSCWebSite
+    // DBCONNLOCMARC = Marcus' local sql server KofCWeb
+    //---------------------------------------------------------------------------------------------------
+    string myEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower();
+    switch (myEnv)
     {
-        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
-        secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZPROD").Value;
-    }
-    else
-    {
-        kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
-        secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZDEV").Value;
+        case "production":
+            cnString = secretClient.GetSecret("AZPROD").Value;
+            break;
+        case "development":
+            cnString = secretClient.GetSecret("DBCONNLOC").Value;
+            break;
+        case "test":
+            cnString = secretClient.GetSecret("AZDEV").Value;
+            break;
+        default:
+            cnString = secretClient.GetSecret("AZPROD").Value;
+            break;
     }
     
+
     string connectionString = cnString.Value;
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
