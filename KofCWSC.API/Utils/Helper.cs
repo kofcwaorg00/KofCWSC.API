@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace KofCWSC.API.Utils
 {
@@ -32,6 +34,32 @@ namespace KofCWSC.API.Utils
                 }
             }
             return string.Empty;
+        }
+        public static string FormatPhoneNumber(string? phoneNumber)
+        {
+            if (phoneNumber.IsNullOrEmpty())
+            {
+                return null;
+                //return "(000) 000-0000";
+            }
+            else
+            {
+                // Remove any non-numeric characters
+                string cleanedPhoneNumber = Regex.Replace(phoneNumber, @"\D", "");
+
+                // Ensure the phone number has 10 digits
+                if (cleanedPhoneNumber.Length == 10)
+                {
+                    // Format the phone number
+                    string formattedPhoneNumber = $"({cleanedPhoneNumber.Substring(0, 3)}) {cleanedPhoneNumber.Substring(3, 3)}-{cleanedPhoneNumber.Substring(6, 4)}";
+                    return formattedPhoneNumber;
+                }
+                else 
+                {
+                    // Return the original input if it doesn't have 10 digits
+                    return phoneNumber;
+                }
+            }
         }
     }
 }

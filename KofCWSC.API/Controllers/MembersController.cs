@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KofCWSC.API.Data;
 using KofCWSC.API.Models;
 using KofCWSC.API.Utils;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
-using System.Security.Principal;
 using Serilog;
 using System.Text.RegularExpressions;
-using Microsoft.Data.SqlClient;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
+
 
 namespace KofCWSC.API.Controllers
 {
@@ -142,7 +133,7 @@ namespace KofCWSC.API.Controllers
                 Log.Fatal("Member ID " + id + " Not found");
                 return BadRequest($"Member ID {id} Not Found");
             }
-
+            FormatMemberDataToSpec(ref tblMasMember);
             _context.Entry(tblMasMember).State = EntityState.Modified;
 
             try
@@ -173,7 +164,7 @@ namespace KofCWSC.API.Controllers
         // POST: api/TblMasMembers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("/Member")]
-        public async Task<ActionResult<TblMasMember>> Member([FromBody]TblMasMember tblMasMember)
+        public async Task<ActionResult<TblMasMember>> Member([FromBody] TblMasMember tblMasMember)
         {
             //********************************************************************************************
             // June 3, 2024 Tim Philomeno
@@ -183,6 +174,7 @@ namespace KofCWSC.API.Controllers
             try
             {
                 // Call the UserService to create a new user
+                FormatMemberDataToSpec(ref tblMasMember);
                 _context.TblMasMembers.Add(tblMasMember);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -242,9 +234,44 @@ namespace KofCWSC.API.Controllers
             {
                 return results;
             }
-            
+
         }
-       
+        // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
+        [HttpGet("Members/FormatData")]
+        public async Task<ActionResult> FormatMemberData()
+        {
+            List<TblMasMember> myMem = await _context.TblMasMembers.ToListAsync();
+            // now spin through and format the data
+            foreach (var mem in myMem)
+            {
+                var myMember = mem;
+                FormatMemberDataToSpec(ref myMember);
+                _context.Entry(myMember).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+            return Ok();
+        }
+        // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
+        [HttpGet("Members/FormatData/{id}")]
+        public async Task<ActionResult> FormatMemberData(int id)
+        {
+            var myMem = await _context.TblMasMembers
+                .Where(e => e.MemberId == id)
+                .FirstOrDefaultAsync();
+            // now update the spec and save
+            if (myMem == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                FormatMemberDataToSpec(ref myMem);
+                _context.Entry(myMem).State = EntityState.Modified;
+                _context.SaveChanges();
+
+                return Ok(myMem.LastName);
+            }
+        }
         private bool TblMasMemberExists(int id)
         {
             //********************************************************************************************
@@ -296,12 +323,20 @@ namespace KofCWSC.API.Controllers
 
             string rxPat = (@"^[0-9a-zA-Z.,\s]+$");
 
-            if(!Regex.IsMatch(LastName, rxPat))
+            if (!Regex.IsMatch(LastName, rxPat))
             {
                 return false;
             }
 
             return true;
+        }
+        private static void FormatMemberDataToSpec(ref TblMasMember tblMasMember)
+        {
+            tblMasMember.Phone = Helper.FormatPhoneNumber(tblMasMember.Phone);
+            if (!tblMasMember.Address.IsNullOrEmpty()) { tblMasMember.Address = tblMasMember.Address.ToUpper(); }
+            if (!tblMasMember.City.IsNullOrEmpty()) { tblMasMember.City = tblMasMember.City.ToUpper(); }
+            if (!tblMasMember.State.IsNullOrEmpty()) { tblMasMember.State = tblMasMember.State.ToUpper(); }
+            if (!tblMasMember.Email.IsNullOrEmpty()) { tblMasMember.Email = tblMasMember.Email.ToUpper(); }
         }
     }
 }
