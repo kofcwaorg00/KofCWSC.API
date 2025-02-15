@@ -237,6 +237,12 @@ namespace KofCWSC.API.Controllers
 
         }
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
+        //****************************************************************************************************************
+        // 2/15/2025 Tim Philomeno
+        // This takes over an hour and 1/2 to run on our data.  Should probably not need to run it after one time
+        // because the CREATE/UPDATE methods will format on the fly and we now have the button on the Manage Members
+        // index to do them individually.  I ran it today
+        //---------------------------------------------------------------------------------------------------------------
         [HttpGet("Members/FormatData")]
         public async Task<ActionResult> FormatMemberData()
         {
