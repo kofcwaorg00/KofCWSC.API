@@ -56,7 +56,8 @@ namespace KofCWSC.API.Controllers
                 var lon2 = coordinates2.GetProperty("lon").GetDouble();
 
                 // Step 3: Call the Route API to calculate driving distance
-                var routeUrl = $"https://atlas.microsoft.com/route/directions/json?api-version=1.0&subscription-key={azureMapsKey}&query={lat1},{lon1}:{lat2},{lon2}";
+                var routeUrl = $"https://atlas.microsoft.com/route/directions/json?api-version=1.0&routeType=shortest&avoid=ferries&subscription-key={azureMapsKey}&query={lat1},{lon1}:{lat2},{lon2}";
+
                 var routeResponse = await _httpClient.GetAsync(routeUrl);
                 routeResponse.EnsureSuccessStatusCode();
                 var routeResult = JsonDocument.Parse(await routeResponse.Content.ReadAsStringAsync());

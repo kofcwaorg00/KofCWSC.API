@@ -77,7 +77,7 @@ namespace KofCWSC.API.Controllers
         }
         // PUT: api/TblValCouncils/5
         [HttpPut("Mileage/{id}")]
-        public async Task<ActionResult<CvnMileage>> UpdateCvnMileage(int id, CvnMileage cvnMileage)
+        public async Task<ActionResult<CvnMileage>> UpdateCvnMileage(int id,[FromBody] CvnMileage cvnMileage)
         {
             if (id != cvnMileage.Id)
             {
