@@ -359,7 +359,7 @@ namespace KofCWSC.API.Data
             });
             modelBuilder.Entity<TblValCouncilFSEdit>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.CNumber);
             });
 
             modelBuilder.Entity<TblValCouncil>(entity =>
@@ -442,6 +442,10 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.MeetPostalCode)
                     .HasMaxLength(20)
                     .HasColumnName("MeetPostalCode");
+                entity.Property(e => e.Updated)
+                    .HasColumnName("Updated");
+                entity.Property(e => e.UpdatedBy)
+                    .HasColumnName("UpdatedBy");
 
             });
 

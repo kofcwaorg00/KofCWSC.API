@@ -126,9 +126,10 @@ namespace KofCWSC.API.Controllers
             return Ok(tblValCouncil);
         }
 
-        // PUT: api/TblValCouncils/5
-        [HttpPut("Council/{id}")]
-        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncil(int id, [FromBody] TblValCouncil tblValCouncil)
+
+        //PUT: Only Update the address and meeting info
+        [HttpPut("Council/FSEdit/{id}")]
+        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncilFSEdit(int id, [FromBody] TblValCouncilFSEdit tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
@@ -136,8 +137,68 @@ namespace KofCWSC.API.Controllers
                 // to the calling process what happened
                 return BadRequest("Council numbers mismatch");
             }
-            _context.Entry(tblValCouncil).State = EntityState.Modified;
+            var council = new TblValCouncil { CNumber = id };
+            _context.Attach(council);
+            // Physical address
+            council.PhyAddress = tblValCouncil.PhyAddress;
+            _context.Entry(council).Property(e => e.PhyAddress).IsModified = true;
 
+            council.PhyCity = tblValCouncil.PhyCity;
+            _context.Entry(council).Property(e => e.PhyCity).IsModified = true;
+
+            council.PhyState = tblValCouncil.PhyState;
+            _context.Entry(council).Property(e => e.PhyState).IsModified = true;
+
+            council.PhyPostalCode = tblValCouncil.PhyPostalCode;
+            _context.Entry(council).Property(e => e.PhyPostalCode).IsModified = true;
+            // Meeting Address
+            council.MeetAddress = tblValCouncil.MeetAddress;
+            _context.Entry(council).Property(e => e.MeetAddress).IsModified = true;
+
+            council.MeetCity = tblValCouncil.MeetCity;
+            _context.Entry(council).Property(e => e.MeetCity).IsModified = true;
+
+            council.MeetState = tblValCouncil.MeetState;
+            _context.Entry(council).Property(e => e.MeetState).IsModified = true;
+
+            council.MeetPostalCode = tblValCouncil.MeetPostalCode;
+            _context.Entry(council).Property(e => e.MeetPostalCode).IsModified = true;
+            //Mailing Address
+            council.MailAddress = tblValCouncil.MailAddress;
+            _context.Entry(council).Property(e => e.MailAddress).IsModified = true;
+
+            council.MailCity = tblValCouncil.MailCity;
+            _context.Entry(council).Property(e => e.MailCity).IsModified = true;
+
+            council.MailState = tblValCouncil.MailState;
+            _context.Entry(council).Property(e => e.MailState).IsModified = true;
+
+            council.MailPostalCode = tblValCouncil.MailPostalCode;
+            _context.Entry(council).Property(e => e.MailPostalCode).IsModified = true;
+            //Meeting times days
+            council.BMeetDOW = tblValCouncil.BMeetDOW;
+            _context.Entry(council).Property(e => e.BMeetDOW).IsModified = true;
+
+            council.BMeetTime = tblValCouncil.BMeetTime;
+            _context.Entry(council).Property(e => e.BMeetTime).IsModified = true;
+
+            council.OMeetDOW = tblValCouncil.OMeetDOW;
+            _context.Entry(council).Property(e => e.OMeetDOW).IsModified = true;
+
+            council.OMeetTime = tblValCouncil.OMeetTime;
+            _context.Entry(council).Property(e => e.OMeetTime).IsModified = true;
+
+            council.SMeetDOW = tblValCouncil.SMeetDOW;
+            _context.Entry(council).Property(e => e.SMeetDOW).IsModified = true;
+
+            council.SMeetTime = tblValCouncil.SMeetTime;
+            _context.Entry(council).Property(e => e.SMeetTime).IsModified = true;
+
+            council.Updated = tblValCouncil.Updated;
+            _context.Entry(council).Property(e => e.Updated).IsModified = true;
+
+            council.UpdatedBy = tblValCouncil.UpdatedBy;
+            _context.Entry(council).Property(e => e.UpdatedBy).IsModified = true;
             try
             {
                 await _context.SaveChangesAsync();
@@ -153,7 +214,38 @@ namespace KofCWSC.API.Controllers
                     return BadRequest("Unknown");
                 }
             }
-            catch(Exception ex)
+
+            return Ok(tblValCouncil);
+        }
+        // PUT: api/TblValCouncils/5
+        [HttpPut("Council/{id}")]
+        public async Task<ActionResult<TblValCouncil>> UpdateTblValCouncil(int id, [FromBody] TblValCouncil tblValCouncil)
+        {
+            if (id != tblValCouncil.CNumber)
+            {
+                // not sure if this would ever happen but we need to communicate back
+                // to the calling process what happened
+                return BadRequest("Council numbers mismatch");
+            }
+
+
+            try
+            {
+                _context.Entry(tblValCouncil).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblValCouncilExists(id))
+                {
+                    return BadRequest("Concurrency Issue");
+                }
+                else
+                {
+                    return BadRequest("Unknown");
+                }
+            }
+            catch (Exception ex)
             {
                 Log.Error(Utils.Helper.FormatLogEntry(this, ex));
                 return BadRequest(ex.Message);
