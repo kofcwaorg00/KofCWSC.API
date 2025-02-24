@@ -2,6 +2,7 @@ using KofCWSC.API.Data;
 using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace KofCWSC.API.Controllers
 {
@@ -22,8 +23,17 @@ namespace KofCWSC.API.Controllers
         [HttpGet("HomeEnv")]
         public IActionResult GetEnv()
         {
-            var myENV = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            return Ok(myENV);
+            try
+            {
+                var myENV = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                return Ok(myENV);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                return BadRequest(ex.Message);
+            }
+
             //return new JsonResult(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
         }
 
