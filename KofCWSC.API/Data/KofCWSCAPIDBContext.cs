@@ -17,7 +17,7 @@ namespace KofCWSC.API.Data
         public KofCWSCAPIDBContext()
         {
         }
-        private static bool isKVInit;
+        private static bool isKVInit = false;
         public KofCWSCAPIDBContext(DbContextOptions<KofCWSCAPIDBContext> options)
             : base(options)
         {
@@ -367,7 +367,7 @@ namespace KofCWSC.API.Data
                 entity.HasKey(e => e.CNumber)
                     .HasName("aaaaatbl_ValCouncils_PK")
                     .IsClustered(false);
-                
+
                 entity.ToTable("tbl_ValCouncils");
 
                 entity.Property(e => e.CNumber)
