@@ -16,4 +16,6 @@ public partial class CvnControl
     public decimal? MPDDay { get; set; }
     public decimal? MPDMile { get; set; }
     public string? Location {  get; set; }
+    public string? CheckAccount { get; set; }
+    public string? Category { get; set; }
 }

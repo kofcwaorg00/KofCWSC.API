@@ -19,6 +19,7 @@ namespace KofCWSC.API.Models
         public int SeatedDays { get; set; }
         public string? SigImageID { get; set; }
         public bool PrintCheckNumber { get; set; }
+        public string? Memo { get; set; }
 
     }
 }
