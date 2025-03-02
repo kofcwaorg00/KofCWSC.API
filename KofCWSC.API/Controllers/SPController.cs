@@ -42,16 +42,16 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: GetAssys
-        [HttpGet("GetAssys")]
-        public async Task<ActionResult<IEnumerable<SPGetAssysView>>> GetAssys()
+        [HttpGet("GetAssys/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetAssysView>>> GetAssys(int NextYear = 0)
         {
-            return await _context.Database.SqlQuery<SPGetAssysView>($"EXECUTE uspWEB_GetAssys").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetAssysView>($"EXECUTE uspWEB_GetAssys {NextYear}").ToListAsync();
         }
         // GET: GetCouncils
-        [HttpGet("GetCouncils")]
-        public async Task<ActionResult<IEnumerable<SPGetCouncilsView>>> GetCouncils()
+        [HttpGet("GetCouncils/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetCouncilsView>>> GetCouncils(int NextYear = 0)
         {
-            return await _context.Database.SqlQuery<SPGetCouncilsView>($"EXECUTE uspWEB_GetCouncils").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetCouncilsView>($"EXECUTE uspWEB_GetCouncils {NextYear}").ToListAsync();
         }
 
         // GET: GetSOS
@@ -77,34 +77,34 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/SP/GetChairmen
-        [HttpGet("GetChairmen")]
-        public async Task<ActionResult<IEnumerable<SPGetChairmen>>> GetChairmen()
+        [HttpGet("GetChairmen/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetChairmen>>> GetChairmen(int NextYear = 0)
         {
-            return await _context.Database.SqlQuery<SPGetChairmen>($"EXECUTE uspWEB_GetChairmen 0").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetChairmen>($"EXECUTE uspWEB_GetChairmen {NextYear}").ToListAsync();
         }
 
         // GET: api/SP/GetChairmanInfoBlock/{id}
-        [HttpGet("GetChairmanInfoBlock/{id}")]
-        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetChairmanInfoBlock(int id)
+        [HttpGet("GetChairmanInfoBlock/{id}/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetChairmanInfoBlock(int id,int NextYear = 0)
         {
             //Check to see if we have a valid chairman id
             var myChairmenList = await _context.Database
-                   .SqlQuery<SPGetChairmenId>($"EXECUTE uspWEB_IsChairman {id} ")
+                   .SqlQuery<SPGetChairmenId>($"EXECUTE uspWEB_IsChairman {id}")
                    .ToListAsync();
 
             if (myChairmenList.Count() == 0)
             {
                 return NotFound();
             }
-            return await _context.Database.SqlQuery<SPGetChairmanInfoBlock>($"EXECUTE uspWEB_GetChairmanInfoBlock {id}").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetChairmanInfoBlock>($"EXECUTE uspWEB_GetChairmanInfoBlock {id},{NextYear}").ToListAsync();
 
         }
 
         // GET: api/SP/GetDDs
-        [HttpGet("GetDDs")]
-        public async Task<ActionResult<IEnumerable<SPGetDDs>>> GetDDs()
+        [HttpGet("GetDDs/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetDDs>>> GetDDs(int NextYear = 0)
         {
-            return await _context.Database.SqlQuery<SPGetDDs>($"EXECUTE uspWEB_GetDDs 0").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetDDs>($"EXECUTE uspWEB_GetDDs {NextYear}").ToListAsync();
         }
 
         // GET: api/SP/FourthDegreeOfficers
