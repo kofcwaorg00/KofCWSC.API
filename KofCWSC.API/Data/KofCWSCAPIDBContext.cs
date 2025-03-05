@@ -48,6 +48,8 @@ namespace KofCWSC.API.Data
             }
         }
 
+        public virtual DbSet<Event> Events { get; set; } = null!;
+
         public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
         public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
         public virtual DbSet<TblValOffice> TblValOffices { get; set; }
@@ -65,7 +67,6 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
         public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
         public virtual DbSet<SPGetChairmenId> SPGetChairmanIDs { get; set; }
-        public virtual DbSet<TblSysTrxEvents> TblSysTrxEvents { get; set; }
         public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<CvnControl> TblCvnControls { get; set; }
@@ -529,21 +530,35 @@ namespace KofCWSC.API.Data
                 OnModelCreatingPartial(modelBuilder);
             });
 
-            modelBuilder.Entity<TblSysTrxEvents>(entity =>
+            modelBuilder.Entity<Event>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__tblSYS_t__3214EC07638F8109");
+                entity.HasKey(e => e.EventId).HasName("PK__tblSYS_t__3214EC07638F8109");
 
                 entity.ToTable("tblSYS_trxEvents");
 
-                entity.Property(e => e.AddedBy).HasMaxLength(50);
-                entity.Property(e => e.AttachUrl)
+                entity.Property(e => e.EventId).HasColumnName("Id"); // Maps primary key
+                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.Details)
+                    .HasColumnName("Description")
+                    .HasColumnType("nvarchar(max)");
+                entity.Property(e => e.StartDate)
+                    .HasColumnName("Begin")
+                    .HasColumnType("datetime");
+                entity.Property(e => e.EndDate)
+                    .HasColumnName("End")
+                    .HasColumnType("datetime");
+                entity.Property(e => e.IsAllDay)
+                    .HasColumnName("isAllDay")
+                    .HasColumnType("bit");
+                entity.Property(e => e.AttachmentUrl)
                     .HasMaxLength(250)
                     .HasColumnName("AttachURL");
-                entity.Property(e => e.Begin).HasColumnType("datetime");
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-                entity.Property(e => e.End).HasColumnType("datetime");
-                entity.Property(e => e.Title).HasMaxLength(50);
-                entity.Property(e => e.isAllDay).HasColumnType("boolean");
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(50)
+                    .HasColumnName("AddedBy");
+                entity.Property(e => e.DateCreated)
+                    .HasColumnName("DateAdded")
+                    .HasColumnType("datetime");
             });
             modelBuilder.Entity<EmailOffice>(entity =>
             {

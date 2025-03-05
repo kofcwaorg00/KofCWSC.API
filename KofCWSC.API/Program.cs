@@ -37,13 +37,13 @@ try
     {
         kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
         secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZPROD").Value;
+        cnString = secretClient.GetSecret("DBCONNLOCMARC").Value;
     }
     else
     {
         kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
         secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-        cnString = secretClient.GetSecret("AZDEV").Value;
+        cnString = secretClient.GetSecret("DBCONNLOCMARC").Value;
     }
     
     string connectionString = cnString.Value;
