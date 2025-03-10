@@ -599,7 +599,10 @@ namespace KofCWSC.API.Data
             });
             modelBuilder.Entity<CvnImpDelegate>(entity =>
             {
-                entity.HasKey(e => e.ID);
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("ID");
                 entity.ToTable("tblCVN_ImpDelegates");
 
                 entity.Property(e => e.A1Address1)
@@ -745,9 +748,7 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.FormSubmitterSEmail)
                     .HasMaxLength(255)
                     .HasColumnName("FormSubmitterSEmail");
-                entity.Property(e => e.ID)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("ID");
+                
                 entity.Property(e => e.SubmissionDate)
                     .HasColumnType("datetime")
                     .HasColumnName("SubmissionDate");
