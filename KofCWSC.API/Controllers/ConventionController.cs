@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Serilog;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KofCWSC.API.Controllers
 {
@@ -47,6 +48,39 @@ namespace KofCWSC.API.Controllers
                     // second import the incoming data
                     foreach (var myDel in cvnImpDelegate)
                     {
+                        //----------------------------------------------------------------------------------------
+                        // D1
+                        myDel.D1Phone = Helper.FormatPhoneNumber(myDel.D1Phone);
+                        if (!myDel.D1Address1.IsNullOrEmpty()) { myDel.D1Address1 = myDel.D1Address1.ToUpper(); }
+                        if (!myDel.D1Address2.IsNullOrEmpty()) { myDel.D1Address2 = myDel.D1Address2.ToUpper(); }
+                        if (!myDel.D1City.IsNullOrEmpty()) { myDel.D1City = myDel.D1City.ToUpper(); }
+                        if (!myDel.D1State.IsNullOrEmpty()) { myDel.D1State = myDel.D1State.ToUpper(); }
+                        if (!myDel  .D1Email.IsNullOrEmpty()) { myDel.D1Email = myDel.D1Email.ToUpper(); }
+                        //----------------------------------------------------------------------------------------
+                        // D2
+                        myDel.D2Phone = Helper.FormatPhoneNumber(myDel.D2Phone);
+                        if (!myDel.D2Address1.IsNullOrEmpty()) { myDel.D2Address1 = myDel.D2Address1.ToUpper(); }
+                        if (!myDel.D2Address2.IsNullOrEmpty()) { myDel.D2Address2 = myDel.D2Address2.ToUpper(); }
+                        if (!myDel.D2City.IsNullOrEmpty()) { myDel.D2City = myDel.D2City.ToUpper(); }
+                        if (!myDel.D2State.IsNullOrEmpty()) { myDel.D2State = myDel.D2State.ToUpper(); }
+                        if (!myDel.D2Email.IsNullOrEmpty()) { myDel.D2Email = myDel.D2Email.ToUpper(); }
+                        //----------------------------------------------------------------------------------------
+                        // A1
+                        myDel.A1Phone = Helper.FormatPhoneNumber(myDel.A1Phone);
+                        if (!myDel.A1Address1.IsNullOrEmpty()) { myDel.A1Address1 = myDel.A1Address1.ToUpper(); }
+                        if (!myDel.A1Address2.IsNullOrEmpty()) { myDel.A1Address2 = myDel.A1Address2.ToUpper(); }
+                        if (!myDel.A1City.IsNullOrEmpty()) { myDel.A1City = myDel.A1City.ToUpper(); }
+                        if (!myDel.A1State.IsNullOrEmpty()) { myDel.A1State = myDel.A1State.ToUpper(); }
+                        if (!myDel.A1Email.IsNullOrEmpty()) { myDel.A1Email = myDel.A1Email.ToUpper(); }
+                        //----------------------------------------------------------------------------------------
+                        // A2
+                        myDel.A2Phone = Helper.FormatPhoneNumber(myDel.A2Phone);
+                        if (!myDel.A2Address1.IsNullOrEmpty()) { myDel.A2Address1 = myDel.A2Address1.ToUpper(); }
+                        if (!myDel.A2Address2.IsNullOrEmpty()) { myDel.A2Address2 = myDel.A2Address2.ToUpper(); }
+                        if (!myDel.A2City.IsNullOrEmpty()) { myDel.A2City = myDel.A2City.ToUpper(); }
+                        if (!myDel.A2State.IsNullOrEmpty()) { myDel.A2State = myDel.A2State.ToUpper(); }
+                        if (!myDel.A2Email.IsNullOrEmpty()) { myDel.A2Email = myDel.A2Email.ToUpper(); }
+                        //----------------------------------------------------------------------------------------
                         _context.CvnImpDelegates.Add(myDel);
                         //ProcessCouncil(myDel);
                     }
@@ -114,7 +148,15 @@ namespace KofCWSC.API.Controllers
                 return _new;
             }
         }
-
+        private static void FormatMemberDataToSpec(ref CvnImpDelegate cvnImpDelegate)
+        {
+            cvnImpDelegate.D1Phone = Helper.FormatPhoneNumber(cvnImpDelegate.D1Phone);
+            if (!cvnImpDelegate.D1Address1.IsNullOrEmpty()) { cvnImpDelegate.D1Address1 = cvnImpDelegate.D1Address1.ToUpper(); }
+            if (!cvnImpDelegate.D1Address2.IsNullOrEmpty()) { cvnImpDelegate.D1Address2 = cvnImpDelegate.D1Address2.ToUpper(); }
+            if (!cvnImpDelegate.D1City.IsNullOrEmpty()) { cvnImpDelegate.D1City = cvnImpDelegate.D1City.ToUpper(); }
+            if (!cvnImpDelegate.D1State.IsNullOrEmpty()) { cvnImpDelegate.D1State = cvnImpDelegate.D1State.ToUpper(); }
+            if (!cvnImpDelegate.D1Email.IsNullOrEmpty()) { cvnImpDelegate.D1Email = cvnImpDelegate.D1Email.ToUpper(); }
+        }
 
         //[HttpGet("ProcessDelegateImport/{GUID}")]
         //public async Task<ActionResult> ProcessDelegateImport(Guid GUID)
