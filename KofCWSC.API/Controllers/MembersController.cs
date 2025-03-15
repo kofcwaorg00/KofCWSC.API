@@ -40,6 +40,21 @@ namespace KofCWSC.API.Controllers
             Log.Information(Helper.FormatLogEntry(this, new Exception("DBContext Created")));
         }
 
+        [HttpGet("Member/KofCID/{KofCID}")]
+        public async Task<ActionResult<TblMasMember>> GetMemberByKofCID(int KofCID)
+        {
+            try
+            {
+                return _context.TblMasMembers
+                .Where(t => t.KofCid == KofCID).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+                Log.Error("Invalid Last Name");
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("Members/KofCID/{KofCID}")]
         public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembersByKofCID(int KofCID)
