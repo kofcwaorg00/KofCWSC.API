@@ -28,77 +28,97 @@ namespace KofCWSC.API.Controllers
         }
         // GET: CvnControls/Edit/5
         [HttpGet("ImpDelegates")]
-        public async Task<ActionResult<IEnumerable<CvnImpDelegate>>> GetDelegates()
+        public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> GetDelegates()
         {
-            return await _context.CvnImpDelegates.ToListAsync();
+            return await _context.CvnImpDelegateIMPs.ToListAsync();
         }
         public IActionResult Index()
         {
             return View();
         }
         [HttpPost("ImpDelegates")]
-        public async Task<ActionResult<CvnImpDelegate>> ImpDelegates([FromBody] List<CvnImpDelegate> cvnImpDelegate)
+        public async Task<ActionResult<CvnImpDelegateIMP>> ImpDelegates([FromBody] List<CvnImpDelegateIMP> cvnImpDelegate)
         {
+            string myRetMess = "";
             try
             {
+                
                 if (ModelState.IsValid)
                 {
                     // first delete the existing table data
-                    _context.Database.ExecuteSqlRaw("TRUNCATE TABLE [tblCVN_ImpDelegates]");
+                    //_context.Database.ExecuteSqlRaw("TRUNCATE TABLE [tblCVN_ImpDelegates]");
                     // second import the incoming data
                     foreach (var myDel in cvnImpDelegate)
                     {
-                        //----------------------------------------------------------------------------------------
-                        // D1
-                        myDel.D1Phone = Helper.FormatPhoneNumber(myDel.D1Phone);
-                        if (!myDel.D1Address1.IsNullOrEmpty()) { myDel.D1Address1 = myDel.D1Address1.ToUpper(); }
-                        if (!myDel.D1Address2.IsNullOrEmpty()) { myDel.D1Address2 = myDel.D1Address2.ToUpper(); }
-                        if (!myDel.D1City.IsNullOrEmpty()) { myDel.D1City = myDel.D1City.ToUpper(); }
-                        if (!myDel.D1State.IsNullOrEmpty()) { myDel.D1State = myDel.D1State.ToUpper(); }
-                        if (!myDel  .D1Email.IsNullOrEmpty()) { myDel.D1Email = myDel.D1Email.ToUpper(); }
-                        //----------------------------------------------------------------------------------------
-                        // D2
-                        myDel.D2Phone = Helper.FormatPhoneNumber(myDel.D2Phone);
-                        if (!myDel.D2Address1.IsNullOrEmpty()) { myDel.D2Address1 = myDel.D2Address1.ToUpper(); }
-                        if (!myDel.D2Address2.IsNullOrEmpty()) { myDel.D2Address2 = myDel.D2Address2.ToUpper(); }
-                        if (!myDel.D2City.IsNullOrEmpty()) { myDel.D2City = myDel.D2City.ToUpper(); }
-                        if (!myDel.D2State.IsNullOrEmpty()) { myDel.D2State = myDel.D2State.ToUpper(); }
-                        if (!myDel.D2Email.IsNullOrEmpty()) { myDel.D2Email = myDel.D2Email.ToUpper(); }
-                        //----------------------------------------------------------------------------------------
-                        // A1
-                        myDel.A1Phone = Helper.FormatPhoneNumber(myDel.A1Phone);
-                        if (!myDel.A1Address1.IsNullOrEmpty()) { myDel.A1Address1 = myDel.A1Address1.ToUpper(); }
-                        if (!myDel.A1Address2.IsNullOrEmpty()) { myDel.A1Address2 = myDel.A1Address2.ToUpper(); }
-                        if (!myDel.A1City.IsNullOrEmpty()) { myDel.A1City = myDel.A1City.ToUpper(); }
-                        if (!myDel.A1State.IsNullOrEmpty()) { myDel.A1State = myDel.A1State.ToUpper(); }
-                        if (!myDel.A1Email.IsNullOrEmpty()) { myDel.A1Email = myDel.A1Email.ToUpper(); }
-                        //----------------------------------------------------------------------------------------
-                        // A2
-                        myDel.A2Phone = Helper.FormatPhoneNumber(myDel.A2Phone);
-                        if (!myDel.A2Address1.IsNullOrEmpty()) { myDel.A2Address1 = myDel.A2Address1.ToUpper(); }
-                        if (!myDel.A2Address2.IsNullOrEmpty()) { myDel.A2Address2 = myDel.A2Address2.ToUpper(); }
-                        if (!myDel.A2City.IsNullOrEmpty()) { myDel.A2City = myDel.A2City.ToUpper(); }
-                        if (!myDel.A2State.IsNullOrEmpty()) { myDel.A2State = myDel.A2State.ToUpper(); }
-                        if (!myDel.A2Email.IsNullOrEmpty()) { myDel.A2Email = myDel.A2Email.ToUpper(); }
-                        //----------------------------------------------------------------------------------------
-                        _context.CvnImpDelegates.Add(myDel);
-                        //ProcessCouncil(myDel);
-                    }
+                        try
+                        {
+                            //----------------------------------------------------------------------------------------
+                            // D1
+                            myDel.D1Phone = Helper.FormatPhoneNumber(myDel.D1Phone);
+                            if (!myDel.D1Address1.IsNullOrEmpty()) { myDel.D1Address1 = myDel.D1Address1.ToUpper(); }
+                            if (!myDel.D1Address2.IsNullOrEmpty()) { myDel.D1Address2 = myDel.D1Address2.ToUpper(); }
+                            if (!myDel.D1City.IsNullOrEmpty()) { myDel.D1City = myDel.D1City.ToUpper(); }
+                            if (!myDel.D1State.IsNullOrEmpty()) { myDel.D1State = Helper.GetStateAbbr(myDel.D1State); }
+                            if (!myDel.D1Email.IsNullOrEmpty()) { myDel.D1Email = myDel.D1Email.ToUpper(); }
+                            //----------------------------------------------------------------------------------------
+                            // D2
+                            myDel.D2Phone = Helper.FormatPhoneNumber(myDel.D2Phone);
+                            if (!myDel.D2Address1.IsNullOrEmpty()) { myDel.D2Address1 = myDel.D2Address1.ToUpper(); }
+                            if (!myDel.D2Address2.IsNullOrEmpty()) { myDel.D2Address2 = myDel.D2Address2.ToUpper(); }
+                            if (!myDel.D2City.IsNullOrEmpty()) { myDel.D2City = myDel.D2City.ToUpper(); }
+                            if (!myDel.D2State.IsNullOrEmpty()) { myDel.D2State = Helper.GetStateAbbr(myDel.D2State); }
+                            if (!myDel.D2Email.IsNullOrEmpty()) { myDel.D2Email = myDel.D2Email.ToUpper(); }
+                            //----------------------------------------------------------------------------------------
+                            // A1
+                            myDel.A1Phone = Helper.FormatPhoneNumber(myDel.A1Phone);
+                            if (!myDel.A1Address1.IsNullOrEmpty()) { myDel.A1Address1 = myDel.A1Address1.ToUpper(); }
+                            if (!myDel.A1Address2.IsNullOrEmpty()) { myDel.A1Address2 = myDel.A1Address2.ToUpper(); }
+                            if (!myDel.A1City.IsNullOrEmpty()) { myDel.A1City = myDel.A1City.ToUpper(); }
+                            if (!myDel.A1State.IsNullOrEmpty()) { myDel.A1State = Helper.GetStateAbbr(myDel.A1State); }
+                            if (!myDel.A1Email.IsNullOrEmpty()) { myDel.A1Email = myDel.A1Email.ToUpper(); }
+                            //----------------------------------------------------------------------------------------
+                            // A2
+                            myDel.A2Phone = Helper.FormatPhoneNumber(myDel.A2Phone);
+                            if (!myDel.A2Address1.IsNullOrEmpty()) { myDel.A2Address1 = myDel.A2Address1.ToUpper(); }
+                            if (!myDel.A2Address2.IsNullOrEmpty()) { myDel.A2Address2 = myDel.A2Address2.ToUpper(); }
+                            if (!myDel.A2City.IsNullOrEmpty()) { myDel.A2City = myDel.A2City.ToUpper(); }
+                            if (!myDel.A2State.IsNullOrEmpty()) { myDel.A2State = Helper.GetStateAbbr(myDel.A2State); }
+                            if (!myDel.A2Email.IsNullOrEmpty()) { myDel.A2Email = myDel.A2Email.ToUpper(); }
+                            //----------------------------------------------------------------------------------------
+                            // next line should clear context so the previous adds are gone
+                            _context.ChangeTracker.Clear();
+                            
+                            _context.CvnImpDelegateIMPs.Add(myDel);
+                            await _context.SaveChangesAsync();
 
-                    await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateException ex)
+                        {
+                            if (ex.InnerException.Message.Contains("duplicate key"))
+                            {
+                                myRetMess += $"Skipping Duplicate Council {myDel.CouncilNumber}; ";
+                                // do nothing just ignore
+                            }
+                            else
+                            {
+                                myRetMess += $"Skipping Missing Council {myDel.CouncilNumber}; ";
+                                // do something
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    return BadRequest("Model State is Invalid");
+                    return BadRequest(myRetMess);
                 }
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 Log.Error(ex.Message + " - " + ex.InnerException);
                 return BadRequest($"Error saving changes - {ex.Message}");
             }
             //return Ok("Import Successful");
-            return Json("Import Successful");
+            return Json(myRetMess);
         }
 
         // GET: CvnControls/Edit/5
@@ -109,12 +129,12 @@ namespace KofCWSC.API.Controllers
         }
 
         [HttpGet("ToggleDelegateDays/{id}/{day}")]
-        public int ToggleDelegateDays(int id,int day)
+        public int ToggleDelegateDays(int id, int day)
         {
-            return  _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleSeatedDays] {id}, {day}");
+            return _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleSeatedDays] {id}, {day}");
         }
         [HttpGet("ToggleCouncilDays/{id}/{day}/{del}")]
-        public int ToggleCouncilDays(int id, int day,string del)
+        public int ToggleCouncilDays(int id, int day, string del)
         {
             return _context.Database.ExecuteSql($"EXECUTE [uspCVN_ToggleCouncilDays] {id}, {day},{del}");
         }
@@ -127,7 +147,7 @@ namespace KofCWSC.API.Controllers
 
         // REPORTS
         [HttpGet("/PrintMPDChecks/{GroupID}/{BegChkNbr}/{PrintCheckNumber}")]
-        public IEnumerable<PrintMPDChecks> GetLabelByGroup(int GroupID,int BegChkNbr,int PrintCheckNumber)
+        public IEnumerable<PrintMPDChecks> GetLabelByGroup(int GroupID, int BegChkNbr, int PrintCheckNumber)
         {
             if (!(GroupID == 3 || GroupID == 25))
             {
