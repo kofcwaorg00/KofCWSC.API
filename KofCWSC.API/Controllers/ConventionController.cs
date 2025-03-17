@@ -54,6 +54,8 @@ namespace KofCWSC.API.Controllers
                         {
                             //----------------------------------------------------------------------------------------
                             // D1
+                            myDel.D1FirstName = Helper.CUpLow(myDel.D1FirstName);
+                            myDel.D1LastName = Helper.CUpLow(myDel.D1LastName);
                             myDel.D1Phone = Helper.FormatPhoneNumber(myDel.D1Phone);
                             if (!myDel.D1Address1.IsNullOrEmpty()) { myDel.D1Address1 = myDel.D1Address1.ToUpper(); }
                             if (!myDel.D1Address2.IsNullOrEmpty()) { myDel.D1Address2 = myDel.D1Address2.ToUpper(); }
@@ -62,6 +64,8 @@ namespace KofCWSC.API.Controllers
                             if (!myDel.D1Email.IsNullOrEmpty()) { myDel.D1Email = myDel.D1Email.ToUpper(); }
                             //----------------------------------------------------------------------------------------
                             // D2
+                            myDel.D2FirstName = Helper.CUpLow(myDel.D2FirstName);
+                            myDel.D2LastName = Helper.CUpLow(myDel.D2LastName);
                             myDel.D2Phone = Helper.FormatPhoneNumber(myDel.D2Phone);
                             if (!myDel.D2Address1.IsNullOrEmpty()) { myDel.D2Address1 = myDel.D2Address1.ToUpper(); }
                             if (!myDel.D2Address2.IsNullOrEmpty()) { myDel.D2Address2 = myDel.D2Address2.ToUpper(); }
@@ -70,6 +74,8 @@ namespace KofCWSC.API.Controllers
                             if (!myDel.D2Email.IsNullOrEmpty()) { myDel.D2Email = myDel.D2Email.ToUpper(); }
                             //----------------------------------------------------------------------------------------
                             // A1
+                            myDel.A1FirstName = Helper.CUpLow(myDel.A1FirstName);
+                            myDel.A1LastName = Helper.CUpLow(myDel.A1LastName);
                             myDel.A1Phone = Helper.FormatPhoneNumber(myDel.A1Phone);
                             if (!myDel.A1Address1.IsNullOrEmpty()) { myDel.A1Address1 = myDel.A1Address1.ToUpper(); }
                             if (!myDel.A1Address2.IsNullOrEmpty()) { myDel.A1Address2 = myDel.A1Address2.ToUpper(); }
@@ -78,6 +84,8 @@ namespace KofCWSC.API.Controllers
                             if (!myDel.A1Email.IsNullOrEmpty()) { myDel.A1Email = myDel.A1Email.ToUpper(); }
                             //----------------------------------------------------------------------------------------
                             // A2
+                            myDel.A2FirstName = Helper.CUpLow(myDel.A2FirstName);
+                            myDel.A2LastName = Helper.CUpLow(myDel.A2LastName);
                             myDel.A2Phone = Helper.FormatPhoneNumber(myDel.A2Phone);
                             if (!myDel.A2Address1.IsNullOrEmpty()) { myDel.A2Address1 = myDel.A2Address1.ToUpper(); }
                             if (!myDel.A2Address2.IsNullOrEmpty()) { myDel.A2Address2 = myDel.A2Address2.ToUpper(); }

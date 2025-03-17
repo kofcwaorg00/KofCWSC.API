@@ -23,6 +23,13 @@ namespace KofCWSCWebsite.Controllers
             _context = context;
         }
 
+        [HttpGet("CvnImpDelegatesIMP")]
+        public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> IndexIMP()
+        {
+            var results = await _context.CvnImpDelegateIMPs.ToListAsync();
+            return results;
+        }
+
         [HttpGet("CvnImpDelegates")]
         // GET: CvnImpDelegates
         public async Task<ActionResult<IEnumerable<CvnImpDelegate>>> Index()
@@ -71,6 +78,15 @@ namespace KofCWSCWebsite.Controllers
             return BadRequest();
         }
 
+        [HttpGet("CvnImpDelegateIMP/{id}")]
+        public async Task<ActionResult<CvnImpDelegate>> GetByID(int? id)
+        {
+            var results = _context.Database
+                       .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegatesByID {id}")
+                       .AsEnumerable()
+                       .FirstOrDefault();
+            return results;
+        }
         // GET: CvnImpDelegates/Edit/5
         [HttpGet("CvnImpDelegate/{id}")]
         public async Task<ActionResult<CvnImpDelegateIMP>> Edit(int? id)
@@ -136,8 +152,7 @@ namespace KofCWSCWebsite.Controllers
 
 
         // POST: CvnImpDelegates/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpDelete("CvnImpDelegate/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cvnImpDelegateIMP = await _context.CvnImpDelegateIMPs.FindAsync(id);

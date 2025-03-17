@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -126,6 +127,11 @@ namespace KofCWSC.API.Utils
             {
                 throw new ArgumentException($"State name '{stateName}' is not recognized.");
             }
+        }
+        public static string CUpLow(string instr)
+        {
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(instr.ToLower());
         }
     }
 }
