@@ -243,7 +243,8 @@ namespace KofCWSC.API.Controllers
             var results = _context.TblMasMembers.Where(p => p.KofCid == id).FirstOrDefault();
             if (results == null)
             {
-                return NotFound(); // I added this so the API Helper can handle a "" json string
+                //return NotFound(); // I added this so the API Helper can handle a "" json string
+                return results; // I added this so the API Helper can handle a "" json string
             }
             else
             {
