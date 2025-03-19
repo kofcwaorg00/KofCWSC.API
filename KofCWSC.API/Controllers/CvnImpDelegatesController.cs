@@ -71,11 +71,23 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cvnImpDelegateIMP);
-                await _context.SaveChangesAsync();
-                return Ok();
+                try
+                {
+                    _context.Add(cvnImpDelegateIMP);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException.Message.Contains("duplicate key"))
+                    {
+                        return Json("Duplicate Key Detected");
+                        //return Ok("Duplicate Key Detected");
+                    }
+                }
+                
             }
-            return BadRequest();
+            return BadRequest("Model is invalid");
         }
 
         [HttpGet("CvnImpDelegateIMP/{id}")]
