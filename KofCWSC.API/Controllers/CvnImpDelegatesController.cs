@@ -79,10 +79,14 @@ namespace KofCWSCWebsite.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (ex.InnerException.Message.Contains("duplicate key"))
+                    if (ex.InnerException.Message.ToLower().Contains("duplicate key"))
                     {
                         return Json("Duplicate Key Detected");
                         //return Ok("Duplicate Key Detected");
+                    }
+                    if (ex.InnerException.Message.ToLower().Contains("foreign key"))
+                    {
+                        return Json("Council not found");
                     }
                 }
                 
