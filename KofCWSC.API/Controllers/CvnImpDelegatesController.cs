@@ -161,7 +161,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     return NotFound(ex.Message);
                 }
-                return Ok();
+                return Ok(Json("Success"));
             }
             return Ok();
         }

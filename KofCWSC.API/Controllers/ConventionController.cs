@@ -98,7 +98,7 @@ namespace KofCWSC.API.Controllers
                             
                             _context.CvnImpDelegateIMPs.Add(myDel);
                             await _context.SaveChangesAsync();
-
+                            myRetMess += $"Adding New Council {myDel.CouncilNumber}";
                         }
                         catch (DbUpdateException ex)
                         {
