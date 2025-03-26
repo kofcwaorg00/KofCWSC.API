@@ -104,12 +104,12 @@ namespace KofCWSC.API.Controllers
                         {
                             if (ex.InnerException.Message.Contains("duplicate key"))
                             {
-                                myRetMess += $"Skipping Duplicate Council {myDel.CouncilNumber}; ";
+                                myRetMess += ""; //$"Skipping Duplicate Council {myDel.CouncilNumber}; ";
                                 // do nothing just ignore
                             }
                             else
                             {
-                                myRetMess += $"Skipping Missing Council {myDel.CouncilNumber}; ";
+                                myRetMess += ""; // $"Skipping Missing Council {myDel.CouncilNumber}; ";
                                 // do something
                             }
                         }
