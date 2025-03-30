@@ -354,6 +354,9 @@ namespace KofCWSC.API.Controllers
         }
         private static void FormatMemberDataToSpec(ref TblMasMember tblMasMember)
         {
+            if (!tblMasMember.FirstName.IsNullOrEmpty()) { tblMasMember.FirstName = tblMasMember.FirstName.Trim(); }
+            if (!tblMasMember.LastName.IsNullOrEmpty()) { tblMasMember.LastName = tblMasMember.LastName.Trim(); }
+            if (!tblMasMember.Mi.IsNullOrEmpty()) { tblMasMember.Mi = tblMasMember.Mi.Trim(); }
             tblMasMember.Phone = Helper.FormatPhoneNumber(tblMasMember.Phone);
             if (!tblMasMember.Address.IsNullOrEmpty()) { tblMasMember.Address = tblMasMember.Address.ToUpper(); }
             if (!tblMasMember.City.IsNullOrEmpty()) { tblMasMember.City = tblMasMember.City.ToUpper(); }
