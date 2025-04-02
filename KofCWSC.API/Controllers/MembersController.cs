@@ -357,7 +357,7 @@ namespace KofCWSC.API.Controllers
             if (!tblMasMember.FirstName.IsNullOrEmpty()) { tblMasMember.FirstName = tblMasMember.FirstName.Trim(); }
             if (!tblMasMember.LastName.IsNullOrEmpty()) { tblMasMember.LastName = tblMasMember.LastName.Trim(); }
             if (!tblMasMember.Mi.IsNullOrEmpty()) { tblMasMember.Mi = tblMasMember.Mi.Trim(); }
-            tblMasMember.Phone = Helper.FormatPhoneNumber(tblMasMember.Phone);
+            if (!tblMasMember.Phone.IsNullOrEmpty()) { tblMasMember.Phone = Helper.FormatPhoneNumber(tblMasMember.Phone); }
             if (!tblMasMember.Address.IsNullOrEmpty()) { tblMasMember.Address = tblMasMember.Address.ToUpper(); }
             if (!tblMasMember.City.IsNullOrEmpty()) { tblMasMember.City = tblMasMember.City.ToUpper(); }
             if (!tblMasMember.State.IsNullOrEmpty()) { tblMasMember.State = tblMasMember.State.ToUpper(); }
