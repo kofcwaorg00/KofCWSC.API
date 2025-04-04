@@ -12,5 +12,8 @@
         public string CA3 { get; set; }
         public string CA4 { get; set; }
         public string CA5 { get; set; }
+        public string CA6 { get; set; }
+        public string CA7 { get; set; }
+        public string CA8 { get; set; }
     }
 }

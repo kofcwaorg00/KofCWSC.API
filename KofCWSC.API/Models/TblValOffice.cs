@@ -25,5 +25,7 @@ public partial class TblValOffice
     [Display(Name = "Supreme URL")]
     public string? SupremeUrl { get; set; }
     public int GroupId { get; set; }
+    public bool Copy2NewYear { get; set; }
+    public string? ExchangeMailType { get; set; }
 }
 

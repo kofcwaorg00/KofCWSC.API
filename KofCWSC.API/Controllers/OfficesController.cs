@@ -55,7 +55,7 @@ namespace KofCWSC.API.Controllers
 
         // PUT: api/Offices/5
         [HttpPut("Office/{id}")]
-        public async Task<IActionResult> UpdateOffice(int id, TblValOffice tblValOffice)
+        public async Task<IActionResult> UpdateOffice(int id,[FromBody] TblValOffice tblValOffice)
         {
             if (id != tblValOffice.OfficeId)
             {
@@ -79,8 +79,13 @@ namespace KofCWSC.API.Controllers
                     throw;
                 }
             }
+            catch (Exception ex)
+            {
+                Utils.Helper.FormatLogEntry(this, ex);
+                return BadRequest();
+            }
 
-            return NoContent();
+            return Ok();
         }
 
         // DELETE: api/Offices/5
