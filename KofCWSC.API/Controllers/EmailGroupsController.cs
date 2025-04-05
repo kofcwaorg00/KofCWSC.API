@@ -23,5 +23,12 @@ namespace KofCWSC.API.Controllers
         {
             return await _context.Database.SqlQuery<EmailGroups>($"EXECUTE uspWEB_GetDDL {GroupID}, {NextYear}").ToListAsync();
         }
+        // GET: api/SP/GetDDs
+        [HttpGet("GetDistListForExchange/{OfficeID}/{GroupID}/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<DistListForExchange>>> GetDistListForExchange(int OfficeID,int GroupID, int NextYear = 0)
+        {
+            return await _context.Database.SqlQuery<DistListForExchange>($"EXECUTE uspSYS_GetDistListForExchange {OfficeID}, {GroupID}, {NextYear}").ToListAsync();
+        }
+
     }
 }
