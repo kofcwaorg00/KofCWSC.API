@@ -27,7 +27,16 @@ namespace KofCWSC.API.Controllers
         [HttpGet("GetDistListForExchange/{OfficeID}/{GroupID}/{NextYear}")]
         public async Task<ActionResult<IEnumerable<DistListForExchange>>> GetDistListForExchange(int OfficeID,int GroupID, int NextYear = 0)
         {
-            return await _context.Database.SqlQuery<DistListForExchange>($"EXECUTE uspSYS_GetDistListForExchange {OfficeID}, {GroupID}, {NextYear}").ToListAsync();
+            try
+            {
+                return await _context.Database.SqlQuery<DistListForExchange>($"EXECUTE uspSYS_GetDistListForExchange {OfficeID}, {GroupID}, {NextYear}").ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Utils.Helper.FormatLogEntry(this, ex);
+                return BadRequest();
+            }
+            
         }
 
     }
