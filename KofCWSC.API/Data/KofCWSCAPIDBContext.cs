@@ -84,7 +84,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
         public virtual DbSet<CvnImpDelegateIMP> CvnImpDelegateIMPs { get; set; }
         public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
-
+        public virtual DbSet<NecImpNecrology> TblNecImpNecrologies { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -817,7 +817,138 @@ namespace KofCWSC.API.Data
             {
                 entity.HasNoKey();
             });
+            modelBuilder.Entity<NecImpNecrology>(entity =>
+            {
+                entity
+                    .HasNoKey()
+                    .ToTable("tblNEC_ImpNecrology");
+
+                entity.Property(e => e.AssemblyId).HasColumnName("AssemblyID");
+                entity.Property(e => e.Comments).IsUnicode(false);
+                entity.Property(e => e.CouncilId).HasColumnName("CouncilID");
+                entity.Property(e => e.DecFmorKn)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DecFMorKN");
+                entity.Property(e => e.DecFname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DecFName");
+                entity.Property(e => e.DecLname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DecLName");
+                entity.Property(e => e.DecMemberId).HasColumnName("DecMemberID");
+                entity.Property(e => e.DecMname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("DecMName");
+                entity.Property(e => e.DecOfficesHeld)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+                entity.Property(e => e.DecPrefix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.DecSuffix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.Dod)
+                    .HasColumnType("datetime")
+                    .HasColumnName("DOD");
+                entity.Property(e => e.Fmfname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FMFName");
+                entity.Property(e => e.Fmlname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FMLName");
+                entity.Property(e => e.Fmmname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FMMName");
+                entity.Property(e => e.Fmprefix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FMPrefix");
+                entity.Property(e => e.Fmsuffix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FMSuffix");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.MemberType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.Nokaddress1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKAddress1");
+                entity.Property(e => e.Nokaddress2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKAddress2");
+                entity.Property(e => e.Nokcity)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKCity");
+                entity.Property(e => e.Nokcountry)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKCountry");
+                entity.Property(e => e.Nokfname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKFName");
+                entity.Property(e => e.Noklname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKLname");
+                entity.Property(e => e.Nokmname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKMName");
+                entity.Property(e => e.Nokprefix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKPrefix");
+                entity.Property(e => e.Nokrelate)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKRelate");
+                entity.Property(e => e.Nokstate)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKState");
+                entity.Property(e => e.Noksuffix)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKSuffix");
+                entity.Property(e => e.Nokzip)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("NOKZip");
+                entity.Property(e => e.Relationship)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.SubDate).HasColumnType("datetime");
+                entity.Property(e => e.SubEmail)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+                entity.Property(e => e.SubFname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SubFName");
+                entity.Property(e => e.SubLname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("SubLName");
+                entity.Property(e => e.SubRole)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
