@@ -24,12 +24,12 @@ namespace KofCWSC.API.Controllers
             return await _context.Database.SqlQuery<EmailGroups>($"EXECUTE uspWEB_GetDDL {GroupID}, {NextYear}").ToListAsync();
         }
         // GET: api/SP/GetDDs
-        [HttpGet("GetDistListForExchange/{Type}/{NextYear}")]
-        public async Task<ActionResult<IEnumerable<DistListForExchange>>> GetDistListForExchange(string Type,int NextYear = 0)
+        [HttpGet("GetDistListForExchange/{Type}/{GroupID}/{OfficeID}/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<DistListForExchange>>> GetDistListForExchange(string Type,int GroupID,int OfficeID,int NextYear = 0)
         {
             try
             {
-                return await _context.Database.SqlQuery<DistListForExchange>($"EXECUTE uspSYS_GetDistListForExchange {Type}, {NextYear}").ToListAsync();
+                return await _context.Database.SqlQuery<DistListForExchange>($"EXECUTE uspSYS_GetDistListForExchange {Type},{GroupID},{OfficeID}, {NextYear}").ToListAsync();
             }
             catch (Exception ex)
             {
