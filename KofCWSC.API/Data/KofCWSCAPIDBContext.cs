@@ -85,6 +85,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<CvnImpDelegateIMP> CvnImpDelegateIMPs { get; set; }
         public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
         public virtual DbSet<NecImpNecrology> TblNecImpNecrologies { get; set; }
+        public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -543,7 +544,7 @@ namespace KofCWSC.API.Data
                 {
                     entity.HasNoKey();
                 });
-                OnModelCreatingPartial(modelBuilder);
+
             });
 
             modelBuilder.Entity<TblSysTrxEvents>(entity =>
@@ -947,8 +948,20 @@ namespace KofCWSC.API.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-        }
+            modelBuilder.Entity<LogCorrMemberOffice>(entity =>
+            {
+                entity.ToTable("tblLOG_CorrMemberOffice");
 
+                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.ChangeDate).HasColumnType("datetime");
+                entity.Property(e => e.ChangeType).HasMaxLength(10);
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+                entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+       
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
