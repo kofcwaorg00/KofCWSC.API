@@ -121,7 +121,8 @@ namespace KofCWSC.API.Controllers
         [HttpGet("UpdateDeceased/{KofCID}")]
         public int UpdateDeceased(int KofCID)
         {
-            return _context.Database.ExecuteSql($"EXECUTE [uspNEC_UpdateDeceased] {KofCID}");
+            var rowsAffected =  _context.Database.ExecuteSql($"EXECUTE [uspNEC_UpdateDeceased] {KofCID}");
+            return rowsAffected;
         }
     }
 }
