@@ -75,7 +75,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     _context.Add(cvnImpDelegateIMP);
                     await _context.SaveChangesAsync();
-                    return Ok();
+                    return Ok("Success");
                 }
                 catch (DbUpdateException ex)
                 {

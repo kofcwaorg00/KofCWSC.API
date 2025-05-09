@@ -55,11 +55,11 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: GetSOS
-        [HttpGet("GetSOSView")]
-        public async Task<ActionResult<IEnumerable<SPGetSOSView>>> GetSOSView()
+        [HttpGet("GetSOSView/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetSOSView>>> GetSOSView(int NextYear = 0)
         {
             // Run Sproc
-            return await _context.Database.SqlQuery<SPGetSOSView>($"EXECUTE uspWEB_GetSOSView").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetSOSView>($"EXECUTE uspWEB_GetSOSView {NextYear}").ToListAsync();
         }
 
         // GET: api/SP/GetBulletins OBSOLETE
