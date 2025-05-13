@@ -6,6 +6,9 @@ using KofCWSC.API.Utils;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Reflection;
 
 
 namespace KofCWSC.API.Controllers
@@ -143,16 +146,60 @@ namespace KofCWSC.API.Controllers
             // the data is.  In this case I added [FromBody] because I am sending the tblMasMember
             // object in the body and we just "know what to do"
             //********************************************************************************************
-            if (id != tblMasMember.MemberId)
-            {
-                Log.Fatal("Member ID " + id + " Not found");
-                return BadRequest($"Member ID {id} Not Found");
-            }
-            FormatMemberDataToSpec(ref tblMasMember);
-            _context.Entry(tblMasMember).State = EntityState.Modified;
-
             try
             {
+                if (id != tblMasMember.MemberId)
+                {
+                    Log.Fatal("Member ID " + id + " Not found");
+                    return BadRequest($"Member ID {id} Not Found");
+                }
+                FormatMemberDataToSpec(ref tblMasMember);
+                //********************************************************************************************
+                // 5/12/2025 Tim Philomeno
+                // The follwing block of code will dynmaically set the LastUpdated/By data for any process
+                // that flow through.  This is specific to the tbl_MasMembers table only.  The incoming 
+                // LastUpdated and LastUpdatedBy will contain the data from the calling process.
+                //----------------------------------------------------------------------------------------------
+                var existingMember = _context.TblMasMembers.Find(tblMasMember.MemberId);
+                if (existingMember == null)
+                {
+                    return NotFound();
+                }
+                var properties = typeof(TblMasMember).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                var allowedProperties = new List<string> { "Prefix", "FirstName", "NickName", "MI", "LastName", "Suffix", "AddInfo1", "Address", "City", "State", "PostalCode", "Phone", "WifesName", "AddInfo2", "FaxNumber", "Council", "Assembly", "Circle", "Email", "Deceased", "CellPhone", "Bulletin" };
+
+                // spin through all properties
+                foreach (var prop in properties)
+                {
+                    // only run the updated and updatedby on those that are not tracked
+                    if (!prop.Name.ToLower().Contains("updated"))
+                    {
+                        var newValue = prop.GetValue(tblMasMember);
+                        var existingValue = prop.GetValue(existingMember);
+                        // compare the 2 values
+                        if (!object.Equals(newValue, existingValue))
+                        {
+                            // Update the main value
+                            prop.SetValue(existingMember, newValue);
+                            _context.Entry(existingMember).Property(prop.Name).IsModified = true;
+                            // only update the allowed properties
+                            if (allowedProperties.Contains(prop.Name))
+                            {
+                                string updproperty = prop.Name;
+                                string updUpdated = $"{updproperty}Updated";
+                                string updUpdatedBy = $"{updproperty}UpdatedBy";
+                                typeof(TblMasMember).GetProperty(updUpdated)?.SetValue(existingMember, tblMasMember.LastUpdated);
+                                typeof(TblMasMember).GetProperty(updUpdatedBy)?.SetValue(existingMember, tblMasMember.LastUpdatedBy.ToString());
+                                _context.Entry(existingMember).Property(updUpdated).IsModified = true;
+                                _context.Entry(existingMember).Property(updUpdatedBy).IsModified = true;
+                            }
+                        }
+                    }
+                }
+                //********************************************************************************************
+                //_context.Entry(existingMember).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

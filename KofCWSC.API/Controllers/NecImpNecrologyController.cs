@@ -1,12 +1,9 @@
 ﻿using KofCWSC.API.Data;
 using KofCWSC.API.Models;
 using KofCWSC.API.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System.Text.RegularExpressions;
 
 namespace KofCWSC.API.Controllers
 {
@@ -46,6 +43,8 @@ namespace KofCWSC.API.Controllers
                 var results = await _context.Database.SqlQuery<NecImpNecrologyVM>($"EXECUTE uspNEC_GetNecrology").ToListAsync();
                 if (!results.Any())
                 {
+                    // 5/12/2025 Tim Philomeno
+                    // NoContent() will return a NULL model that can be handled in the corresponding VIEW, i.e. No Records Found
                     return NoContent();
                 }
                 return Ok(results); // Use Ok() for successful responses.
@@ -53,7 +52,8 @@ namespace KofCWSC.API.Controllers
             catch (Exception ex)
             {
                 Utils.Helper.FormatLogEntry(this, ex);
-                return BadRequest(ex.Message); // Include exception details if appropriate.
+                return Problem(detail: ex.Message, statusCode: 400,title:"Unexpected Error in API",type:"GET/Necrology",instance:"KofCWSC API");
+                //return BadRequest(ex.Message); // Include exception details if appropriate.
             }
         }
 
