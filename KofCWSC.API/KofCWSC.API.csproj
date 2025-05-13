@@ -50,4 +50,11 @@
     <Folder Include="logs\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\KofCWSCAPI - Web Deploy PROD.pubxml-Destiny2.user" />
+    <None Include="Properties\PublishProfiles\KofCWSCAPI - Web Deploy PROD.pubxml.user" />
+    <None Include="Properties\PublishProfiles\KofCWSCAPITest - Web Deploy.pubxml.user" />
+  </ItemGroup>
+
 </Project>

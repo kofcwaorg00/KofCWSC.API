@@ -29,11 +29,11 @@ public partial class TblMasMember
 
     public string? NickNameUpdatedBy { get; set; }
 
-    public string? Mi { get; set; }
+    public string? MI { get; set; }
 
-    public DateTime? Miupdated { get; set; }
+    public DateTime? MIUpdated { get; set; }
 
-    public string? MiupdatedBy { get; set; }
+    public string? MIUpdatedBy { get; set; }
 
     public string LastName { get; set; }
 

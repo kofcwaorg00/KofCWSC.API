@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Reflection;
+using System.Data.Common;
 
 
 namespace KofCWSC.API.Controllers
@@ -168,34 +169,38 @@ namespace KofCWSC.API.Controllers
                 var properties = typeof(TblMasMember).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
                 var allowedProperties = new List<string> { "Prefix", "FirstName", "NickName", "MI", "LastName", "Suffix", "AddInfo1", "Address", "City", "State", "PostalCode", "Phone", "WifesName", "AddInfo2", "FaxNumber", "Council", "Assembly", "Circle", "Email", "Deceased", "CellPhone", "Bulletin" };
-
+                var allowedUpdates = new List<string> { "PrefixUpdated", "PrefixUpdatedBy", "FirstNameUpdated", "FirstNameUpdatedBy", "NickNameUpdated", "NickNameUpdatedBy", "MIUpdated", "MIUpdatedBy", "LastNameUpdated", "LastNameUpdatedBy", "SuffixUpdated", "SuffixUpdatedBy", "AddInfo1Updated", "AddInfo1UpdatedBy", "AddressUpdated", "AddressUpdatedBy", "CityUpdated", "CityUpdatedBy", "StateUpdated", "StateUpdatedBy", "PostalCodeUpdated", "PostalCodeUpdatedBy", "PhoneUpdated", "PhoneUpdatedBy", "WifesNameUpdated", "WifesNameUpdatedBy", "AddInfo2Updated", "AddInfo2UpdatedBy", "FaxNumberUpdated", "FaxNumberUpdatedBy", "CouncilUpdated", "CouncilUpdatedBy", "AssemblyUpdated", "AssemblyUpdatedBy", "CircleUpdated", "CircleUpdatedBy", "EmailUpdated", "EmailUpdatedBy", "DeceasedUpdated", "DeceasedUpdatedBy", "CellPhoneUpdated", "CellPhoneUpdatedBy", "BulletinUpdated", "BulletinUpdatedBy" };
                 // spin through all properties
                 foreach (var prop in properties)
                 {
-                    // only run the updated and updatedby on those that are not tracked
-                    if (!prop.Name.ToLower().Contains("updated"))
+                    var newValue = prop.GetValue(tblMasMember);
+                    var existingValue = prop.GetValue(existingMember);
+                    // compare the 2 values
+                    if (!object.Equals(newValue, existingValue))
                     {
-                        var newValue = prop.GetValue(tblMasMember);
-                        var existingValue = prop.GetValue(existingMember);
-                        // compare the 2 values
-                        if (!object.Equals(newValue, existingValue))
+                        string updproperty = prop.Name;
+                        string updUpdated = $"{updproperty}Updated";
+                        string updUpdatedBy = $"{updproperty}UpdatedBy";
+
+                        // root will either be null or be on of the chosen
+                        if (!allowedUpdates.Contains(prop.Name,StringComparer.OrdinalIgnoreCase))
                         {
-                            // Update the main value
-                            prop.SetValue(existingMember, newValue);
-                            _context.Entry(existingMember).Property(prop.Name).IsModified = true;
-                            // only update the allowed properties
-                            if (allowedProperties.Contains(prop.Name))
-                            {
-                                string updproperty = prop.Name;
-                                string updUpdated = $"{updproperty}Updated";
-                                string updUpdatedBy = $"{updproperty}UpdatedBy";
-                                typeof(TblMasMember).GetProperty(updUpdated)?.SetValue(existingMember, tblMasMember.LastUpdated);
-                                typeof(TblMasMember).GetProperty(updUpdatedBy)?.SetValue(existingMember, tblMasMember.LastUpdatedBy.ToString());
-                                _context.Entry(existingMember).Property(updUpdated).IsModified = true;
-                                _context.Entry(existingMember).Property(updUpdatedBy).IsModified = true;
-                            }
+                                // Update the main value
+                                prop.SetValue(existingMember, newValue);
+                                _context.Entry(existingMember).Property(prop.Name).IsModified = true;
+                                // only update the allowed properties
+                                // only run the updated and updatedby for the tracked list
+                                if (allowedProperties.Contains(prop.Name,StringComparer.OrdinalIgnoreCase))
+                                {
+
+                                    typeof(TblMasMember).GetProperty(updUpdated)?.SetValue(existingMember, tblMasMember.LastUpdated);
+                                    typeof(TblMasMember).GetProperty(updUpdatedBy)?.SetValue(existingMember, tblMasMember.LastUpdatedBy.ToString());
+                                    _context.Entry(existingMember).Property(updUpdated).IsModified = true;
+                                    _context.Entry(existingMember).Property(updUpdatedBy).IsModified = true;
+                                }
                         }
                     }
+
                 }
                 //********************************************************************************************
                 //_context.Entry(existingMember).State = EntityState.Modified;
@@ -403,7 +408,7 @@ namespace KofCWSC.API.Controllers
         {
             if (!tblMasMember.FirstName.IsNullOrEmpty()) { tblMasMember.FirstName = tblMasMember.FirstName.Trim(); }
             if (!tblMasMember.LastName.IsNullOrEmpty()) { tblMasMember.LastName = tblMasMember.LastName.Trim(); }
-            if (!tblMasMember.Mi.IsNullOrEmpty()) { tblMasMember.Mi = tblMasMember.Mi.Trim(); }
+            if (!tblMasMember.MI.IsNullOrEmpty()) { tblMasMember.MI = tblMasMember.MI.Trim(); }
             if (!tblMasMember.Phone.IsNullOrEmpty()) { tblMasMember.Phone = Helper.FormatPhoneNumber(tblMasMember.Phone); }
             if (!tblMasMember.Address.IsNullOrEmpty()) { tblMasMember.Address = tblMasMember.Address.ToUpper(); }
             if (!tblMasMember.City.IsNullOrEmpty()) { tblMasMember.City = tblMasMember.City.ToUpper(); }

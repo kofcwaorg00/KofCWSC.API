@@ -215,15 +215,15 @@ namespace KofCWSC.API.Data
 
                 entity.Property(e => e.LastUpdated).HasColumnType("datetime");
 
-                entity.Property(e => e.Mi)
+                entity.Property(e => e.MI)
                     .HasMaxLength(50)
                     .HasColumnName("MI");
 
-                entity.Property(e => e.Miupdated)
+                entity.Property(e => e.MIUpdated)
                     .HasColumnType("datetime")
                     .HasColumnName("MIUpdated");
 
-                entity.Property(e => e.MiupdatedBy)
+                entity.Property(e => e.MIUpdatedBy)
                     .HasMaxLength(50)
                     .HasColumnName("MIUpdatedBy");
 
