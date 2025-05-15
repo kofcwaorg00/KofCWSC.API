@@ -26,6 +26,13 @@ namespace KofCWSC.API.Controllers
             return myID;
             
         }
+        [HttpGet("EOYProcess")]
+        public async Task<ActionResult<int>> EOYProcess()
+        {
+            int rowsAffected = await _context.Database.ExecuteSqlInterpolatedAsync($"EXECUTE [uspEOY_CreateNewYearOffices]");
+            return Ok(rowsAffected);
+
+        }
         // GET: FraternalYear
         [HttpGet("GetFratYear/{NextYear}")]
         public async Task<ActionResult> GetFratYear(int NextYear)
