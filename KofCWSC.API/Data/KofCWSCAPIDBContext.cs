@@ -87,6 +87,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<NecImpNecrology> TblNecImpNecrologies { get; set; }
         public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

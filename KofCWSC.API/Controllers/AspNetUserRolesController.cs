@@ -34,7 +34,6 @@ namespace KofCWSC.API.Controllers
             {
                 return NotFound();
             }
-
             _context.AspNetUserRoles.Remove(userRole.FirstOrDefault());
             await _context.SaveChangesAsync();
             return Ok();
