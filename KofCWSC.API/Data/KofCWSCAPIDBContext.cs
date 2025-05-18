@@ -86,6 +86,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
         public virtual DbSet<NecImpNecrology> TblNecImpNecrologies { get; set; }
         public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -957,6 +958,13 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.ChangeType).HasMaxLength(10);
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
                 entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+            });
+
+            modelBuilder.Entity<AspNetUserRole>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId });
+
+                entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
             });
 
             OnModelCreatingPartial(modelBuilder);
