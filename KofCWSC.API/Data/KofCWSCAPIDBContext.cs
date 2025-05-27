@@ -60,6 +60,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
         public virtual DbSet<TblValCouncilFSEdit> TblValCouncilsFSEdit { get; set; }
         public virtual DbSet<TblMasMember> TblMasMembers { get; set; } = null!;
+        public virtual DbSet<TblMasMemberVM> TblMasMemberVMs { get; set; } = null!;
         public virtual DbSet<GetLabelByOffice> GetLabelsByOffice { get; set; } = null!;
         public virtual DbSet<DirMain> DirMain { get; set; }
         public virtual DbSet<DirSupremeContacts> DirSupremeContacts { get; set; }
@@ -108,6 +109,13 @@ namespace KofCWSC.API.Data
             {
                 entity.HasNoKey();
             });
+
+            modelBuilder.Entity<TblMasMemberVM>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+
             modelBuilder.Entity<TblMasMember>(entity =>
             {
                 entity.HasKey(e => e.MemberId);

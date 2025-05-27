@@ -10,6 +10,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Reflection;
 using System.Data.Common;
+using System.Collections.Immutable;
 
 
 namespace KofCWSC.API.Controllers
@@ -61,13 +62,17 @@ namespace KofCWSC.API.Controllers
         }
 
         [HttpGet("Members/KofCID/{KofCID}")]
-        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembersByKofCID(int KofCID)
+        public async Task<ActionResult<IEnumerable<TblMasMemberVM>>> GetMembersByKofCID(int KofCID)
         {
+            string? myLastName = "0";
             try
             {
-                return await _context.TblMasMembers
-                .Where(t => t.KofCid == KofCID)
+                return await _context.TblMasMemberVMs
+                    .FromSqlRaw($"EXEC uspSYS_GetMembers {myLastName}, {KofCID}")
+                //.Where(t => t.KofCid == KofCID)
                 .ToListAsync();
+
+                
             }
             catch (Exception ex)
             {
@@ -79,8 +84,9 @@ namespace KofCWSC.API.Controllers
 
         // GET: api/TblMasMembers - we would never use this because it will give us all 17k members, too much data
         [HttpGet("Members/LastName/{lastname}")]
-        public async Task<ActionResult<IEnumerable<TblMasMember>>> GetMembers(string lastname)
+        public async Task<ActionResult<IEnumerable<TblMasMemberVM>>> GetMembers(string lastname)
         {
+            int? myKofCID = 0;
             Log.Information("Starting GetMembers/ByLastName/" + lastname);
             if (!IsLastNameValid(lastname))
             {
@@ -100,9 +106,24 @@ namespace KofCWSC.API.Controllers
 
             try
             {
-                return await _context.TblMasMembers
-                .Where(t => t.LastName.Contains(lastname))
-                .ToListAsync();
+                //var myName = _context.funSYS_BuildName.FromSqlInterpolated($"SELECT dbo.funSYS_BuildName({id},0,'N') as MemberName").FirstOrDefault().MemberName;
+                //return Json(myName);
+                //return await _context.uspSYS_GetMembers.FromSqlInterpolated($"exec uspSYS_GetMembers").ToListAsync()
+                //.Where(t => t.LastName.Contains(lastname))
+                //.ToListAsync();
+
+                //return _context.Database
+                //.SqlQuery<TblMasMemberVM>($"uspSYS_GetMembers")
+                //.Where(t => t.LastName.Contains(lastname))
+                //.AsEnumerable().ToList();
+                //.ToListAsync();
+
+                return await _context.TblMasMemberVMs
+                    .FromSqlRaw($"EXEC uspSYS_GetMembers '{lastname}',{myKofCID}")
+                    //.AsEnumerable()
+                    //.Where(t => t.LastName.Contains(lastname))
+                    .ToListAsync();
+
             }
             catch (Exception ex)
             {
