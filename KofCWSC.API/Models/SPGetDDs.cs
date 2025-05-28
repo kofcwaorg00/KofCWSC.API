@@ -21,5 +21,7 @@ namespace KofCWSC.API.Models
         public string? Email { get; set; }
         public string Heading { get; set; }
         public int MemberID { get; set; }
+        public string? Photo {  get; set; }
+        public int? KofCID { get; set; }
     }
 }
