@@ -2,9 +2,13 @@
 using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Serilog;
+using System.Data;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KofCWSC.API.Controllers
 {
@@ -46,51 +50,59 @@ namespace KofCWSC.API.Controllers
         //[AcceptVerbs("GET", "POST")]
         [HttpGet("/VerifyKofCID/{KofCMemberID}")]
         //[Route("VerifyKofCID")]
-        public async Task<IActionResult> VerifyKofCID(int KofCMemberID)
-
-      {
+        public async Task<int> VerifyKofCID(int KofCMemberID)
+        {
             try
             {
-                if (!IsKofCMemberIDValid(KofCMemberID))
+                var userIdParam = new SqlParameter("@KofCID", KofCMemberID);
+                var verifyParam = new SqlParameter("@RetVal", SqlDbType.Int)
                 {
-                    var ex = new Exception($"Invalid KofC Member ID {KofCMemberID}");
-                    Log.Error(Utils.Helper.FormatLogEntry(this, ex));
-                    return BadRequest("Invalid KofC Member ID");
-                }
-                //*******************************************************************************************
-                // 6/22/2024 Tim Philomeno
-                // simply return a TRUE if we find it and a FALSE if not
-                // let the calling process deal with the validation logic and feedback
-                //*******************************************************************************************
-                var isMember = await _context.Database
-                    .SqlQuery<KofCMemberIDUsers>($"EXECUTE uspSYS_ValidateKofCID {KofCMemberID} ")
-                    .ToListAsync();
+                    Direction = ParameterDirection.Output
+                };
 
-                if (isMember.Count() > 0)
-                {
-                    // we have the KofC Member in our data, now check for suspensions
-                    var isSusp = await _context.Database
-                        .SqlQuery<KofCMemberIDUsers>($"EXECUTE uspSYS_IsMemberSuspended {KofCMemberID} ")
-                        .ToListAsync();
-                    if (isSusp.Count() > 0)
-                    {
-                        return Json("Member is Suspended! ");
-                    }
-                    else
-                    {
-                        return Json(true);
-                    }
-                }
-                else
-                {
-                    return Json(false);
-                }
+                _context.Database.ExecuteSqlRaw("EXEC dbo.uspSYS_ValidateKofCID @KofCID, @RetVal OUTPUT", userIdParam, verifyParam);
+
+                return (int)verifyParam.Value;
+                //if (!IsKofCMemberIDValid(KofCMemberID))
+                //{
+                //    var ex = new Exception($"Invalid KofC Member ID {KofCMemberID}");
+                //    Log.Error(Utils.Helper.FormatLogEntry(this, ex));
+                //    return BadRequest("Invalid KofC Member ID Format");
+                //}
+                ////*******************************************************************************************
+                //// 6/22/2024 Tim Philomeno
+                //// simply return a TRUE if we find it and a FALSE if not
+                //// let the calling process deal with the validation logic and feedback
+                ////*******************************************************************************************
+                //var isMember = await _context.Database
+                //    .SqlQuery<KofCMemberIDUsers>($"EXECUTE uspSYS_ValidateKofCID {KofCMemberID} ")
+                //    .ToListAsync();
+
+                //if (isMember.Count() > 0)
+                //{
+                //    // we have the KofC Member in our data, now check for suspensions
+                //    var isSusp = await _context.Database
+                //        .SqlQuery<KofCMemberIDUsers>($"EXECUTE uspSYS_IsMemberSuspended {KofCMemberID} ")
+                //        .ToListAsync();
+                //    if (isSusp.Count() > 0)
+                //    {
+                //        return Json("Member is Suspended! ");
+                //    }
+                //    else
+                //    {
+                //        return Json(true);
+                //    }
+                //}
+                //else
+                //{
+                //    return Json(false);
+                //}
             }
             catch (Exception ex)
             {
 
                 Log.Fatal("VerifyKofCIDAsync" + ex.Message + " " + ex.InnerException);
-                return Json(false);
+                return -1;
             }
 
         }
@@ -102,6 +114,7 @@ namespace KofCWSC.API.Controllers
             // must be a string (this should be taken care of becasue of our parameter data type)
             // length must be between 5 and 7
             // must be 0-9
+            // must be within a range of 10000 to 6000000
             //********************************************************************************************
             if (KofCMemberID == 0)
             {
@@ -115,6 +128,11 @@ namespace KofCWSC.API.Controllers
             {
                 return false;
             }
+            if (!(KofCMemberID >= 10000 && KofCMemberID <= 6000000))
+            {
+                return false;
+            }
+
 
             //string rxPat = (@"^[0-9]+$");
 
