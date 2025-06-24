@@ -9,7 +9,7 @@ using KofCWSC.API.Models;
 
 namespace KofCWSC.API.Controllers
 {
-    [Route("")]
+    [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
     {
@@ -20,95 +20,103 @@ namespace KofCWSC.API.Controllers
             _context = context;
         }
 
-        // GET: /Events
-        [HttpGet("Events")]
+        // GET: api/Events
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetAllEvents()
         {
             return await _context.Events.OrderBy(e => e.StartDate).ToListAsync();
         }
 
-        // GET: /Events/{start}/{end}
-        [HttpGet("Events/{start}/{end}")]
-        public IActionResult GetCalendarEvents(string start, string end)
+        // GET: api/Events/range?start=2025-01-01&end=2025-12-31
+        [HttpGet("range")]
+        public IActionResult GetEventsInRange([FromQuery] string start, [FromQuery] string end)
         {
-            // Ensure date formats are correct
-            DateTime startDate = DateTime.Parse(start.Replace("%2F", "/"));
-            DateTime endDate = DateTime.TryParse(end.Replace("%2F", "/"), out var parsedEndDate) ? parsedEndDate : DateTime.MaxValue;
+            if (!DateTime.TryParse(start, out var startDate))
+                return BadRequest("Invalid start date.");
 
-            List<Event> events = _context.Events
+            if (!DateTime.TryParse(end, out var endDate))
+                endDate = DateTime.MaxValue;
+
+            var events = _context.Events
                 .Where(e => e.StartDate >= startDate && e.EndDate <= endDate)
+                .OrderBy(e => e.StartDate)
                 .ToList();
 
             return Ok(events);
         }
 
-        // GET: /Event/{id}
-        [HttpGet("Event/{id}")]
-        public async Task<IActionResult> GetEventDetails(int id)
+        // GET: api/Events/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Event>> GetEventById(int id)
         {
             var eventItem = await _context.Events.FirstOrDefaultAsync(e => e.EventId == id);
-            if (eventItem == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(eventItem);
+            if (eventItem == null)
+                return NotFound();
+
+            return eventItem;
         }
 
-        // POST: /Event
-        [HttpPost("Event")]
-        public async Task<IActionResult> CreateEvent([FromBody] Event newEvent)
+        // POST: api/Events
+        [HttpPost]
+        public async Task<ActionResult<Event>> CreateEvent([FromBody] Event newEvent)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
+
+            try
+            {
+                _context.Events.Add(newEvent);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetEventById), new { id = newEvent.EventId }, newEvent);
             }
-
-            _context.Events.Add(newEvent);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetEventDetails), new { id = newEvent.EventId }, newEvent);
+            catch (Exception ex)
+            {
+                // Optional: Log error using your own utility if available
+                // Utils.Helper.FormatLogEntry(this, ex);
+                return  StatusCode(500, "An error occurred while saving the event.");
+            }
         }
 
-        // PUT: /Event/{id}
-        [HttpPut("Event/{id}")]
+        // PUT: api/Events/5
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] Event updatedEvent)
         {
             if (id != updatedEvent.EventId)
-            {
-                return BadRequest();
-            }
+                return BadRequest("ID mismatch.");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             _context.Entry(updatedEvent).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!_context.Events.Any(e => e.EventId == id))
-                {
                     return NotFound();
-                }
+
                 throw;
             }
-
-            return NoContent();
         }
 
-        // DELETE: /Event/{id}
-        [HttpDelete("Event/{id}")]
+        // DELETE: api/Events/5
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
             var eventItem = await _context.Events.FindAsync(id);
+
             if (eventItem == null)
-            {
                 return NotFound();
-            }
 
             _context.Events.Remove(eventItem);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
     }
