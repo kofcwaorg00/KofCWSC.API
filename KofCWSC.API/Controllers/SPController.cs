@@ -115,10 +115,10 @@ namespace KofCWSC.API.Controllers
         }
 
         // GET: api/SP/FourthDegreeOfficers
-        [HttpGet("FourthDegreeOfficers")]
-        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetFourthDegreeOfficers()
+        [HttpGet("FourthDegreeOfficers/{NextYear}")]
+        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetFourthDegreeOfficers(int NextYear)
         {
-            return await _context.Database.SqlQuery<SPGetChairmanInfoBlock>($"EXECUTE uspWEB_GetFourthDegreeOfficers").ToListAsync();
+            return await _context.Database.SqlQuery<SPGetChairmanInfoBlock>($"EXECUTE uspWEB_GetFourthDegreeOfficers {NextYear}").ToListAsync();
         }
     }
 }
