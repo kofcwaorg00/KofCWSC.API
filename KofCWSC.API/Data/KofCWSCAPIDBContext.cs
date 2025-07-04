@@ -76,7 +76,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<FileStorage> FileStorages { get; set; }
         public virtual DbSet<CvnControl> TblCvnControls { get; set; }
         public virtual DbSet<RollCallSheets> RollCallSheets { get; set; }
-        
+
         public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
         public virtual DbSet<CvnDelegateDays> CvnDelegateDays { get; set; }
         public virtual DbSet<CvnMileage> TblCvnMasMileages { get; set; }
@@ -88,7 +88,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<NecImpNecrology> TblNecImpNecrologies { get; set; }
         public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
-
+        public DbSet<AspNetUser> AspNetUsers { get; set; } = default!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -100,7 +100,7 @@ namespace KofCWSC.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
             modelBuilder.Entity<MemberVM>(entity =>
             {
                 entity.HasNoKey();
@@ -761,7 +761,7 @@ namespace KofCWSC.API.Data
                 entity.Property(e => e.FormSubmitterSEmail)
                     .HasMaxLength(255)
                     .HasColumnName("FormSubmitterSEmail");
-                
+
                 entity.Property(e => e.SubmissionDate)
                     .HasColumnType("datetime")
                     .HasColumnName("SubmissionDate");
@@ -975,10 +975,13 @@ namespace KofCWSC.API.Data
 
                 entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
             });
-
+            modelBuilder.Entity<AspNetUser>(entity =>
+            {
+                entity.ToTable(tb => tb.UseSqlOutputClause(false));
+            });
             OnModelCreatingPartial(modelBuilder);
         }
-       
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
