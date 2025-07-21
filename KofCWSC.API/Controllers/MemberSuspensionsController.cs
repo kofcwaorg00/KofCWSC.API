@@ -121,6 +121,10 @@ namespace KofCWSC.API.Controllers
                         throw;
                     }
                 }
+                catch (Exception ex)
+                {
+                    return NotFound();
+                }
                 return Ok();
             }
             return Ok();
