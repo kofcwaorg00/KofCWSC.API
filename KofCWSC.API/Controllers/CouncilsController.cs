@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using KofCWSC.API.Data;
+using KofCWSC.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using KofCWSC.API.Data;
-using KofCWSC.API.Models;
 using NuGet.Protocol;
-using System.ComponentModel;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace KofCWSC.API.Controllers
 {
@@ -263,11 +264,22 @@ namespace KofCWSC.API.Controllers
             {
                 return NotFound();
             }
+            try
+            {
+                _context.TblValCouncils.Remove(tblValCouncil);
+                await _context.SaveChangesAsync();
 
-            _context.TblValCouncils.Remove(tblValCouncil);
-            await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (SqlException ex)
+            {
+                return StatusCode(500, new { error = "Database error", details = ex.InnerException.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "General error", details = ex.InnerException.Message });
+            }
 
-            return Ok();
         }
 
         private bool TblValCouncilExists(int id)
