@@ -89,6 +89,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public DbSet<AspNetUser> AspNetUsers { get; set; } = default!;
+        public DbSet<Message> Messages { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -100,7 +101,10 @@ namespace KofCWSC.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.Entity<MemberVM>(entity =>
             {
                 entity.HasNoKey();

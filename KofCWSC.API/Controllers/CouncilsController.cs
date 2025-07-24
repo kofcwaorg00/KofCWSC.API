@@ -6,11 +6,13 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using Serilog;
+using Serilog.Formatting.Display;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KofCWSC.API.Controllers
 {
@@ -23,6 +25,28 @@ namespace KofCWSC.API.Controllers
         public CouncilsController(KofCWSCAPIDBContext context)
         {
             _context = context;
+
+        }
+
+        [HttpGet("MoveCouncil/{From}/{To}/{Post}")]
+        public async Task<List<Message>> MoveCouncil(int From, int To, bool Post)
+        {
+            try
+            {
+                var mess = await _context.Messages.FromSqlRaw($"EXECUTE [uspSYS_MoveCouncil] {From},{To},{Post}").ToListAsync();
+                return mess;
+
+            }
+            catch (Exception ex)
+            {
+                var errorList = new List<Message>
+                {
+                    new Message { MessageText = ex.Message }
+                };
+                return errorList;
+
+            }
+            //            var retmess = await _context.Database.SqlQuery<string>($"EXECUTE [uspSYS_MoveCouncil] {From},{To},{Post}").ToListAsync();
         }
 
         // GET: api/TblValCouncils
