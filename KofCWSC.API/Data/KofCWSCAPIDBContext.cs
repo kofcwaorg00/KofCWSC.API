@@ -90,6 +90,7 @@ namespace KofCWSC.API.Data
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public DbSet<AspNetUser> AspNetUsers { get; set; } = default!;
         public DbSet<Message> Messages { get; set; }
+        public DbSet<DuplicateMember> DuplicateMembers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -101,6 +102,10 @@ namespace KofCWSC.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DuplicateMember>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.HasNoKey();

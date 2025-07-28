@@ -156,6 +156,15 @@ namespace KofCWSC.API.Controllers
 
             return tblMasMember;
         }
+        [HttpGet("DuplicateMembers")]
+        public async Task<ActionResult<List<DuplicateMember>>> GetDuplicateMembers()
+        {
+            var members = await _context.DuplicateMembers
+                .FromSqlRaw("EXEC uspSYS_FindDuplicateMembers")
+                .ToListAsync();
+
+            return Ok(members);
+        }
 
         // PUT: api/TblMasMembers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
