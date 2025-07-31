@@ -44,11 +44,11 @@ Log.Logger = new LoggerConfiguration()
 try
 {
     object kvURL = null;
-    SecretClient secretClient = null;
+    ///////////////////////SecretClient secretClient = null;
     KeyVaultSecret cnString = null;
     Log.Information("Using " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") + " Environment");
     kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVPROD");
-    secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+    /////////////////////////////secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
     //**************************************************************************************************
     // Secrets for sql server db connect strings
     // DBCONN = KofCWSC sql server KofCWSCWeb
@@ -61,16 +61,16 @@ try
     switch (myEnv)
     {
         case "production":
-            cnString = secretClient.GetSecret("AZPROD").Value;
+            cnString = kvclient.GetSecret("AZPROD").Value;
             break;
         case "development":
-            cnString = secretClient.GetSecret("DBCONNLOC").Value;
+            cnString = kvclient.GetSecret("DBCONNLOC").Value;
             break;
         case "test":
-            cnString = secretClient.GetSecret("AZDEV").Value;
+            cnString = kvclient.GetSecret("AZDEV").Value;
             break;
         default:
-            cnString = secretClient.GetSecret("AZPROD").Value;
+            cnString = kvclient.GetSecret("AZPROD").Value;
             break;
     }
     

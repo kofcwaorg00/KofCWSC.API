@@ -84,9 +84,9 @@ namespace KofCWSC.API.Controllers
                 }
                 return CreatedAtAction(nameof(Create), new { id = memberSuspension.Id }, memberSuspension);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
         }
