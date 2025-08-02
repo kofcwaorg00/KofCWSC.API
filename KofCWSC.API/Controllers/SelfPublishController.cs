@@ -113,6 +113,37 @@ namespace KofCWSC.API.Controllers
             return NoContent();
         }
 
+
+        // PUT: api/SelfPublish/Edit/{id}
+        [HttpPut("SelfPubInt/{id}")]
+        public async Task<IActionResult> EditInt(int id, [FromBody] TblWebSelfPublish tblWebSelfPublish)
+        {
+            if (id != tblWebSelfPublish.OID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(tblWebSelfPublish).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TblWebSelfPublishExists(tblWebSelfPublish.Url))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // DELETE: api/SelfPublish/Delete/{id}
         [HttpDelete("SelfPub/{id}")]
         public async Task<IActionResult> DeleteConfirmed(string id)
