@@ -28,8 +28,23 @@ namespace KofCWSC.API.Controllers
             return await _context.TblWebSelfPublishes.ToListAsync();
         }
 
+        
         // GET: api/SelfPublish/Details/{id}
-        [HttpGet("SelfPub/{id}")]
+        [HttpGet("SelfPub/int/{id}")]
+        public async Task<ActionResult<TblWebSelfPublish>> GetDetails(int id)
+        {
+            var tblWebSelfPublish = await _context.TblWebSelfPublishes
+                .FirstOrDefaultAsync(m => m.OID == id);
+
+            if (tblWebSelfPublish == null)
+            {
+                return NotFound();
+            }
+
+            return tblWebSelfPublish;
+        }
+        // GET: api/SelfPublish/Details/{id}
+        [HttpGet("SelfPub/str/{id}")]
         public async Task<ActionResult<TblWebSelfPublish>> GetDetails(string id)
         {
             var tblWebSelfPublish = await _context.TblWebSelfPublishes
@@ -42,7 +57,6 @@ namespace KofCWSC.API.Controllers
 
             return tblWebSelfPublish;
         }
-
         // GET: api/SelfPublish/Display/{id}
         [HttpGet("SelfPub/Display/{id}")]
         public async Task<ActionResult<IEnumerable<SPGetSOS>>> Display(int id)
