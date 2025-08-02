@@ -46,7 +46,7 @@ namespace KofCWSC.API.Data
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error($"From API dbcontext ctor - {ex.Message}");
                 throw new Exception("SQL Azure Key Vault Initialization Failed");
             }
         }
