@@ -107,6 +107,25 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<HttpClient, HttpClient>();
 
+//------------------------------------------------------------
+// 8/7/2025 Tim Philomeno
+// this is needed to support cross origin isses
+// the WithOrigins needs to include any development urls too
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+            "https://localhost:7213",
+            "https://kofc-wa.org/") // Replace with your frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+        //.AllowCredentials(); // Optional: only needed if using cookies or auth
+    });
+});
+//------------------------------------------------------------
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -118,6 +137,8 @@ if (true)
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend"); // Apply the CORS policy
 
 app.UseAuthorization();
 

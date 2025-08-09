@@ -92,6 +92,8 @@ namespace KofCWSC.API.Data
         public DbSet<AspNetUser> AspNetUsers { get; set; } = default!;
         public DbSet<Message> Messages { get; set; }
         public DbSet<DuplicateMember> DuplicateMembers { get; set; }
+
+        public DbSet<CalendarEvent>tblCAL_trxEvents { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -103,6 +105,15 @@ namespace KofCWSC.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CalendarEvent>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.StartDateTime).IsRequired();
+                entity.Property(e => e.EndDateTime).IsRequired();
+                entity.Property(e => e.Description).HasMaxLength(1000); // optional limit
+                entity.Property(e => e.AllDay).IsRequired();
+            });
             modelBuilder.Entity<DuplicateMember>(entity =>
             {
                 entity.HasNoKey();
