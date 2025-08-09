@@ -117,6 +117,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "https://localhost:7213",
+            "https://kofcwscapi.azurewebsites.net",
             "https://kofc-wa.org/") // Replace with your frontend URL
               .AllowAnyHeader()
               .AllowAnyMethod();
