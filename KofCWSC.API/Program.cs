@@ -117,8 +117,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "https://localhost:7213",
-            "https://kofcwscapi.azurewebsites.net",
-            "https://kofc-wa.org/") // Replace with your frontend URL
+            "https://kofc-wa.org") // Replace with your frontend URL
               .AllowAnyHeader()
               .AllowAnyMethod();
         //.AllowCredentials(); // Optional: only needed if using cookies or auth
@@ -138,6 +137,9 @@ if (true)
 }
 
 app.UseHttpsRedirection();
+
+// added this based on chatgpt recommendation
+app.UseRouting(); // add this explicitly
 
 app.UseCors("AllowFrontend"); // Apply the CORS policy
 
