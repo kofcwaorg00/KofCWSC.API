@@ -94,6 +94,7 @@ namespace KofCWSC.API.Data
         public DbSet<DuplicateMember> DuplicateMembers { get; set; }
 
         public DbSet<CalendarEvent>tblCAL_trxEvents { get; set; }
+        public DbSet<EmailAddress> EmailAddresses { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

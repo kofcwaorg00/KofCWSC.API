@@ -24,7 +24,7 @@ namespace KofCWSC.API.Controllers
         {
             var myID = _context.Database.SqlQuery<string>($"EXECUTE uspWSC_GetNextTempID");
             return myID;
-            
+
         }
         [HttpGet("EOYProcess")]
         public async Task<ActionResult<int>> EOYProcess()
@@ -32,6 +32,15 @@ namespace KofCWSC.API.Controllers
             int rowsAffected = await _context.Database.ExecuteSqlInterpolatedAsync($"EXECUTE [uspEOY_CreateNewYearOffices]");
             return Ok(rowsAffected);
 
+        }
+        // GET: GetEmailAddrForBulkSendTo
+        [HttpGet("GetEmailSendTo/{KofCID}/{Nextyear}")]
+        public async Task<ActionResult> GetEmailSendTo(int KofCID, int Nextyear = 0)
+        {
+            var myEmails = await _context.Set<EmailAddress>()
+                .FromSqlInterpolated($"EXECUTE uspSYS_GetEmailAddrForBulkSendTo {KofCID}, {Nextyear}")
+                .ToListAsync();
+            return Ok(myEmails);
         }
         // GET: FraternalYear
         [HttpGet("GetFratYear/{NextYear}")]
@@ -92,7 +101,7 @@ namespace KofCWSC.API.Controllers
 
         // GET: api/SP/GetChairmanInfoBlock/{id}
         [HttpGet("GetChairmanInfoBlock/{id}/{NextYear}")]
-        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetChairmanInfoBlock(int id,int NextYear = 0)
+        public async Task<ActionResult<IEnumerable<SPGetChairmanInfoBlock>>> GetChairmanInfoBlock(int id, int NextYear = 0)
         {
             //Check to see if we have a valid chairman id
             var myChairmenList = await _context.Database
