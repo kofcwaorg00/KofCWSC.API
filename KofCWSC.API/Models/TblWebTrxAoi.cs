@@ -17,7 +17,8 @@ public partial class TblWebTrxAoi
 
     public string? LinkUrl { get; set; }
 
-    public DateTime? PostedDate { get; set; }
+    public DateTime PostedDate { get; set; }
 
-    public bool? Expired { get; set; }
+    public bool Expired { get; set; }
+    public DateTime ExpirationDate { get; set; }
 }
