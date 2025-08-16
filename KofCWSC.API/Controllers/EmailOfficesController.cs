@@ -27,7 +27,9 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
-                return await _context.TblWebTrxEmailOffices.ToListAsync();
+                return await _context.TblWebTrxEmailOffices
+                    .OrderByDescending(d => d.DateSent)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -67,13 +69,35 @@ namespace KofCWSCWebsite.Controllers
             {
                 _context.TblWebTrxEmailOffices.Add(emailOffice);
                 await _context.SaveChangesAsync();
-                return Json("Success");
+
+                return Json(new
+                {
+                    status = "success",
+                    message = "Email office saved successfully"
+                });
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message + " - " + ex.InnerException);
-                return Json("Error");
+                Log.Error($"Error saving email office: {ex.Message}", ex);
+
+                return Json(new
+                {
+                    status = "error",
+                    message = "An error occurred while saving the email office",
+                    details = ex.InnerException?.Message
+                });
             }
+            //try
+            //{
+            //    _context.TblWebTrxEmailOffices.Add(emailOffice);
+            //    await _context.SaveChangesAsync();
+            //    return Json("Success");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log.Error(ex.Message + " - " + ex.InnerException);
+            //    return Json("Error");
+            //}
         }
     }
 }

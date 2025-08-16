@@ -28,6 +28,22 @@ namespace KofCWSC.API.Controllers
 
         }
 
+        [HttpGet("CouncilContact/{Council}/{Type}")]
+        public async Task<JsonResult> GetCouncilContact(int Council,string Type)
+        {
+            // must have council and type
+            string RetVal = $"Testing {Council}, {Type}";
+            switch (Type) {
+                case "GK":
+                    break;
+                case "FS":
+                    break;
+                default:
+                    break;
+            }
+            return new JsonResult(RetVal);
+        }
+
         [HttpGet("MoveCouncil/{From}/{To}/{Post}")]
         public async Task<List<Message>> MoveCouncil(int From, int To, bool Post)
         {
